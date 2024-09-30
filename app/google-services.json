@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "821835235059",
+    "project_id": "pet-guardian-be40c",
+    "storage_bucket": "pet-guardian-be40c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821835235059:android:ead87115b0856daf1b4186",
+        "android_client_info": {
+          "package_name": "com.dias.mayara.petguardian"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChhXi6g4QZ5tPhU2yHvur1a5ct0fRRfwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

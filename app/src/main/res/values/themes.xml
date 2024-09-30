@@ -1,0 +1,15 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PetGuardian" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/verdeOlivaClaro</item>
+        <item name="colorSecondary">@color/azulCeuClaro</item>
+        <item name="colorTertiary">@color/coralSuave</item>
+        <item name="android:colorBackground">@color/begeClaro</item>
+        <item name="colorAccent">@color/amareloDouradoSuave</item>
+        <item name="android:textColorPrimary">@color/marromEscuro</item>
+        <item name="android:statusBarColor">@color/verdeOlivaClaro</item>
+    </style>
+
+    <style name="Theme.PetGuardian" parent="Base.Theme.PetGuardian" />
+</resources>
