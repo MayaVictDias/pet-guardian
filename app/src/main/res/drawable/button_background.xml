@@ -1,0 +1,12 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@android:color/transparent" /> <!-- Cor de fundo transparente -->
+
+    <stroke
+        android:width="2dp"
+        android:color="@color/amareloDouradoSuave" /> <!-- Cor amarela para o contorno -->
+
+    <corners android:radius="12dp" /> <!-- Defina o raio dos cantos -->
+
+</shape>

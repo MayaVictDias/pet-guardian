@@ -9,6 +9,7 @@
         <item name="colorAccent">@color/amareloDouradoSuave</item>
         <item name="android:textColorPrimary">@color/marromEscuro</item>
         <item name="android:statusBarColor">@color/verdeOlivaClaro</item>
+        <item name="android:button">@color/amareloDouradoSuave</item>
     </style>
 
     <style name="Theme.PetGuardian" parent="Base.Theme.PetGuardian" />
