@@ -10,6 +10,8 @@
         <item name="android:textColorPrimary">@color/marromEscuro</item>
         <item name="android:statusBarColor">@color/verdeOlivaClaro</item>
         <item name="android:button">@color/amareloDouradoSuave</item>
+        <!-- Cor quando o checkbox está marcado -->
+        <item name="android:state_checked">@color/coralSuave</item>
     </style>
 
     <style name="Theme.PetGuardian" parent="Base.Theme.PetGuardian" />

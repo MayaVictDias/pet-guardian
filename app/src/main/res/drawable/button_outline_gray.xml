@@ -6,14 +6,14 @@
     <!-- Estado de clique pressionado -->
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/amareloDouradoSuave" /> <!-- Cor para quando o botão é pressionado -->
+            <solid android:color="@color/cinzaClaro" /> <!-- Cor para quando o botão é pressionado -->
             <corners android:radius="8dp" />
         </shape>
     </item>
 
     <stroke
         android:width="2dp"
-        android:color="@color/amareloDouradoSuave" /> <!-- Cor amarela para o contorno -->
+        android:color="@color/cinzaClaro" /> <!-- Cor amarela para o contorno -->
 
     <corners android:radius="12dp" /> <!-- Defina o raio dos cantos -->
 
