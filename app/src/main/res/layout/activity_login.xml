@@ -79,7 +79,7 @@
         android:text="Lembre-se de mim" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
@@ -87,5 +87,13 @@
         android:layout_marginRight="24dp"
         android:text="Login"
         style="@style/CustomButtonStyleYellowBackground"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:visibility="gone" />
 
 </LinearLayout>

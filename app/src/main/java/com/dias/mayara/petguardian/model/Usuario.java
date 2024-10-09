@@ -2,52 +2,52 @@ package com.dias.mayara.petguardian.model;
 
 public class Usuario {
 
-    private String id;
-    private String nome;
-    private String email;
-    private String senha;
-    private String caminhoFoto;
+    private String idUsuario;
+    private String nomeUsuario;
+    private String emailUsuario;
+    private String senhaUsuario;
+    private String caminhoFotoUsuario;
 
     public Usuario() {
     }
 
-    public String getId() {
-        return id;
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeUsuario() {
+        return nomeUsuario;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailUsuario() {
+        return emailUsuario;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getSenhaUsuario() {
+        return senhaUsuario;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSenhaUsuario(String senhaUsuario) {
+        this.senhaUsuario = senhaUsuario;
     }
 
-    public String getCaminhoFoto() {
-        return caminhoFoto;
+    public String getCaminhoFotoUsuario() {
+        return caminhoFotoUsuario;
     }
 
-    public void setCaminhoFoto(String caminhoFoto) {
-        this.caminhoFoto = caminhoFoto;
+    public void setCaminhoFotoUsuario(String caminhoFotoUsuario) {
+        this.caminhoFotoUsuario = caminhoFotoUsuario;
     }
 }

@@ -1,16 +1,11 @@
 package com.dias.mayara.petguardian.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
@@ -19,19 +14,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ToolbarHelper;
 import com.dias.mayara.petguardian.model.Usuario;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
@@ -82,10 +71,16 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
 
                         usuario = new Usuario();
 
-                        usuario.setEmail(emailUsuario);
-                        usuario.setSenha(textoConfirmarSenha);
+                        usuario.setEmailUsuario(emailUsuario);
+                        usuario.setSenhaUsuario(textoConfirmarSenha);
 
                         cadastrar(usuario);
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("exibir_modal_boas_vindas", true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
 
                     } else {
                         Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
@@ -109,8 +104,8 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
 
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         autenticacao.createUserWithEmailAndPassword(
-                usuario.getEmail(),
-                usuario.getSenha()
+                usuario.getEmailUsuario(),
+                usuario.getSenhaUsuario()
         ).addOnCompleteListener(
                 this,
                 new OnCompleteListener<AuthResult>() {
