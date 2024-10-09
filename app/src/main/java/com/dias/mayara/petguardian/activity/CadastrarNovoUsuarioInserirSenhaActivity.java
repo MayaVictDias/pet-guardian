@@ -1,0 +1,183 @@
+package com.dias.mayara.petguardian.activity;
+
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.helper.ToolbarHelper;
+import com.dias.mayara.petguardian.model.Usuario;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+
+public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    private EditText editTextNovoUsuarioInserirSenha, editTextNovoUsuarioConfirmarSenha;
+    private ProgressBar progressBar;
+    ;
+    private Button buttonCadastrarNovoUsuario;
+
+    private Usuario usuario;
+
+    private FirebaseAuth autenticacao;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cadastrar_novo_usuario_inserir_senha);
+
+        inicializarComponentes();
+
+        // Recuperar informação de email do usuário passado na activity anterior
+        Intent intent = getIntent();
+        String nomeUsuario = intent.getStringExtra("nome_usuario");
+        String emailUsuario = intent.getStringExtra("email_usuario");
+
+        // Configurações da toolbar
+        setSupportActionBar(toolbar);
+        ToolbarHelper.setupToolbar(this, toolbar, "Cadastrar");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        progressBar.setVisibility(View.GONE);
+
+        buttonCadastrarNovoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String textoInserirSenha = editTextNovoUsuarioInserirSenha.getText().toString();
+                String textoConfirmarSenha = editTextNovoUsuarioConfirmarSenha.getText().toString();
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                if (!textoInserirSenha.isEmpty()) {
+                    if (!textoConfirmarSenha.isEmpty()) {
+
+                        usuario = new Usuario();
+
+                        usuario.setEmail(emailUsuario);
+                        usuario.setSenha(textoConfirmarSenha);
+
+                        cadastrar(usuario);
+
+                    } else {
+                        Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                                "Preencha o campo Confirme a sua Senha!",
+                                Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                } else {
+                    Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                            "Preencha o campo Digite a sua Senha!",
+                            Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+    }
+
+    // Metodo responsável por cadastrar um novo usuário no firebase
+    private void cadastrar(Usuario usuario) {
+
+        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        autenticacao.createUserWithEmailAndPassword(
+                usuario.getEmail(),
+                usuario.getSenha()
+        ).addOnCompleteListener(
+                this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        String erroExcecao = null;
+                        if (task.isSuccessful()) {
+
+                            try {
+
+                                progressBar.setVisibility(View.GONE);
+
+                                Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                                        "Cadastro realizado com sucesso!",
+                                        Toast.LENGTH_SHORT).show();
+
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish(); // Método para encerrar a activity atual de cadastrar usuário
+
+                            } catch (Exception e) {
+
+                                e.printStackTrace();
+                            }
+
+                        } else {
+
+                            progressBar.setVisibility(View.GONE);
+
+                            // Tratamento do erro
+                            erroExcecao = "";
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+                                erroExcecao = "Digite uma senha mais forte!";
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                erroExcecao = "Por favor, digite um email válido";
+                            } catch (FirebaseAuthUserCollisionException e) {
+                                erroExcecao = "Esta conta já foi cadastrada";
+                            } catch (Exception e) {
+                                erroExcecao = "ao cadastrar usuario " + e.getMessage();
+                                e.printStackTrace();
+                            }
+
+                            Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                                    "Erro: " + erroExcecao,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+        );
+
+    }
+
+    // Método para lidar com o clique no botão de voltar
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();  // Volta para a tela anterior
+        return true;
+    }
+
+    private void inicializarComponentes() {
+
+        toolbar = findViewById(R.id.toolbarPrincipal);
+        editTextNovoUsuarioInserirSenha = findViewById(R.id.editTextNovoUsuarioInserirSenha);
+        editTextNovoUsuarioConfirmarSenha = findViewById(R.id.editTextNovoUsuarioConfirmarSenha);
+        progressBar = findViewById(R.id.progressBar2);
+        buttonCadastrarNovoUsuario = findViewById(R.id.buttonCadastrarNovoUsuario);
+    }
+}

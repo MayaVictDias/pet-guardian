@@ -14,5 +14,23 @@
         <item name="android:state_checked">@color/coralSuave</item>
     </style>
 
+    <!-- Estilo personalizado para botões amarelos -->
+    <style name="CustomButtonStyleYellowBackground" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/amareloDouradoSuave</item> <!-- Cor de fundo -->
+        <item name="android:textColor">@color/marromEscuro</item> <!-- Cor do texto -->
+        <item name="cornerRadius">10dp</item> <!-- Raiz de borda se necessário -->
+        <item name="android:padding">12dp</item> <!-- Preenchimento -->
+        <item name="android:fontFamily">@font/nunito_bold</item> <!-- Fonte da letra -->
+    </style>
+
+    <!-- Estilo personalizado para botões com fundo transparente e contorno amarelo -->
+    <style name="CustomButtonStyleYellowOutline" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@android:color/transparent</item> <!-- Cor de fundo -->
+        <item name="android:textColor">@color/marromEscuro</item> <!-- Cor do texto -->
+        <item name="cornerRadius">10dp</item> <!-- Raiz de borda se necessário -->
+        <item name="android:padding">12dp</item> <!-- Preenchimento -->
+        <item name="android:fontFamily">@font/nunito_bold</item> <!-- Fonte da letra -->
+    </style>
+
     <style name="Theme.PetGuardian" parent="Base.Theme.PetGuardian" />
 </resources>

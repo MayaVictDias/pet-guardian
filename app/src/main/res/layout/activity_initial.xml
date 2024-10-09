@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/button_background">
+    android:background="@color/verdeOlivaClaro">
 
     <!-- Logo do app -->
 
@@ -38,17 +38,14 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
         <Button
-            android:id="@+id/buttonCadastrar"
+            android:id="@+id/cadastrarButton"
+            style="@style/CustomButtonStyleYellowOutline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/button_background"
-            android:backgroundTintMode="add"
-            android:fontFamily="@font/nunito_medium"
             android:text="Cadastrar"
-            android:textColor="@color/marromEscuro"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,18 +66,16 @@
 
         <Button
             android:id="@+id/loginButton"
+            style="@style/CustomButtonStyleYellowOutline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="18dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/button_background"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Fazer login"
-            android:textColor="@color/marromEscuro"
+            android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonCadastrar" />
+            app:layout_constraintTop_toBottomOf="@+id/cadastrarButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

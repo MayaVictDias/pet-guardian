@@ -14,51 +14,34 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.helper.ToolbarHelper;
 
 public class LoginActivity extends AppCompatActivity {
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Toolbar toolbar = findViewById(R.id.toolbarPrincipal);
-        setSupportActionBar(toolbar);
+        inicializarComponentes();
 
-        // Remover o título padrão da ActionBar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+        ToolbarHelper.setupToolbar(this, toolbar, "Login");
 
-        // Criar um TextView para o título centralizado
-        TextView toolbarTitle = new TextView(this);
-        toolbarTitle.setText("Fazer login");
-        toolbarTitle.setTextSize(20); // Tamanho do texto
-        toolbarTitle.setGravity(Gravity.CENTER); // Centraliza o texto
-
-        // Definir LayoutParams para centralizar o TextView na Toolbar
-        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(
-                Toolbar.LayoutParams.WRAP_CONTENT,
-                Toolbar.LayoutParams.MATCH_PARENT
-        );
-        layoutParams.gravity = Gravity.CENTER; // Centraliza no eixo horizontal
-
-        // Adicionar o TextView à Toolbar
-        toolbar.addView(toolbarTitle, layoutParams);
-
-        // Exibe o ícone de voltar na toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    // Definir comportamento para quando o botão de voltar for clicado
+    // Método para lidar com o clique no botão de voltar
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            // Lógica para o botão de voltar
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onSupportNavigateUp() {
+        onBackPressed();  // Volta para a tela anterior
+        return true;
     }
 
+    private void inicializarComponentes() {
+
+        toolbar = findViewById(R.id.toolbarPrincipal);
+    }
 }

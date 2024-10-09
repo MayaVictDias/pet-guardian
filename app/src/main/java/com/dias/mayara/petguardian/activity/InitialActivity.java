@@ -19,12 +19,22 @@ public class InitialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_initial);
 
         Button loginButton = findViewById(R.id.loginButton);
+        Button cadastrarButton = findViewById(R.id.cadastrarButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Criar um Intent para navegar para LoginActivity
                 Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cadastrarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Criar um Intent para navegar para CadastrarActivity
+                Intent intent = new Intent(InitialActivity.this, CadastrarNovoUsuarioInserirNomeActivity.class);
                 startActivity(intent);
             }
         });
