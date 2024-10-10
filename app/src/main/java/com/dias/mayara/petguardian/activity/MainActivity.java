@@ -22,9 +22,16 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.fragment.AddPetFragment;
+import com.dias.mayara.petguardian.fragment.CameraIAFragment;
+import com.dias.mayara.petguardian.fragment.HomeFragment;
+import com.dias.mayara.petguardian.fragment.PerfilFragment;
+import com.dias.mayara.petguardian.fragment.SearchFragment;
 import com.dias.mayara.petguardian.helper.ToolbarHelper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
+    private BottomNavigationView bottomNavigationView;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // DrawerLayout
         drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView = findViewById(R.id.navigation_view);
 
         // Configurar o botão do menu
         ImageButton menuButton = toolbar.findViewById(R.id.menu_button);
@@ -86,6 +95,41 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Definindo o comportamento de seleção de itens
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                Fragment selectedFragment = null;
+
+                int id = menuItem.getItemId();
+
+                if (id == R.id.nav_home) {
+                    selectedFragment = new HomeFragment();
+                } else if (id == R.id.nav_search) {
+                    selectedFragment = new SearchFragment();
+                } else if (id == R.id.nav_add_pet) {
+                    selectedFragment = new AddPetFragment();
+                } else if (id == R.id.nav_camera_ia) {
+                    selectedFragment = new CameraIAFragment();
+                } else if (id == R.id.nav_perfil) {
+                    selectedFragment = new PerfilFragment();
+                }
+
+                // Substituir o FrameLayout pelo fragmento selecionado
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, selectedFragment).commit();
+
+                return true;
+            }
+        });
+
+        // Definir o fragmento inicial
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
+        }
     }
 
     private void exibirModalBoasVindas() {
