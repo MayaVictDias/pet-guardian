@@ -4,43 +4,123 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.helper.ToolbarHelper;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Se o usuário estiver vindo da tela de cadastro de novo usuário, irá visualizar a modal de boas vindas
         Intent intent = getIntent();
         if (intent != null && intent.getBooleanExtra("exibir_modal_boas_vindas", false)) {
             exibirModalBoasVindas();
         }
 
+        // Configuração da toolbar
+        toolbar = findViewById(R.id.toolbarPrincipal);
+        toolbar.setTitle("Pet Guardian");
+        toolbar.setTitleTextColor(getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        // DrawerLayout
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+
+        // Configurar o botão do menu
+        ImageButton menuButton = toolbar.findViewById(R.id.menu_button);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        // Personalizar o cabeçalho
+        View headerView = navigationView.getHeaderView(0);
+        ImageView userProfileImage = headerView.findViewById(R.id.user_profile_image);
+        TextView userName = headerView.findViewById(R.id.user_name);
+        TextView userLocation = headerView.findViewById(R.id.user_location);
+
+        // Lidar com cliques no menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.nav_notificacoes) {
+                    // Handle Notificações click
+                } else if (id == R.id.nav_meus_pets) {
+                    // Handle Meus pets click
+                } else if (id == R.id.nav_configuracoes) {
+                    // Handle Configurações click
+                }
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
     private void exibirModalBoasVindas() {
-        new AlertDialog.Builder(this)
-                .setTitle("Bem-vindo!")
-                .setMessage("Seja bem-vindo ao Pet Guardian!")
-                .setPositiveButton("Valeu!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setCancelable(false)  // Modal não pode ser cancelada ao tocar fora dela
-                .show();
+        // Inflar o layout personalizado
+        View modalView = getLayoutInflater().inflate(R.layout.modal_boas_vindas, null);
+
+        // Criar o AlertDialog com o layout personalizado
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(modalView);  // Define o layout customizado no diálogo
+
+        AlertDialog dialog = builder.create();
+
+        // Encontrar e configurar os componentes da modal
+        TextView titulo = modalView.findViewById(R.id.titulo);
+        TextView mensagem = modalView.findViewById(R.id.mensagem);
+        Button botaoFechar = modalView.findViewById(R.id.botao_fechar);
+
+        // Definir comportamento do botão para fechar a modal
+        botaoFechar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();  // Fecha a modal
+            }
+        });
+
+        // Exibir a modal
+        dialog.show();
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Captura o clique no botão do Toggle
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

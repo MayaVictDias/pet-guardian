@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/begeClaro"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Título da Modal -->
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Boas-vindas ao Pet Guardian!"
+        android:textColor="@color/verdeOlivaClaro"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Mensagem da Modal -->
+    <TextView
+        android:id="@+id/mensagem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/nunito_medium"
+        android:gravity="center"
+        android:text="Vamos iniciar um tour pelo app?"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <!-- Botão para fechar a modal -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/botao_fechar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="6dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/amareloDouradoSuave"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Agora não, valeu"
+            android:textColor="@color/marromEscuro"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="24dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/amareloDouradoSuave"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Claro, vamos lá!"
+            android:textColor="@color/marromEscuro" />
+    </LinearLayout>
+</LinearLayout>

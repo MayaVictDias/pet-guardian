@@ -45,6 +45,8 @@
             android:id="@+id/editTextNomeNovoUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
             android:background="@drawable/button_background_outline_gray" />
     </com.google.android.material.textfield.TextInputLayout>
 

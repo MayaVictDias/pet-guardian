@@ -40,6 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="6dp"
+        android:singleLine="true"
+        android:scrollHorizontally="true"
         android:layout_marginRight="24dp"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/cinzaClaro"
@@ -80,6 +82,8 @@
             android:id="@+id/editTextNovoUsuarioConfirmarSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
             android:background="@drawable/button_background_outline_gray"
             android:inputType="textPassword" />
 
