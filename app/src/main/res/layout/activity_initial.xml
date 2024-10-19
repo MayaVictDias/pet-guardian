@@ -39,7 +39,6 @@
 
         <Button
             android:id="@+id/cadastrarButton"
-            style="@style/CustomButtonStyleYellowOutline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -66,11 +65,10 @@
 
         <Button
             android:id="@+id/loginButton"
-            style="@style/CustomButtonStyleYellowOutline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="32dp"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"

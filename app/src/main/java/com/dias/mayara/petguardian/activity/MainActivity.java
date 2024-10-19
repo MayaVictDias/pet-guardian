@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_meus_pets) {
                     // Handle Meus pets click
                 } else if (id == R.id.nav_configuracoes) {
-                    // Handle Configurações click
+                    startActivity(new Intent(MainActivity.this, ConfiguracoesActivity.class));
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;

@@ -32,5 +32,12 @@
         <item name="android:fontFamily">@font/nunito_bold</item> <!-- Fonte da letra -->
     </style>
 
+    <style name="Base.TextAppearance.AppCompat.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@android:color/transparent</item> <!-- Cor de fundo -->
+        <item name="android:textColor">@color/marromEscuro</item> <!-- Cor do texto -->
+        <item name="android:padding">12dp</item> <!-- Preenchimento -->
+        <item name="android:fontFamily">@font/nunito_medium</item> <!-- Fonte da letra -->
+    </style>
+
     <style name="Theme.PetGuardian" parent="Base.Theme.PetGuardian" />
 </resources>

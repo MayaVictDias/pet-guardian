@@ -34,7 +34,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunito_medium"
-                android:text="Melissa Rodrigues"
+                android:text="Nome do usuário"
                 android:textColor="@color/marromEscuro"
                 android:textSize="18sp" />
 
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunito_medium"
-                android:text="Santo André - SP"
+                android:text="Cidade do usuário"
                 android:textColor="@color/marromEscuro"
                 android:textSize="14sp" />
 

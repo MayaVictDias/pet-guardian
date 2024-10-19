@@ -1,11 +1,13 @@
 package com.dias.mayara.petguardian.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextLoginSenha, editTextLoginEmail;
     private Button buttonLogin;
     private ProgressBar progressBar;
+    private CheckBox checkBoxLembrarUsuario;
 
     private Usuario usuario;
 
@@ -99,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
+                    autenticacao.getCurrentUser();
+
                     progressBar.setVisibility(View.GONE);
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -122,5 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         editTextLoginSenha = findViewById(R.id.editTextLoginSenha);
         buttonLogin = findViewById(R.id.buttonLogin);
         progressBar = findViewById(R.id.progressBar);
+        checkBoxLembrarUsuario = findViewById(R.id.checkBoxLembrarUsuario);
     }
 }

@@ -7,6 +7,7 @@ public class Usuario {
     private String emailUsuario;
     private String senhaUsuario;
     private String caminhoFotoUsuario;
+    private String cidadeUsuario;
 
     public Usuario() {
     }
@@ -49,5 +50,13 @@ public class Usuario {
 
     public void setCaminhoFotoUsuario(String caminhoFotoUsuario) {
         this.caminhoFotoUsuario = caminhoFotoUsuario;
+    }
+
+    public String getCidadeUsuario() {
+        return cidadeUsuario;
+    }
+
+    public void setCidadeUsuario(String cidadeUsuario) {
+        this.cidadeUsuario = cidadeUsuario;
     }
 }

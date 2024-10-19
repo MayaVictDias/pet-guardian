@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/begeClaro"
+    android:orientation="vertical"
+    tools:context=".activity.ConfiguracoesActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/begeClaro"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+        <!-- Botão do lado esquerdo -->
+
+        <!-- Adicionando um TextView para o título -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nunito_medium"
+            android:gravity="center"
+            android:text="Configurações"
+            android:textColor="@color/marromEscuro"
+            android:textSize="20sp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="12dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/buttonConta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Conta" />
+
+        <Button
+            android:id="@+id/buttonPoliticaPrivacidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Política de privacidade" />
+
+        <Button
+            android:id="@+id/buttonTermosUso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Termos de uso" />
+
+        <Button
+            android:id="@+id/buttonCentralAjuda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Central de ajuda" />
+
+        <Button
+            android:id="@+id/buttonSair"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sair" />
+    </LinearLayout>
+
+
+</LinearLayout>
