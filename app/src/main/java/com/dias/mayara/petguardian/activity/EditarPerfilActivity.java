@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ToolbarHelper;
+import com.shuhart.stepview.StepView;
 
 public class EditarPerfilActivity extends AppCompatActivity {
 
@@ -30,11 +31,13 @@ public class EditarPerfilActivity extends AppCompatActivity {
         ToolbarHelper.setupToolbar(this, toolbar, "Editar perfil");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
     }
 
     public void inicializarComponentes() {
 
         toolbar = findViewById(R.id.toolbarPrincipal);
+
         buttonAlterarFoto = findViewById(R.id.buttonAlterarFoto);
         editTextNomeUsuario = findViewById(R.id.editTextNomeUsuario);
         editTextEmail = findViewById(R.id.editTextEmail);

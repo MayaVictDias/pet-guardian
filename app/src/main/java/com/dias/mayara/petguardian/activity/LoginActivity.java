@@ -34,14 +34,13 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private EditText editTextLoginSenha, editTextLoginEmail;
+    private EditText editTextLoginEmail, editTextLoginSenha;
     private Button buttonLogin;
     private ProgressBar progressBar;
     private CheckBox checkBoxLembrarUsuario;
 
-    private Usuario usuario;
-
     private FirebaseAuth autenticacao;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,31 +61,18 @@ public class LoginActivity extends AppCompatActivity {
                 String textoEmail = editTextLoginEmail.getText().toString();
                 String textoSenha = editTextLoginSenha.getText().toString();
 
-                // Se algum campo não tiver sido preenchido, envia uma mensagem de erro pro usuário
-                if (!textoEmail.isEmpty()) {
-                    if (!textoSenha.isEmpty()) {
+                if (!textoEmail.isEmpty() && !textoSenha.isEmpty()) {
+                    usuario = new Usuario();
+                    usuario.setEmailUsuario(textoEmail);
+                    usuario.setSenhaUsuario(textoSenha);
 
-                        usuario = new Usuario();
-                        usuario.setEmailUsuario(textoEmail);
-                        usuario.setSenhaUsuario(textoSenha);
+                    validarLogin(usuario);
 
-                        validarLogin(usuario);
-
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Preencha o campo Senha!", Toast.LENGTH_SHORT).show();
-                    }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Preencha o campo Email!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Preencha os campos de Email e Senha!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    // Método para lidar com o clique no botão de voltar
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();  // Volta para a tela anterior
-        return true;
     }
 
     private void validarLogin(Usuario usuario) {
@@ -102,18 +88,30 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    autenticacao.getCurrentUser();
+                    // Verificar o estado da checkbox e salvar nas SharedPreferences
+                    SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
 
+                    if (checkBoxLembrarUsuario.isChecked()) {
+                        // Se checkbox marcada, salva a preferência para manter o login ativo
+                        editor.putBoolean("manterLogado", true);
+                    } else {
+                        // Se checkbox não marcada, remove a preferência
+                        editor.putBoolean("manterLogado", false);
+                        // Aqui você pode fazer o logout imediato, se desejar não manter a sessão
+                        autenticacao.signOut();
+                    }
+
+                    editor.apply(); // Aplica as mudanças nas SharedPreferences
                     progressBar.setVisibility(View.GONE);
 
+                    // Redireciona para a MainActivity
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 } else {
-
-                    Toast.makeText(LoginActivity.this, "Erro ao fazer login",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Erro ao fazer login", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -121,12 +119,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void inicializarComponentes() {
-
         toolbar = findViewById(R.id.toolbarPrincipal);
         editTextLoginEmail = findViewById(R.id.editTextLoginEmail);
         editTextLoginSenha = findViewById(R.id.editTextLoginSenha);
         buttonLogin = findViewById(R.id.buttonLogin);
         progressBar = findViewById(R.id.progressBar);
         checkBoxLembrarUsuario = findViewById(R.id.checkBoxLembrarUsuario);
+
+        SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        boolean lembrarUsuario = preferences.getBoolean("manterLogado", false);
+        checkBoxLembrarUsuario.setChecked(lembrarUsuario);
     }
 }
