@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/nav_configuracoes"
-        android:icon="@drawable/ic_configuracoes"
+        android:icon="@drawable/ic_settings_coral_28x28"
         android:title="Configurações" />
 
 </menu>

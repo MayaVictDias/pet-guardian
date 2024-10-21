@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
                 android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_perfil"
+                android:drawableStart="@drawable/ic_perfil_brown_25x26"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/nunito_medium"
                 android:hint="Nome de usuário" />
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_mail_marrom_32px32px"
+                android:drawableStart="@drawable/ic_mail_brown_32x32"
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/nunito_medium"
                 android:hint="Email" />

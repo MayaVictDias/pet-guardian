@@ -34,7 +34,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:contentDescription="Menu"
                     android:padding="10dp"
-                    android:src="@drawable/ic_menu" />
+                    android:src="@drawable/ic_menu_brown_28_18" />
 
                 <!-- Adicionando um TextView para o título -->
                 <TextView
