@@ -131,27 +131,27 @@
             android:text="Selecione a espécie do seu pet"
             android:textSize="13sp" />
 
-        <RelativeLayout
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="12dp">
 
-            <Spinner
-                android:id="@+id/mySpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_background_outline_gray"
-                android:padding="12dp"
-                android:spinnerMode="dropdown" />
-
-            <ImageView
-                android:id="@+id/imageViewSeta"
+            <RadioButton
+                android:id="@+id/radioButtonCachorro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="24dp"
-                android:src="@drawable/ic_arrow_down_gray_24x24" />
-        </RelativeLayout>
+                android:fontFamily="@font/nunito_medium"
+                android:text="Cachorro" />
+
+            <RadioButton
+                android:id="@+id/radioButtonGato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Gato" />
+
+        </RadioGroup>
 
         <TextView
             android:id="@+id/textView22"

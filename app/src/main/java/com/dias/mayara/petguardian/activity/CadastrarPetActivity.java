@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.fragment.cadastrarpet.InformacoesGeraisPetFragment;
@@ -70,15 +71,18 @@ public class CadastrarPetActivity extends AppCompatActivity implements FragmentI
 
     @Override
     public void replaceFragment(Class<? extends Fragment> fragmentClass) {
+        Fragment fragment = null;
         try {
-            Fragment fragment = fragmentClass.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_layout, fragment)
-                    .addToBackStack(null) // Adiciona à pilha de retorno
-                    .commit();
+            fragment = fragmentClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        // Use o FragmentManager para substituir o fragmento e adicionar à pilha
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null); // Adiciona à pilha de retrocesso
+        transaction.commit();
     }
 
 }

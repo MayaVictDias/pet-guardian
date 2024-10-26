@@ -61,8 +61,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
 
     public void inicializarComponentes(View view) {
 
-        spinner = view.findViewById(R.id.mySpinner);
-        imageViewSeta = view.findViewById(R.id.imageViewSeta);
         buttonAvancar = view.findViewById(R.id.buttonAvancar);
 
     }
