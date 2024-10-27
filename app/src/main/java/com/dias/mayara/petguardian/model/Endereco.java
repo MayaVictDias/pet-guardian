@@ -1,5 +1,8 @@
 package com.dias.mayara.petguardian.model;
 
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.google.firebase.database.DatabaseReference;
+
 public class Endereco {
 
     private String idEndereco;
@@ -11,10 +14,19 @@ public class Endereco {
     private String numero;
     private String complemento;
 
+    private DatabaseReference firebaseRef;
+    private DatabaseReference enderecoRef;
+
     public Endereco() {
     }
 
     public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento) {
+
+        // Configuração de um ID único para o pet
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        String idEndereco = firebaseRef.child("endereco").push().getKey();
+        this.setIdEndereco(idEndereco);
+
         this.complemento = complemento;
         this.numero = numero;
         this.ruaAvenida = ruaAvenida;
@@ -23,6 +35,22 @@ public class Endereco {
         this.estado = estado;
         this.cep = cep;
     }
+
+    public void salvar() {
+        // Verifica se o idEndereco foi configurado
+        if (idEndereco != null && !idEndereco.isEmpty()) {
+            // Inicializa a referência ao nó "endereco" do Firebase Database
+            firebaseRef = ConfiguracaoFirebase.getFirebase();
+            enderecoRef = firebaseRef.child("enderecos").child(idEndereco);
+
+            // Salva o objeto Endereco na referência criada
+            enderecoRef.setValue(this);
+        } else {
+            throw new IllegalStateException("ID do Endereço não foi configurado.");
+        }
+    }
+
+
 
     public String getIdEndereco() {
         return idEndereco;

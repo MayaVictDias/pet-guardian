@@ -1,5 +1,13 @@
 package com.dias.mayara.petguardian.model;
 
+import android.util.Log;
+
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Pet {
 
     private String idPet;
@@ -11,10 +19,55 @@ public class Pet {
     //private String caminhoFotoPet;
     private String statusPet;
 
-    private Endereco id;
+    private String idEndereco;
+
+    private DatabaseReference firebaseRef;
+    private DatabaseReference petRef;
 
     public Pet() {
 
+    }
+
+    public Pet(String nomePet, String idadePet, String generoPet, String especiePet, String sobreOPet, String statusPet, String idEndereco) {
+        // Configuração de um ID único para o pet
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        String idPet = firebaseRef.child("pets").push().getKey();
+        this.setIdPet(idPet);
+
+        this.nomePet = nomePet;
+        this.idadePet = idadePet;
+        this.generoPet = generoPet;
+        this.especiePet = especiePet;
+        this.sobreOPet = sobreOPet;
+        this.statusPet = statusPet;
+        this.idEndereco = idEndereco;
+    }
+
+    public void salvar() {
+        // Verifica se o ID do pet foi definido antes de prosseguir
+        if (getIdPet() != null) {
+            DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
+            DatabaseReference petsRef = firebaseRef.child("pets").child(getIdPet());
+
+            // Cria um mapa para armazenar os dados do pet
+            Map<String, Object> petData = new HashMap<>();
+            petData.put("idPet", getIdPet());
+            petData.put("nomePet", getNomePet());
+            petData.put("idadePet", getIdadePet());
+            petData.put("generoPet", getGeneroPet());
+            petData.put("especiePet", getEspeciePet());
+            petData.put("sobreOPet", getSobreOPet());
+            petData.put("statusPet", getStatusPet());
+
+            // Adiciona apenas o idEndereco, se ele estiver definido
+            if (idEndereco != null) {
+                petData.put("idEndereco", getIdEndereco());
+            }
+
+            petsRef.setValue(petData);
+        } else {
+            Log.e("Pet", "ID do Pet não foi definido. Verifique a configuração do Firebase.");
+        }
     }
 
     public String getIdPet() {
@@ -73,12 +126,12 @@ public class Pet {
         this.statusPet = statusPet;
     }
 
-    public Endereco getEndereco() {
-        return id;
+    public String getIdEndereco() {
+        return idEndereco;
     }
 
-    public void setEndereco(Endereco id) {
-        this.id = id;
+    public void setEndereco(String id) {
+        this.idEndereco = id;
     }
 
     @Override
@@ -91,7 +144,7 @@ public class Pet {
                 ", especiePet='" + especiePet + '\'' +
                 ", sobreOPet='" + sobreOPet + '\'' +
                 ", statusPet='" + statusPet + '\'' +
-                ", id=" + id +
+                ", id=" + idEndereco +
                 '}';
     }
 }

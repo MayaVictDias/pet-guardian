@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:layout_margin="24dp"
+    android:scrollbars="none"
+    tools:context=".fragment.cadastrarpet.ConferirInformacoesNovoPetFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:orientation="vertical"
-        tools:context=".fragment.cadastrarpet.ConferirInformacoesNovoPetFragment">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView29"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Revisão"
@@ -148,14 +149,15 @@
             android:textColor="@color/marromEscuro" />
 
         <TextView
-            android:id="@+id/textView41"
+            android:id="@+id/textViewVistoPelaUltimaVez"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Visto pela última vez"
             android:textColor="@color/coralSuave"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView43"
@@ -164,7 +166,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="CEP"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewCep"
@@ -174,7 +177,8 @@
             android:fontFamily="@font/nunito_medium"
             android:text="CEP"
             android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView45"
@@ -183,7 +187,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Estado"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewEstado"
@@ -193,7 +198,8 @@
             android:fontFamily="@font/nunito_medium"
             android:text="Estado"
             android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView47"
@@ -202,7 +208,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Cidade"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewCidade"
@@ -212,7 +219,29 @@
             android:fontFamily="@font/nunito_medium"
             android:text="Cidade"
             android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textView49"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Bairro"
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewBairro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Bairro"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView49"
@@ -221,7 +250,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Rua/Avenida"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewRuaAvenida"
@@ -231,7 +261,8 @@
             android:fontFamily="@font/nunito_medium"
             android:text="Rua/Avenida"
             android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView51"
@@ -240,7 +271,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Número"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewNumero"
@@ -250,7 +282,8 @@
             android:fontFamily="@font/nunito_medium"
             android:text="Número"
             android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView53"
@@ -259,7 +292,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Complemento"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewComplemento"
@@ -269,7 +303,8 @@
             android:fontFamily="@font/nunito_medium"
             android:text="Complemento"
             android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView55"
@@ -278,7 +313,8 @@
             android:layout_marginBottom="12dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Selecione no mapa"
-            android:textColor="@color/marromEscuro" />
+            android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -295,7 +331,7 @@
                 android:text="Voltar" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/buttonPublicar"
                 style="@style/CustomButtonStyleYellowBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

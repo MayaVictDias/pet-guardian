@@ -14,25 +14,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConferirInformacoesNovoPetFragment extends Fragment {
 
-    private Button buttonVoltar;
-    private FragmentInteractionListener listener;
-    private TextView textViewNomePet, textViewIdadePet, textViewGeneroPet, textViewEspecie,
-            textViewSobreOPet, textViewStatusPet, textViewCep, textViewEstado, textViewCidade,
-            textViewRuaAvenida, textViewNumero, textViewComplemento;
+    private List<View> adocaoComponents;
+    private List<View> desaparecidoComponents;
+    private List<View> procurandoDonoComponents;
 
-    private Endereco endereco;
-    private Pet pet;
+    private Button buttonVoltar, buttonPublicar;
+    private FragmentInteractionListener listener;
+    private TextView textViewNomePet, textViewIdadePet, textViewBairro, textViewGeneroPet, textViewEspecie,
+            textViewSobreOPet, textViewStatusPet, textViewCep, textViewEstado, textViewCidade,
+            textViewRuaAvenida, textViewNumero, textViewComplemento, textViewVistoPelaUltimaVez;
 
     private CadastroPetViewModel sharedViewModel;
+
+    private StorageReference storageRef;
+    private DatabaseReference firebaseRef;
+
+    private Pet pet;
+    private Endereco endereco;
 
     public ConferirInformacoesNovoPetFragment() {
         // Required empty public constructor
@@ -52,10 +66,10 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
-        inicializarComponentes(view);
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        storageRef = ConfiguracaoFirebase.getFirebaseStorage();
 
-        endereco = new Endereco();
-        pet = new Pet();
+        inicializarComponentes(view);
 
         carregarDados();
 
@@ -70,28 +84,66 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             }
         });
 
+        buttonPublicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+
+                    endereco = new Endereco(
+                            textViewCep.getText().toString(),
+                            textViewEstado.getText().toString(),
+                            textViewCidade.getText().toString(),
+                            textViewBairro.getText().toString(),
+                            textViewRuaAvenida.getText().toString(),
+                            textViewNumero.getText().toString(),
+                            textViewComplemento.getText().toString()
+                    );
+
+                    endereco.salvar();
+
+                    pet = new Pet(
+                            textViewNomePet.getText().toString(),
+                            textViewIdadePet.getText().toString(),
+                            textViewGeneroPet.getText().toString(),
+                            textViewEspecie.getText().toString(),
+                            textViewSobreOPet.getText().toString(),
+                            textViewStatusPet.getText().toString(),
+                            endereco.getIdEndereco()
+                    );
+
+                    pet.salvar();
+
+                    Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+
+                    requireActivity().finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace(); // Imprime o erro no log
+                }
+
+            }
+        });
+
         return view;
     }
 
     private void carregarDados() {
-
         sharedViewModel.getEndereco().observe(getViewLifecycleOwner(), new Observer<Endereco>() {
             @Override
             public void onChanged(Endereco endereco) {
                 if (endereco != null) {
-
                     textViewCep.setText(endereco.getCep());
                     textViewEstado.setText(endereco.getEstado());
                     textViewCidade.setText(endereco.getCidade());
+                    textViewBairro.setText(endereco.getBairro());
                     textViewRuaAvenida.setText(endereco.getRuaAvenida());
                     textViewNumero.setText(endereco.getNumero());
                     textViewComplemento.setText(endereco.getComplemento());
-
                 }
             }
         });
 
-        // Observa o objeto Pet e atualiza os TextViews quando ele muda
         sharedViewModel.getPet().observe(getViewLifecycleOwner(), new Observer<Pet>() {
             @Override
             public void onChanged(Pet pet) {
@@ -102,10 +154,24 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewEspecie.setText(pet.getEspeciePet());
                     textViewSobreOPet.setText(pet.getSobreOPet());
                     textViewStatusPet.setText(pet.getStatusPet());
+
+                    // Verifica o status e chama toggleOptions com o ID apropriado
+                    if ("Procurando dono".equals(pet.getStatusPet())) {
+                        toggleOptions(R.id.radioButtonProcurandoDono);
+                    } else if ("Desaparecido".equals(pet.getStatusPet())) {
+                        toggleOptions(R.id.radioButtonDesaparecido);
+                    } else if ("Adoção".equals(pet.getStatusPet())) {
+                        toggleOptions(R.id.radioButtonAdocao);
+                    }
                 }
             }
         });
     }
+
+    private void salvarDadosFirebase() {
+
+    }
+
 
     private void inicializarComponentes(View view) {
 
@@ -119,9 +185,65 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewCep = view.findViewById(R.id.textViewCep);
         textViewEstado = view.findViewById(R.id.textViewEstado);
         textViewCidade = view.findViewById(R.id.textViewCidade);
+        textViewBairro = view.findViewById(R.id.textViewBairro);
         textViewRuaAvenida = view.findViewById(R.id.textViewRuaAvenida);
         textViewNumero = view.findViewById(R.id.textViewNumero);
         textViewComplemento = view.findViewById(R.id.textViewComplemento);
+        textViewVistoPelaUltimaVez = view.findViewById(R.id.textViewVistoPelaUltimaVez);
+        buttonPublicar = view.findViewById(R.id.buttonPublicar);
+
+        // Inicializa as listas de componentes
+        inicializarListaDesaparecidoComponentes(view);
+        inicializarListaAdocaoComponentes(view);
+        inicializarListaProcurandoDonoComponents(view);
+    }
+
+    private void inicializarListaDesaparecidoComponentes(View view) {
+        desaparecidoComponents = new ArrayList<>();
+        desaparecidoComponents.add(textViewCep);
+        desaparecidoComponents.add(textViewVistoPelaUltimaVez);
+        desaparecidoComponents.add(textViewEstado);
+        desaparecidoComponents.add(textViewCidade);
+        desaparecidoComponents.add(textViewBairro);
+        desaparecidoComponents.add(textViewRuaAvenida);
+        desaparecidoComponents.add(textViewNumero);
+        desaparecidoComponents.add(textViewComplemento);
+    }
+
+    private void inicializarListaAdocaoComponentes(View view) {
+        adocaoComponents = new ArrayList<>();
+    }
+
+    private void inicializarListaProcurandoDonoComponents(View view) {
+        procurandoDonoComponents = new ArrayList<>();
+        procurandoDonoComponents.add(textViewCep);
+        procurandoDonoComponents.add(textViewEstado);
+        procurandoDonoComponents.add(textViewCidade);
+        procurandoDonoComponents.add(textViewBairro);
+        procurandoDonoComponents.add(textViewVistoPelaUltimaVez);
+        procurandoDonoComponents.add(textViewRuaAvenida);
+        procurandoDonoComponents.add(textViewNumero);
+        procurandoDonoComponents.add(textViewComplemento);
+    }
+
+    private void toggleOptions(int checkedId) {
+        toggleViewsVisibility(adocaoComponents, View.GONE);
+        toggleViewsVisibility(desaparecidoComponents, View.GONE);
+        toggleViewsVisibility(procurandoDonoComponents, View.GONE);
+
+        if (checkedId == R.id.radioButtonAdocao) {
+            toggleViewsVisibility(adocaoComponents, View.VISIBLE);
+        } else if (checkedId == R.id.radioButtonDesaparecido) {
+            toggleViewsVisibility(desaparecidoComponents, View.VISIBLE);
+        } else if (checkedId == R.id.radioButtonProcurandoDono) {
+            toggleViewsVisibility(procurandoDonoComponents, View.VISIBLE);
+        }
+    }
+
+    private void toggleViewsVisibility(List<View> views, int visibility) {
+        for (View view : views) {
+            view.setVisibility(visibility);
+        }
     }
 
     @Override
