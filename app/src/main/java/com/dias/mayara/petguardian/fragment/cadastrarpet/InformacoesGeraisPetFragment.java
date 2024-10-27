@@ -7,22 +7,20 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.Pet;
-import com.dias.mayara.petguardian.model.SharedViewModel;
+import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class InformacoesGeraisPetFragment extends Fragment {
@@ -35,7 +33,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
             radioButtonFilhote, radioButtonAdulto;
     private CheckBox checkBoxNaoSeiNomePet;
 
-    private SharedViewModel sharedViewModel;
+    private CadastroPetViewModel cadastroPetViewModel;
 
     private Pet pet;
 
@@ -60,7 +58,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
 
         pet = new Pet();
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        cadastroPetViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         checkBoxNaoSeiNomePet.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -90,7 +88,12 @@ public class InformacoesGeraisPetFragment extends Fragment {
                 } else {
 
                     // Obter o texto dos campos EditText e salvar no objeto pet
-                    pet.setNomePet(editTextNomePet.getText().toString());
+                    if(checkBoxNaoSeiNomePet.isChecked()) {
+                        pet.setNomePet("Nome desconhecido");
+                    } else {
+                        pet.setNomePet(editTextNomePet.getText().toString());
+                    }
+
                     pet.setSobreOPet(editTextSobreOPet.getText().toString());
 
                     // Obter a seleção de Gênero
@@ -110,15 +113,22 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     }
 
                     // Obter a seleção de Idade
-                    int selectedIdadeId = radioGroupEspecie.getCheckedRadioButtonId();
+                    int selectedIdadeId = radioGroupIdade.getCheckedRadioButtonId();
                     if (selectedIdadeId == R.id.radioButtonFilhote) {
-                        pet.setEspeciePet("Filhote");
+                        pet.setIdadePet("Filhote");
                     } else if (selectedIdadeId == R.id.radioButtonAdulto) {
-                        pet.setEspeciePet("Adulto");
+                        pet.setIdadePet("Adulto");
                     }
 
+                    Log.d("PetInfo", "Nome: " + pet.getNomePet());
+                    Log.d("PetInfo", "Idade: " + pet.getIdadePet());
+                    Log.d("PetInfo", "Genero: " + pet.getGeneroPet());
+                    Log.d("PetInfo", "Especie: " + pet.getEspeciePet());
+                    Log.d("PetInfo", "Sobre: " + pet.getSobreOPet());
+                    Log.d("PetInfo", "Status: " + pet.getStatusPet());
+
                     // Salvar o objeto Pet no SharedViewModel
-                    sharedViewModel.setPet(pet);
+                    cadastroPetViewModel.setPet(pet);
 
                     // Substituir o fragmento atual pelo próximo
                     listener.replaceFragment(StatusPetFragment.class);
@@ -238,7 +248,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        sharedViewModel.getPet().removeObservers(getViewLifecycleOwner());
+        cadastroPetViewModel.getPet().removeObservers(getViewLifecycleOwner());
     }
 
 }

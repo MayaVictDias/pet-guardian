@@ -80,4 +80,18 @@ public class Pet {
     public void setEndereco(Endereco id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "idPet='" + idPet + '\'' +
+                ", nomePet='" + nomePet + '\'' +
+                ", idadePet='" + idadePet + '\'' +
+                ", generoPet='" + generoPet + '\'' +
+                ", especiePet='" + especiePet + '\'' +
+                ", sobreOPet='" + sobreOPet + '\'' +
+                ", statusPet='" + statusPet + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

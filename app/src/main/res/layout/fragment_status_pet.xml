@@ -316,8 +316,7 @@
                 android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:tag="perdido_group, desaparecido_group"
-                android:text="Voltar"
-                android:visibility="gone" />
+                android:text="Voltar" />
 
             <Button
                 android:id="@+id/buttonAvancar"
@@ -327,8 +326,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_weight="1"
                 android:tag="perdido_group, desaparecido_group"
-                android:text="Avançar"
-                android:visibility="gone" />
+                android:text="Avançar" />
         </LinearLayout>
 
     </LinearLayout>

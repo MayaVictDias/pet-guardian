@@ -2,8 +2,6 @@ package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +13,11 @@ import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
-import com.dias.mayara.petguardian.model.SharedViewModel;
+import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +34,7 @@ public class StatusPetFragment extends Fragment {
     private List<View> desaparecidoComponents;
     private List<View> procurandoDonoComponents;
 
-    private SharedViewModel sharedViewModel;
+    private CadastroPetViewModel cadastroPetViewModel;
     private Pet pet;
 
     private Button buttonVoltar, buttonAvancar;
@@ -51,8 +50,7 @@ public class StatusPetFragment extends Fragment {
 
     private Endereco endereco;
 
-    // Variáveis para armazenar os dados dos campos
-    private String cep, estado, cidade, bairro, ruaAvenida, numeroEndereco, complementoEndereco;
+    private CadastroPetViewModel sharedViewModel;
 
     @Nullable
     @Override
@@ -60,12 +58,13 @@ public class StatusPetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_status_pet, container, false);
 
         endereco = new Endereco();
+        pet = new Pet();
         inicializarComponentes(view);
         inicializarListaDesaparecidoComponentes(view);
         inicializarListaAdocaoComponentes(view);
         inicializarListaProcurandoDonoComponents(view);
 
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        cadastroPetViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         // Carrega os dados salvos no ViewModel
         carregarDadosSalvos();
@@ -77,18 +76,51 @@ public class StatusPetFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 toggleOptions(checkedId);
                 // Salva a opção selecionada no ViewModel
-                sharedViewModel.setOpcaoSelecionada(checkedId);
+                cadastroPetViewModel.setOpcaoSelecionada(checkedId);
             }
         });
 
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvarDados();
-                listener.replaceFragment(ConferirInformacoesNovoPetFragment.class);
+                if(radioGroupOptions.getCheckedRadioButtonId() == -1) {
+                    Toast.makeText(getContext(), "Selecione o status do pet", Toast.LENGTH_SHORT).show();
+                } else if(editTextCep.getVisibility() == View.VISIBLE && editTextCep.getText() == null ||
+                        editTextCep.getVisibility() == View.VISIBLE && editTextCep.getText().toString().trim().isEmpty()) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'CEP'", Toast.LENGTH_SHORT).show();
+
+                } else if(editTextEstado.getText() == null && editTextEstado.getVisibility() == View.VISIBLE ||
+                        editTextEstado.getText().toString().trim().isEmpty() && editTextEstado.getVisibility() == View.VISIBLE) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'Estado'", Toast.LENGTH_SHORT).show();
+
+                } else if(editTextCidade.getText() == null && editTextCidade.getVisibility() == View.VISIBLE ||
+                        editTextCidade.getText().toString().trim().isEmpty() && editTextCidade.getVisibility() == View.VISIBLE ) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'Cidade'", Toast.LENGTH_SHORT).show();
+
+                } else if(editTextBairro.getText() == null && editTextBairro.getVisibility() == View.VISIBLE ||
+                        editTextBairro.getText().toString().trim().isEmpty() && editTextBairro.getVisibility() == View.VISIBLE) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'Bairro'", Toast.LENGTH_SHORT).show();
+
+                } else if(editTextRuaAvenida.getText() == null && editTextRuaAvenida.getVisibility() == View.VISIBLE ||
+                        editTextRuaAvenida.getText().toString().trim().isEmpty() && editTextRuaAvenida.getVisibility() == View.VISIBLE ) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'Avenida'", Toast.LENGTH_SHORT).show();
+
+                } else if(editTextNumeroEndereco.getText() == null && editTextNumeroEndereco.getVisibility() == View.VISIBLE ||
+                        editTextNumeroEndereco.getText().toString().trim().isEmpty() && editTextNumeroEndereco.getVisibility() == View.VISIBLE) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'Número'", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    salvarDados();
+                    listener.replaceFragment(ConferirInformacoesNovoPetFragment.class);
+                }
             }
         });
-
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +141,7 @@ public class StatusPetFragment extends Fragment {
 
     private void carregarDadosSalvos() {
         // Observa e atualiza os campos de acordo com o ViewModel
-        sharedViewModel.getEndereco().observe(getViewLifecycleOwner(), new Observer<Endereco>() {
+        cadastroPetViewModel.getEndereco().observe(getViewLifecycleOwner(), new Observer<Endereco>() {
             @Override
             public void onChanged(Endereco endereco) {
                 if (endereco != null) {
@@ -124,7 +156,7 @@ public class StatusPetFragment extends Fragment {
             }
         });
 
-        sharedViewModel.getOpcaoSelecionada().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        cadastroPetViewModel.getOpcaoSelecionada().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer opcaoSelecionada) {
                 if (opcaoSelecionada != null) {
@@ -135,7 +167,33 @@ public class StatusPetFragment extends Fragment {
     }
 
     private void salvarDados() {
-        // Atualiza os dados do endereço no ViewModel
+        // Obtém o objeto Pet atual do ViewModel (se ele já existir)
+        Pet petAtual = cadastroPetViewModel.getPet().getValue();
+
+        if (petAtual == null) {
+            // Se o pet atual for nulo, crie um novo objeto Pet
+            petAtual = new Pet();
+        }
+
+        // Define o status com base na seleção do RadioGroup
+        int selectedOptionId = radioGroupOptions.getCheckedRadioButtonId();
+        String status = "";
+
+        if (selectedOptionId == R.id.radioButtonAdocao) {
+            status = "Adocao";
+        } else if (selectedOptionId == R.id.radioButtonDesaparecido) {
+            status = "Desaparecido";
+        } else if (selectedOptionId == R.id.radioButtonProcurandoDono) {
+            status = "Procurando dono";
+        }
+
+        // Atualiza apenas o campo de status no objeto Pet existente
+        petAtual.setStatusPet(status);
+
+        // Salva o objeto Pet atualizado no ViewModel
+        cadastroPetViewModel.setPet(petAtual);
+
+        // Salva os dados de endereço também
         Endereco endereco = new Endereco(
                 editTextCep.getText().toString(),
                 editTextEstado.getText().toString(),
@@ -145,8 +203,9 @@ public class StatusPetFragment extends Fragment {
                 editTextNumeroEndereco.getText().toString(),
                 editTextComplementoEndereco.getText().toString()
         );
-        sharedViewModel.setEndereco(endereco);
+        cadastroPetViewModel.setEndereco(endereco);
     }
+
 
     private void toggleOptions(int checkedId) {
         toggleViewsVisibility(adocaoComponents, View.GONE);
@@ -211,14 +270,10 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(editTextComplementoEndereco);
         desaparecidoComponents.add(textViewSelecioneMapa);
         desaparecidoComponents.add(textViewSelecioneMapaInstrucoes);
-        desaparecidoComponents.add(buttonAvancar);
-        desaparecidoComponents.add(buttonVoltar);
     }
 
     private void inicializarListaAdocaoComponentes(View view) {
         adocaoComponents = new ArrayList<>();
-        adocaoComponents.add(buttonAvancar);
-        adocaoComponents.add(buttonVoltar);
     }
 
     private void inicializarListaProcurandoDonoComponents(View view) {
@@ -241,8 +296,6 @@ public class StatusPetFragment extends Fragment {
         procurandoDonoComponents.add(editTextComplementoEndereco);
         procurandoDonoComponents.add(textViewSelecioneMapa);
         procurandoDonoComponents.add(textViewSelecioneMapaInstrucoes);
-        procurandoDonoComponents.add(buttonAvancar);
-        procurandoDonoComponents.add(buttonVoltar);
     }
 
     private void toggleViewsVisibility(List<View> views, int visibility) {

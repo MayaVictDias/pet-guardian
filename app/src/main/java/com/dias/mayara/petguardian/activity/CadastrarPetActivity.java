@@ -16,13 +16,13 @@ import com.dias.mayara.petguardian.fragment.cadastrarpet.InformacoesGeraisPetFra
 import com.dias.mayara.petguardian.fragment.cadastrarpet.StatusPetFragment;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.helper.ToolbarHelper;
-import com.dias.mayara.petguardian.model.SharedViewModel;
+import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 
 public class CadastrarPetActivity extends AppCompatActivity implements FragmentInteractionListener {
 
     private Toolbar toolbar;
     private ImageButton imageButtonClose;
-    private SharedViewModel sharedViewModel;
+    private CadastroPetViewModel cadastroPetViewModel;
 
     // CadastrarPetActivity.java
     public interface FragmentInteractionListener {
@@ -38,7 +38,7 @@ public class CadastrarPetActivity extends AppCompatActivity implements FragmentI
         inicializarComponentes();
 
         // Obter ViewModel
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        cadastroPetViewModel = new ViewModelProvider(this).get(CadastroPetViewModel.class);
 
         setSupportActionBar(toolbar);
         ToolbarHelper.setupToolbar(this, toolbar, "Editar perfil");
@@ -67,8 +67,8 @@ public class CadastrarPetActivity extends AppCompatActivity implements FragmentI
 
     }
 
-    public SharedViewModel getSharedViewModel() {
-        return sharedViewModel;
+    public CadastroPetViewModel getSharedViewModel() {
+        return cadastroPetViewModel;
     }
 
     public void onAvancarButtonClicked() {

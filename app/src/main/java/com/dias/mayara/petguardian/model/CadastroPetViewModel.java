@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SharedViewModel extends ViewModel {
+public class CadastroPetViewModel extends ViewModel {
 
     private final MutableLiveData<Endereco> endereco = new MutableLiveData<>();
     private final MutableLiveData<Integer> opcaoSelecionada = new MutableLiveData<>();
