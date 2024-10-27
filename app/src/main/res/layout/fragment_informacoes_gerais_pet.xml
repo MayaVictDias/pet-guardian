@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:text="Informe o nome do seu pet"
+            android:text="Informe o nome do pet"
             android:textSize="13sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -44,11 +44,20 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNomePet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
                 android:background="@drawable/button_background_outline_gray" />
+
         </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/checkBoxNaoSeiNomePet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Não sei o nome do pet" />
 
         <TextView
             android:id="@+id/textView16"
@@ -64,20 +73,27 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_medium"
-            android:text="Indique se seu pet é filhote ou adulto"
+            android:text="Indique se o pet é filhote ou adulto"
             android:textSize="13sp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+        <RadioGroup
+            android:id="@+id/radioGroupIdade"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <RadioButton
+                android:id="@+id/radioButtonFilhote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filhote" />
+
+            <RadioButton
+                android:id="@+id/radioButtonAdulto"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/button_background_outline_gray" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Adulto" />
+        </RadioGroup>
 
         <TextView
             android:id="@+id/textView18"
@@ -93,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_medium"
-            android:text="Indique se seu pet é macho ou fêmea"
+            android:text="Indique se o pet é macho ou fêmea"
             android:textSize="13sp" />
 
         <RadioGroup
@@ -102,13 +118,13 @@
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioMacho"
+                android:id="@+id/radioButtonMacho"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Macho" />
 
             <RadioButton
-                android:id="@+id/radioFemea"
+                android:id="@+id/radioButtonFemea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -128,10 +144,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:text="Selecione a espécie do seu pet"
+            android:text="Selecione a espécie do pet"
             android:textSize="13sp" />
 
         <RadioGroup
+            android:id="@+id/radioGroupEspecie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="6dp"
@@ -167,7 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_medium"
-            android:text="Forneça mais informações importantes sobre o seu pet"
+            android:text="Forneça mais informações importantes sobre o pet"
             android:textSize="13sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -176,6 +193,7 @@
             android:layout_marginBottom="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextSobreOPet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray" />

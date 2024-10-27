@@ -116,18 +116,18 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextCep"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -144,17 +144,17 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextEstado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -171,17 +171,17 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextCidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -198,17 +198,17 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextBairro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextBairro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -235,17 +235,17 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextRuaAvcnida"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextRuaAvenida"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -261,17 +261,17 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextNumeroEndereco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNumeroEndereco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -288,17 +288,17 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextComplementoEndereco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="perdido_group, desaparecido_group"
-            android:visibility="gone">
+            android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextComplementoEndereco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"
-                android:tag="perdido_group, desaparecido_group" />
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
