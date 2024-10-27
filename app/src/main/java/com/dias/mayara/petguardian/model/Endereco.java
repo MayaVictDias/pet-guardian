@@ -12,7 +12,16 @@ public class Endereco {
     private String complemento;
 
     public Endereco() {
+    }
 
+    public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento) {
+        this.complemento = complemento;
+        this.numero = numero;
+        this.ruaAvenida = ruaAvenida;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
     }
 
     public String getIdEndereco() {

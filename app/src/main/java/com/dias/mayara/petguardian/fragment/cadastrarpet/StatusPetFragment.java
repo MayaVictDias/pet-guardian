@@ -2,6 +2,8 @@ package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -33,7 +36,6 @@ public class StatusPetFragment extends Fragment {
     private List<View> procurandoDonoComponents;
 
     private SharedViewModel sharedViewModel;
-
     private Pet pet;
 
     private Button buttonVoltar, buttonAvancar;
@@ -58,7 +60,6 @@ public class StatusPetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_status_pet, container, false);
 
         endereco = new Endereco();
-
         inicializarComponentes(view);
         inicializarListaDesaparecidoComponentes(view);
         inicializarListaAdocaoComponentes(view);
@@ -66,39 +67,37 @@ public class StatusPetFragment extends Fragment {
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
+        // Carrega os dados salvos no ViewModel
+        carregarDadosSalvos();
+
         // Configura o listener do RadioGroup
         RadioGroup radioGroup = view.findViewById(R.id.radioGroupOptions);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 toggleOptions(checkedId);
+                // Salva a opção selecionada no ViewModel
+                sharedViewModel.setOpcaoSelecionada(checkedId);
             }
         });
 
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                endereco.setCep(editTextCep.getText().toString());
-                endereco.setEstado(editTextEstado.getText().toString());
-                endereco.setCidade(editTextCidade.getText().toString());
-                endereco.setBairro(editTextBairro.getText().toString());
-                endereco.setRuaAvenida(editTextRuaAvenida.getText().toString());
-                endereco.setNumero(editTextNumeroEndereco.getText().toString());
-                endereco.setComplemento(editTextComplementoEndereco.getText().toString());
-
-                // Armazene o endereço no ViewModel
-                sharedViewModel.setEndereco(endereco);
-
+                salvarDados();
                 listener.replaceFragment(ConferirInformacoesNovoPetFragment.class);
-
             }
         });
 
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                try {
+                    salvarDados();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                } catch (Exception e) {
+                    e.printStackTrace(); // Imprime o erro no log
+                }
             }
         });
 
@@ -108,142 +107,47 @@ public class StatusPetFragment extends Fragment {
         return view;
     }
 
-
-/*
-    private void setupEditTexts() {
-        editTextCep.liste(new TextWatcher() {
+    private void carregarDadosSalvos() {
+        // Observa e atualiza os campos de acordo com o ViewModel
+        sharedViewModel.getEndereco().observe(getViewLifecycleOwner(), new Observer<Endereco>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setCep(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        editTextEstado.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setEstado(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onChanged(Endereco endereco) {
+                if (endereco != null) {
+                    editTextCep.setText(endereco.getCep());
+                    editTextEstado.setText(endereco.getEstado());
+                    editTextCidade.setText(endereco.getCidade());
+                    editTextBairro.setText(endereco.getBairro());
+                    editTextRuaAvenida.setText(endereco.getRuaAvenida());
+                    editTextNumeroEndereco.setText(endereco.getNumero());
+                    editTextComplementoEndereco.setText(endereco.getComplemento());
+                }
             }
         });
 
-        editTextCidade.addTextChangedListener(new TextWatcher() {
+        sharedViewModel.getOpcaoSelecionada().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setCidade(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        editTextCidade.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setCidade(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        editTextBairro.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setBairro(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        editTextRuaAvenida.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setRuaAvenida(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        editTextNumeroEndereco.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setNumero(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        editTextComplementoEndereco.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                endereco.setComplemento(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        radioGroupOptions.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.radioButtonAdocao) {
-                pet.setStatusPet("Adoção");
-            } else if (checkedId == R.id.radioButtonDesaparecido) {
-                pet.setStatusPet("Desaparecido");
-            } else if (checkedId == R.id.radioButtonProcurandoDono) {
-                pet.setStatusPet("Procurando dono");
+            public void onChanged(Integer opcaoSelecionada) {
+                if (opcaoSelecionada != null) {
+                    radioGroupOptions.check(opcaoSelecionada);
+                }
             }
         });
     }
 
+    private void salvarDados() {
+        // Atualiza os dados do endereço no ViewModel
+        Endereco endereco = new Endereco(
+                editTextCep.getText().toString(),
+                editTextEstado.getText().toString(),
+                editTextCidade.getText().toString(),
+                editTextBairro.getText().toString(),
+                editTextRuaAvenida.getText().toString(),
+                editTextNumeroEndereco.getText().toString(),
+                editTextComplementoEndereco.getText().toString()
+        );
+        sharedViewModel.setEndereco(endereco);
+    }
 
- */
     private void toggleOptions(int checkedId) {
         toggleViewsVisibility(adocaoComponents, View.GONE);
         toggleViewsVisibility(desaparecidoComponents, View.GONE);
@@ -313,14 +217,12 @@ public class StatusPetFragment extends Fragment {
 
     private void inicializarListaAdocaoComponentes(View view) {
         adocaoComponents = new ArrayList<>();
-        desaparecidoComponents.add(buttonAvancar);
-        desaparecidoComponents.add(buttonVoltar);
-
+        adocaoComponents.add(buttonAvancar);
+        adocaoComponents.add(buttonVoltar);
     }
 
     private void inicializarListaProcurandoDonoComponents(View view) {
         procurandoDonoComponents = new ArrayList<>();
-
         procurandoDonoComponents.add(textViewVistoUltimaVez);
         procurandoDonoComponents.add(textViewCep);
         procurandoDonoComponents.add(editTextCep);
@@ -355,8 +257,13 @@ public class StatusPetFragment extends Fragment {
         if (context instanceof FragmentInteractionListener) {
             listener = (FragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement FragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " deve implementar FragmentInteractionListener");
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+    }
 }

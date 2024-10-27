@@ -234,4 +234,11 @@ public class InformacoesGeraisPetFragment extends Fragment {
         radioButtonGato = view.findViewById(R.id.radioButtonGato);
         checkBoxNaoSeiNomePet = view.findViewById(R.id.checkBoxNaoSeiNomePet);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        sharedViewModel.getPet().removeObservers(getViewLifecycleOwner());
+    }
+
 }
