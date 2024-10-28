@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dias.mayara.petguardian.R;
@@ -63,7 +62,7 @@ public class InitialActivity extends AppCompatActivity {
 
     public void verificaSeUsuarioEstaLogado() {
 
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        autenticacao = ConfiguracaoFirebase.getFirebaseAuth();
 
         if (autenticacao.getCurrentUser() != null) {
 

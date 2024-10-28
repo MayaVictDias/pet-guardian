@@ -19,11 +19,11 @@ import android.widget.Toast;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
+import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +42,10 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
     private CadastroPetViewModel sharedViewModel;
 
-    private StorageReference storageRef;
     private DatabaseReference firebaseRef;
+    private DatabaseReference usuariosRef;
+    private DatabaseReference usuarioLogadoRef;
+    private String idUsuarioLogado;
 
     private Pet pet;
     private Endereco endereco;
@@ -67,7 +69,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        storageRef = ConfiguracaoFirebase.getFirebaseStorage();
+        usuariosRef = ConfiguracaoFirebase.getFirebase().child("usuarios");
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
 
         inicializarComponentes(view);
 
@@ -87,9 +91,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         buttonPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 try {
-
+                    // Cria o objeto Endereco
                     endereco = new Endereco(
                             textViewCep.getText().toString(),
                             textViewEstado.getText().toString(),
@@ -100,8 +103,10 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                             textViewComplemento.getText().toString()
                     );
 
+                    // Salva o endereço no Firebase
                     endereco.salvar();
 
+                    // Cria o objeto Pet, passando idUsuarioLogado como idTutor
                     pet = new Pet(
                             textViewNomePet.getText().toString(),
                             textViewIdadePet.getText().toString(),
@@ -112,16 +117,16 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                             endereco.getIdEndereco()
                     );
 
+                    // Salva o pet no Firebase
                     pet.salvar();
 
+                    // Exibe uma mensagem de sucesso
                     Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
 
                     requireActivity().finish();
-
                 } catch (Exception e) {
                     e.printStackTrace(); // Imprime o erro no log
                 }
-
             }
         });
 

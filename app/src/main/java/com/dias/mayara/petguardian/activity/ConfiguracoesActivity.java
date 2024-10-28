@@ -6,16 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
-import com.dias.mayara.petguardian.helper.ToolbarHelper;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
@@ -31,7 +26,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         inicializarComponentes();
 
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        autenticacao = ConfiguracaoFirebase.getFirebaseAuth();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

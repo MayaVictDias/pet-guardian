@@ -3,6 +3,7 @@ package com.dias.mayara.petguardian.model;
 import android.util.Log;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 public class Pet {
 
     private String idPet;
+    private String idTutor;
     private String nomePet;
     private String idadePet;
     private String generoPet;
@@ -23,17 +25,25 @@ public class Pet {
 
     private DatabaseReference firebaseRef;
     private DatabaseReference petRef;
+    private DatabaseReference usuarioLogadoRef;
+    private String idUsuarioLogado;
+    private DatabaseReference usuariosRef;
 
     public Pet() {
 
     }
 
-    public Pet(String nomePet, String idadePet, String generoPet, String especiePet, String sobreOPet, String statusPet, String idEndereco) {
+    public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
+               String sobreOPet, String statusPet, String idEndereco) {
         // Configuração de um ID único para o pet
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         String idPet = firebaseRef.child("pets").push().getKey();
         this.setIdPet(idPet);
 
+        idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
+        usuariosRef = ConfiguracaoFirebase.getFirebase().child("usuarios");
+
+        this.idTutor = idUsuarioLogado;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
@@ -43,15 +53,17 @@ public class Pet {
         this.idEndereco = idEndereco;
     }
 
+
     public void salvar() {
         // Verifica se o ID do pet foi definido antes de prosseguir
         if (getIdPet() != null) {
             DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
-            DatabaseReference petsRef = firebaseRef.child("pets").child(getIdPet());
+            DatabaseReference petsRef = firebaseRef.child("pets").child(getIdTutor()).child(getIdPet());
 
             // Cria um mapa para armazenar os dados do pet
             Map<String, Object> petData = new HashMap<>();
             petData.put("idPet", getIdPet());
+            petData.put("idTutor", getIdTutor());
             petData.put("nomePet", getNomePet());
             petData.put("idadePet", getIdadePet());
             petData.put("generoPet", getGeneroPet());
@@ -96,6 +108,14 @@ public class Pet {
 
     public String getGeneroPet() {
         return generoPet;
+    }
+
+    public String getIdTutor() {
+        return idTutor;
+    }
+
+    public void setIdTutor(String idTutor) {
+        this.idTutor = idTutor;
     }
 
     public void setGeneroPet(String generoPet) {

@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -102,7 +103,7 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
     // Metodo responsável por cadastrar um novo usuário no firebase
     private void cadastrar(Usuario usuario) {
 
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        autenticacao = ConfiguracaoFirebase.getFirebaseAuth();
         autenticacao.createUserWithEmailAndPassword(
                 usuario.getEmailUsuario(),
                 usuario.getSenhaUsuario()
@@ -117,6 +118,14 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
                             try {
 
                                 progressBar.setVisibility(View.GONE);
+
+                                // Salvar dados do usuário no firebase
+                                String idUsuario = task.getResult().getUser().getUid(); // Recupera ID do usuario criado pelo firebase
+                                usuario.setIdUsuario(idUsuario);
+                                usuario.salvar();
+
+                                // Salvar nome do usuário
+                                UsuarioFirebase.atualizarNomeUsuario(usuario.getNomeUsuario());
 
                                 Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
                                         "Cadastro realizado com sucesso!",

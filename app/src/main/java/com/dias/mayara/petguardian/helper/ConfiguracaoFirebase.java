@@ -21,7 +21,7 @@ public class ConfiguracaoFirebase {
     }
 
     // Retorna a instancia do FirebaseAuth
-    public static FirebaseAuth getFirebaseAutenticacao() {
+    public static FirebaseAuth getFirebaseAuth() {
         if ( referenciaAutenticacao == null) {
             referenciaAutenticacao = FirebaseAuth.getInstance();
         }

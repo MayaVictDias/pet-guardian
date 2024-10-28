@@ -180,7 +180,7 @@ public class StatusPetFragment extends Fragment {
         String status = "";
 
         if (selectedOptionId == R.id.radioButtonAdocao) {
-            status = "Adocao";
+            status = "Adoção";
         } else if (selectedOptionId == R.id.radioButtonDesaparecido) {
             status = "Desaparecido";
         } else if (selectedOptionId == R.id.radioButtonProcurandoDono) {

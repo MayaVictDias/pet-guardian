@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 public class Endereco {
 
     private String idEndereco;
+    private String idPet;
     private String cep;
     private String estado;
     private String cidade;
