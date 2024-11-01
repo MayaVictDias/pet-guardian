@@ -49,6 +49,7 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
         Intent intent = getIntent();
         String nomeUsuario = intent.getStringExtra("nome_usuario");
         String emailUsuario = intent.getStringExtra("email_usuario");
+        String cidadeUsuario = intent.getStringExtra("cidade_usuario");
 
         // Configurações da toolbar
         setSupportActionBar(toolbar);
@@ -73,6 +74,8 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
                         usuario = new Usuario();
 
                         usuario.setEmailUsuario(emailUsuario);
+                        usuario.setNomeUsuario(nomeUsuario);
+                        usuario.setCidadeUsuario(cidadeUsuario);
                         usuario.setSenhaUsuario(textoConfirmarSenha);
 
                         cadastrar(usuario);

@@ -18,7 +18,7 @@ public class CadastrarNovoUsuarioInserirNomeActivity extends AppCompatActivity {
 
     private Button buttonCadastrarUsuarioAvancar;
     private Toolbar toolbar;
-    private EditText editTextNomeNovoUsuario;
+    private EditText editTextNomeNovoUsuario, editTextCidadeUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class CadastrarNovoUsuarioInserirNomeActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(getApplicationContext(), CadastrarNovoUsuarioInserirEmailActivity.class);
                     intent.putExtra("nome_usuario", editTextNomeNovoUsuario.getText().toString());
+                    intent.putExtra("cidade_usuario", editTextCidadeUsuario.getText().toString());
                     startActivity(intent);
                 } else {
                     Toast.makeText(CadastrarNovoUsuarioInserirNomeActivity.this,
@@ -65,6 +66,7 @@ public class CadastrarNovoUsuarioInserirNomeActivity extends AppCompatActivity {
         buttonCadastrarUsuarioAvancar = findViewById(R.id.buttonCadastrarUsuarioAvancar);
         toolbar = findViewById(R.id.toolbarPrincipal);
         editTextNomeNovoUsuario = findViewById(R.id.editTextNomeNovoUsuario);
+        editTextCidadeUsuario = findViewById(R.id.editTextCidadeUsuario);
     }
 
 }

@@ -35,6 +35,7 @@ public class CadastrarNovoUsuarioInserirEmailActivity extends AppCompatActivity 
         // Recuperar informação de email do usuário passado na activity anterior
         Intent intent = getIntent();
         String nomeUsuario = intent.getStringExtra("nome_usuario");
+        String cidadeUsuario = intent.getStringExtra("cidade_usuario");
 
         buttonCadastrarUsuarioAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +51,7 @@ public class CadastrarNovoUsuarioInserirEmailActivity extends AppCompatActivity 
 
                         Intent intent = new Intent(getApplicationContext(), CadastrarNovoUsuarioInserirSenhaActivity.class);
                         intent.putExtra("nome_usuario", nomeUsuario);
+                        intent.putExtra("cidade_usuario", cidadeUsuario);
                         intent.putExtra("email_usuario", editTextEmailNovoUsuario.getText().toString());
                         startActivity(intent);
 

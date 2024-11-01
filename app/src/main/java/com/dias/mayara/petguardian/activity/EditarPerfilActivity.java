@@ -40,6 +40,14 @@ public class EditarPerfilActivity extends AppCompatActivity {
         // Inicializa o usuário logado
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado(); // Método hipotético para obter o usuário logado
 
+        // Verifica se usuarioLogado não é nulo e preenche os EditTexts
+        if (usuarioLogado != null) {
+            editTextNomeUsuario.setText(usuarioLogado.getNomeUsuario());
+            editTextEmail.setText(usuarioLogado.getEmailUsuario());
+        }  else {
+            Toast.makeText(this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
+        }
+
         // Salvar alterações no nome
         buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
             @Override

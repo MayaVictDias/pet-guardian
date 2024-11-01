@@ -2,7 +2,9 @@ package com.dias.mayara.petguardian.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +26,17 @@ import com.dias.mayara.petguardian.fragment.CameraIAFragment;
 import com.dias.mayara.petguardian.fragment.HomeFragment;
 import com.dias.mayara.petguardian.fragment.PerfilFragment;
 import com.dias.mayara.petguardian.fragment.SearchFragment;
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.dias.mayara.petguardian.helper.UsuarioFirebase;
+import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.bumptech.glide.Glide;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private BottomNavigationView bottomNavigationView;
     private NavigationView navigationView;
+
+    private DatabaseReference firebaseRef;
+    private DatabaseReference usuariosRef;
+    private DatabaseReference usuarioLogadoRef;
+    private FirebaseUser usuarioPerfil;
+    private ValueEventListener valueEventListenerPerfil;
+    private Usuario usuarioLogado;
+
+    private ImageView userProfileImage;
+    private TextView userName;
+    private TextView userLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +67,17 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null && intent.getBooleanExtra("exibir_modal_boas_vindas", false)) {
             exibirModalBoasVindas();
         }
+
+        // Inicializa a instância do Firebase e referências do banco de dados
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        usuariosRef = firebaseRef.child("usuarios");
+
+        // Obtém os dados do usuário logado e configura a referência para o nó do usuário específico
+        usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
+        usuarioLogadoRef = usuariosRef.child(usuarioLogado.getIdUsuario());
+
+        // Recuperar dados do usuário
+        usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
 
         // Configuração da toolbar
         toolbar = findViewById(R.id.toolbarPrincipal);
@@ -68,9 +101,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Personalizar o cabeçalho
         View headerView = navigationView.getHeaderView(0);
-        ImageView userProfileImage = headerView.findViewById(R.id.user_profile_image);
-        TextView userName = headerView.findViewById(R.id.user_name);
-        TextView userLocation = headerView.findViewById(R.id.user_location);
+        userProfileImage = headerView.findViewById(R.id.user_profile_image);
+        userName = headerView.findViewById(R.id.user_name);
+        userLocation = headerView.findViewById(R.id.user_location);
+
+        // Exibir foto do usuario, caso ele tenha setado uma
+        Uri url = usuarioPerfil.getPhotoUrl();
+        if (url != null) {
+            Glide.with(MainActivity.this).load(url).into(userProfileImage);
+        } else {
+            userProfileImage.setImageResource(R.drawable.profile_image);
+        }
+
+        recuperarDadosUsuarioLogado();
 
         // Lidar com cliques no menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -124,6 +167,27 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
         }
+    }
+
+
+    private void recuperarDadosUsuarioLogado() {
+        valueEventListenerPerfil = usuarioLogadoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Usuario usuario = snapshot.getValue(Usuario.class);
+
+                if (usuario != null) {
+
+                    userName.setText(usuario.getNomeUsuario());
+                    userLocation.setText(usuario.getCidadeUsuario());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", error.toException());
+            }
+        });
     }
 
     private void exibirModalBoasVindas() {

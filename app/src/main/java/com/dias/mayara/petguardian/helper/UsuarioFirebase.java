@@ -12,6 +12,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 // Classe que faz as tratativas de um usuário especifico dentro do app
 public class UsuarioFirebase {
@@ -58,16 +63,21 @@ public class UsuarioFirebase {
     public static Usuario getDadosUsuarioLogado() {
 
         FirebaseUser firebaseUser = getUsuarioAtual();
-
         Usuario usuario = new Usuario();
-        usuario.setEmailUsuario( firebaseUser.getEmail() );
-        usuario.setNomeUsuario( firebaseUser.getDisplayName() );
-        usuario.setIdUsuario( firebaseUser.getUid() );
+        usuario.setEmailUsuario(firebaseUser.getEmail());
+        usuario.setNomeUsuario(firebaseUser.getDisplayName());
+        usuario.setIdUsuario(firebaseUser.getUid());
 
-        if ( firebaseUser.getPhotoUrl() == null ){
+        // Defina o caminho da cidade do usuário no Realtime Database
+        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference()
+                .child("usuarios") // Nó principal dos usuários
+                .child(firebaseUser.getUid()) // UID do usuário atual
+                .child("cidadeUsuario"); // Especificamente o campo cidadeUsuario
+
+        if (firebaseUser.getPhotoUrl() == null) {
             usuario.setCaminhoFotoUsuario("");
         } else {
-            usuario.setCaminhoFotoUsuario( firebaseUser.getPhotoUrl().toString() );
+            usuario.setCaminhoFotoUsuario(firebaseUser.getPhotoUrl().toString());
         }
 
         return usuario;

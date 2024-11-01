@@ -123,4 +123,11 @@ public class LoginActivity extends AppCompatActivity {
         boolean lembrarUsuario = preferences.getBoolean("manterLogado", false);
         checkBoxLembrarUsuario.setChecked(lembrarUsuario);
     }
+
+    // Método para lidar com o clique no botão de voltar
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();  // Volta para a tela anterior
+        return true;
+    }
 }

@@ -47,7 +47,7 @@ public class Usuario {
         usuarioMap.put("emailUsuario", getEmailUsuario());
         usuarioMap.put("nomeUsuario", getNomeUsuario());
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
-        usuarioMap.put("id", getIdUsuario());
+        usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFotoUsuario());
 
         return usuarioMap;
