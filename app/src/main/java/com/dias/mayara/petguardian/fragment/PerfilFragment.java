@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
-import com.dias.mayara.petguardian.activity.MainActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Usuario;
@@ -115,6 +114,6 @@ public class PerfilFragment extends Fragment {
     private void inicializarComponentes(View view) {
         textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
-        imagemPerfilUsuario = view.findViewById(R.id.imagemPerfilUsuario);
+        imagemPerfilUsuario = view.findViewById(R.id.escolherImagemPet);
     }
 }

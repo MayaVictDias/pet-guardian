@@ -124,10 +124,17 @@
             android:id="@+id/textViewFoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Foto"
             android:textColor="@color/marromEscuro" />
+
+        <ImageView
+            android:id="@+id/imageViewFotoPet"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="24dp"
+            android:src="@drawable/border_dashed" />
 
         <TextView
             android:id="@+id/textView40"
@@ -143,7 +150,7 @@
             android:id="@+id/textViewStatusPet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="24dp"
             android:fontFamily="@font/nunito_bold"
             android:text="Status"
             android:textColor="@color/marromEscuro" />

@@ -15,6 +15,7 @@ public class Usuario {
     private String senhaUsuario;
     private String caminhoFotoUsuario;
     private String cidadeUsuario;
+    private int quantidadePetsCadastrados;
 
     public Usuario() {
     }
@@ -49,10 +50,18 @@ public class Usuario {
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFotoUsuario());
+        usuarioMap.put("quantidadePetsCadastrados", getQuantidadePetsCadastrados());
 
         return usuarioMap;
     }
 
+    public int getQuantidadePetsCadastrados() {
+        return quantidadePetsCadastrados;
+    }
+
+    public void setQuantidadePetsCadastrados(int quantidadePetsCadastrados) {
+        this.quantidadePetsCadastrados = quantidadePetsCadastrados;
+    }
 
     public String getIdUsuario() {
         return idUsuario;

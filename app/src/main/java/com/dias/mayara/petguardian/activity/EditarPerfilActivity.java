@@ -1,5 +1,6 @@
 package com.dias.mayara.petguardian.activity;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.helper.Permissao;
 import com.dias.mayara.petguardian.helper.ToolbarHelper;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Usuario;
@@ -24,11 +26,17 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private Button buttonAlterarFoto, buttonSalvarAlteracoes;
     private EditText editTextNomeUsuario, editTextEmail;
     private Usuario usuarioLogado;
+    private String[] permissoesNecessarias = new String[] {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
+
+        // Validar permissões
+        Permissao.validarPermissoes(permissoesNecessarias, this, 1);
 
         inicializarComponentes();
 

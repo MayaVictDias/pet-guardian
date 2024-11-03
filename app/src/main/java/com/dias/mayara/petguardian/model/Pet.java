@@ -18,32 +18,19 @@ public class Pet {
     private String generoPet;
     private String especiePet;
     private String sobreOPet;
-    //private String caminhoFotoPet;
     private String statusPet;
-
     private String idEndereco;
+    private String imagemUrl; // Armazenará a URL da imagem
 
     private DatabaseReference firebaseRef;
-    private DatabaseReference petRef;
-    private DatabaseReference usuarioLogadoRef;
     private String idUsuarioLogado;
-    private DatabaseReference usuariosRef;
 
     public Pet() {
-
+        // Construtor vazio
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String idEndereco) {
-        // Configuração de um ID único para o pet
-        firebaseRef = ConfiguracaoFirebase.getFirebase();
-        String idPet = firebaseRef.child("pets").push().getKey();
-        this.setIdPet(idPet);
-
-        idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
-        usuariosRef = ConfiguracaoFirebase.getFirebase().child("usuarios");
-
-        this.idTutor = idUsuarioLogado;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
@@ -51,35 +38,53 @@ public class Pet {
         this.sobreOPet = sobreOPet;
         this.statusPet = statusPet;
         this.idEndereco = idEndereco;
+
+        // Configuração de um ID único para o pet
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        this.idPet = firebaseRef.child("pets").push().getKey();
+        this.idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
+        this.idTutor = idUsuarioLogado; // Aqui você define o idTutor
+    }
+
+    public void salvar() {
+        // Inclui o idUsuarioLogado no caminho para salvar o pet no nó específico do usuário
+        DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
+                .child("pets")
+                .child(idUsuarioLogado)
+                .child(getIdPet());
+
+        Map<String, Object> petData = new HashMap<>();
+        petData.put("idPet", getIdPet());
+        petData.put("idTutor", getIdTutor());
+        petData.put("nomePet", getNomePet());
+        petData.put("idadePet", getIdadePet());
+        petData.put("generoPet", getGeneroPet());
+        petData.put("especiePet", getEspeciePet());
+        petData.put("sobreOPet", getSobreOPet());
+        petData.put("statusPet", getStatusPet());
+        petData.put("imagemUrl", getImagemUrl());
+
+        if (idEndereco != null) {
+            petData.put("idEndereco", getIdEndereco());
+        }
+
+        petsRef.setValue(petData).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("Salvar Pet", "Pet salvo com sucesso.");
+            } else {
+                Log.e("Salvar Pet", "Erro ao salvar o pet: " + task.getException().getMessage());
+            }
+        });
     }
 
 
-    public void salvar() {
-        // Verifica se o ID do pet foi definido antes de prosseguir
-        if (getIdPet() != null) {
-            DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
-            DatabaseReference petsRef = firebaseRef.child("pets").child(getIdTutor()).child(getIdPet());
 
-            // Cria um mapa para armazenar os dados do pet
-            Map<String, Object> petData = new HashMap<>();
-            petData.put("idPet", getIdPet());
-            petData.put("idTutor", getIdTutor());
-            petData.put("nomePet", getNomePet());
-            petData.put("idadePet", getIdadePet());
-            petData.put("generoPet", getGeneroPet());
-            petData.put("especiePet", getEspeciePet());
-            petData.put("sobreOPet", getSobreOPet());
-            petData.put("statusPet", getStatusPet());
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
 
-            // Adiciona apenas o idEndereco, se ele estiver definido
-            if (idEndereco != null) {
-                petData.put("idEndereco", getIdEndereco());
-            }
-
-            petsRef.setValue(petData);
-        } else {
-            Log.e("Pet", "ID do Pet não foi definido. Verifique a configuração do Firebase.");
-        }
+    public void setImagemUrl(String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 
     public String getIdPet() {

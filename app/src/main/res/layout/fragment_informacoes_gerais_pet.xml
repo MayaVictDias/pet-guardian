@@ -217,12 +217,14 @@
             android:textSize="13sp" />
 
         <FrameLayout
+            android:id="@+id/frameLayoutEscolherFotoPet"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true">
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="12dp">
 
             <ImageView
-                android:id="@+id/imagemPerfilUsuario"
+                android:id="@+id/escolherImagemPet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/border_dashed"
@@ -231,7 +233,7 @@
                 android:scaleType="centerCrop" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textViewEscolherImagem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

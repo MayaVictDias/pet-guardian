@@ -1,6 +1,9 @@
 package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +27,17 @@ import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConferirInformacoesNovoPetFragment extends Fragment {
@@ -39,6 +51,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private TextView textViewNomePet, textViewIdadePet, textViewBairro, textViewGeneroPet, textViewEspecie,
             textViewSobreOPet, textViewStatusPet, textViewCep, textViewEstado, textViewCidade,
             textViewRuaAvenida, textViewNumero, textViewComplemento, textViewVistoPelaUltimaVez;
+    private ImageView imageViewFotoPet;
 
     private CadastroPetViewModel sharedViewModel;
 
@@ -46,9 +59,12 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private DatabaseReference usuariosRef;
     private DatabaseReference usuarioLogadoRef;
     private String idUsuarioLogado;
+    private String idPet;
 
     private Pet pet;
     private Endereco endereco;
+
+    private Uri urlImagemPet;
 
     public ConferirInformacoesNovoPetFragment() {
         // Required empty public constructor
@@ -77,6 +93,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
         carregarDados();
 
+        // Configurar a imagem do pet
+        configurarImagemPet();
+
         buttonVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,47 +110,117 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         buttonPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    // Cria o objeto Endereco
-                    endereco = new Endereco(
-                            textViewCep.getText().toString(),
-                            textViewEstado.getText().toString(),
-                            textViewCidade.getText().toString(),
-                            textViewBairro.getText().toString(),
-                            textViewRuaAvenida.getText().toString(),
-                            textViewNumero.getText().toString(),
-                            textViewComplemento.getText().toString()
-                    );
-
-                    // Salva o endereço no Firebase
-                    endereco.salvar();
-
-                    // Cria o objeto Pet, passando idUsuarioLogado como idTutor
-                    pet = new Pet(
-                            textViewNomePet.getText().toString(),
-                            textViewIdadePet.getText().toString(),
-                            textViewGeneroPet.getText().toString(),
-                            textViewEspecie.getText().toString(),
-                            textViewSobreOPet.getText().toString(),
-                            textViewStatusPet.getText().toString(),
-                            endereco.getIdEndereco()
-                    );
-
-                    // Salva o pet no Firebase
-                    pet.salvar();
-
-                    // Exibe uma mensagem de sucesso
-                    Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-
-                    requireActivity().finish();
-                } catch (Exception e) {
-                    e.printStackTrace(); // Imprime o erro no log
-                }
+                salvarDados();
             }
         });
 
+
+
         return view;
     }
+
+    private void salvarDados() {
+        try {
+            // Cria o objeto Endereco e salva no Firebase
+            endereco = new Endereco(
+                    textViewCep.getText().toString(),
+                    textViewEstado.getText().toString(),
+                    textViewCidade.getText().toString(),
+                    textViewBairro.getText().toString(),
+                    textViewRuaAvenida.getText().toString(),
+                    textViewNumero.getText().toString(),
+                    textViewComplemento.getText().toString()
+            );
+            endereco.salvar();
+
+            // Cria o objeto Pet com os dados necessários, mas sem a URL da imagem ainda
+            pet = new Pet(
+                    textViewNomePet.getText().toString(),
+                    textViewIdadePet.getText().toString(),
+                    textViewGeneroPet.getText().toString(),
+                    textViewEspecie.getText().toString(),
+                    textViewSobreOPet.getText().toString(),
+                    textViewStatusPet.getText().toString(),
+                    endereco.getIdEndereco()
+            );
+
+            // Faz o upload da imagem e define a URL da imagem no objeto Pet após o upload bem-sucedido
+            sharedViewModel.getImagemPet().observe(getViewLifecycleOwner(), new Observer<byte[]>() {
+                @Override
+                public void onChanged(byte[] imagemBytes) {
+                    if (imagemBytes != null) {
+                        // Converte o array de bytes em um Bitmap
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(imagemBytes, 0, imagemBytes.length);
+
+                        // Cria referência para o Firebase Storage
+                        StorageReference storageRef = ConfiguracaoFirebase.getFirebaseStorage();
+                        StorageReference imagemRef = storageRef.child("imagens")
+                                .child("pets")
+                                .child(pet.getIdPet() + ".jpeg");
+                        Log.d("Imagem ref", imagemRef.toString());
+
+                        // Recuperar dados da imagem para salvar no Firebase
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                        byte[] dadosImagem = baos.toByteArray();
+                        Log.d("Dados imagem", Arrays.toString(dadosImagem));
+
+                        // Faz o upload da imagem no Firebase Storage
+                        UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Erro ao fazer upload da imagem. Erro: " + e, Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+
+                                            urlImagemPet = task.getResult();
+
+                                            pet.setImagemUrl(urlImagemPet.toString());
+
+                                            Log.d("URL Imagem Pet", String.valueOf(urlImagemPet));
+
+                                            // Após definir a URL da imagem, salva o objeto Pet no Firebase
+                                            pet.salvar();
+
+                                            // Exibe uma mensagem de sucesso
+                                            Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                                            requireActivity().finish();
+                                        } else {
+                                            Toast.makeText(getContext(), "Erro ao obter URL da imagem", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Adicione este método no seu fragment
+    private void configurarImagemPet() {
+        sharedViewModel.getImagemPet().observe(getViewLifecycleOwner(), new Observer<byte[]>() {
+            @Override
+            public void onChanged(byte[] imagemBytes) {
+                if (imagemBytes != null) {
+                    // Converte o array de bytes em um Bitmap
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(imagemBytes, 0, imagemBytes.length);
+                    imageViewFotoPet.setImageBitmap(bitmap);
+                }
+            }
+        });
+    }
+
 
     private void carregarDados() {
         sharedViewModel.getEndereco().observe(getViewLifecycleOwner(), new Observer<Endereco>() {
@@ -178,6 +267,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     }
 
 
+
     private void inicializarComponentes(View view) {
 
         buttonVoltar = view.findViewById(R.id.buttonVoltar);
@@ -185,6 +275,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewIdadePet = view.findViewById(R.id.textViewIdadePet);
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
+        imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);
         textViewSobreOPet = view.findViewById(R.id.textViewSobreOPet);
         textViewStatusPet = view.findViewById(R.id.textViewStatusPet);
         textViewCep = view.findViewById(R.id.textViewCep);

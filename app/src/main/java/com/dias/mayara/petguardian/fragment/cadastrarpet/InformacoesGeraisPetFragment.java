@@ -1,10 +1,18 @@
 package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,15 +21,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
+import com.dias.mayara.petguardian.helper.Permissao;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 
 public class InformacoesGeraisPetFragment extends Fragment {
 
@@ -32,6 +52,14 @@ public class InformacoesGeraisPetFragment extends Fragment {
     private RadioButton radioButtonMacho, radioButtonFemea, radioButtonCachorro, radioButtonGato,
             radioButtonFilhote, radioButtonAdulto;
     private CheckBox checkBoxNaoSeiNomePet;
+    private ImageView escolherImagemPet;
+    private TextView textViewEscolherImagem;
+
+    private static final int SELECAO_CAMERA = 100;
+    private String[] permissoesNecessarias = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+    };
 
     private CadastroPetViewModel cadastroPetViewModel;
 
@@ -54,6 +82,9 @@ public class InformacoesGeraisPetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_informacoes_gerais_pet, container, false);
 
+        // Validar permissões
+        Permissao.validarPermissoes(permissoesNecessarias, getActivity(), 1);
+
         inicializarComponentes(view);
 
         pet = new Pet();
@@ -70,25 +101,47 @@ public class InformacoesGeraisPetFragment extends Fragment {
             }
         });
 
+        // Observa a imagem armazenada no ViewModel e atualiza a ImageView quando houver alteração
+        cadastroPetViewModel.getImagemPet().observe(getViewLifecycleOwner(), imagemBytes -> {
+            if (imagemBytes != null) {
+                escolherImagemPet.setBackground(null); // Remove o fundo do ImageView
+                textViewEscolherImagem.setVisibility(View.GONE);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imagemBytes, 0, imagemBytes.length);
+                escolherImagemPet.setImageBitmap(bitmap);
+            }
+        });
+
+        escolherImagemPet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_CAMERA);
+                }
+            }
+        });
+
+
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(editTextNomePet.getText() == null && !checkBoxNaoSeiNomePet.isChecked()
+                if (editTextNomePet.getText() == null && !checkBoxNaoSeiNomePet.isChecked()
                         || editTextNomePet.getText().toString().trim().isEmpty() && !checkBoxNaoSeiNomePet.isChecked()) {
                     Toast.makeText(getContext(), "Preencha o campo 'Nome do pet'", Toast.LENGTH_SHORT).show();
-                } else if(radioGroupIdade.getCheckedRadioButtonId() == -1) {
+                } else if (radioGroupIdade.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(getContext(), "Preencha o campo 'Idade do pet'", Toast.LENGTH_SHORT).show();
-                } else if(radioGroupGenero.getCheckedRadioButtonId() == -1) {
+                } else if (radioGroupGenero.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(getContext(), "Selecione o gênero do pet", Toast.LENGTH_SHORT).show();
-                } else if(radioGroupEspecie.getCheckedRadioButtonId() == -1) {
+                } else if (radioGroupEspecie.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(getContext(), "Selecione a espécie do pet", Toast.LENGTH_SHORT).show();
-                } else if(editTextSobreOPet.getText() == null || editTextSobreOPet.getText().toString().trim().isEmpty()) {
+                } else if (editTextSobreOPet.getText() == null || editTextSobreOPet.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getContext(), "Preencha o campo 'Sobre o pet'", Toast.LENGTH_SHORT).show();
                 } else {
 
                     // Obter o texto dos campos EditText e salvar no objeto pet
-                    if(checkBoxNaoSeiNomePet.isChecked()) {
+                    if (checkBoxNaoSeiNomePet.isChecked()) {
                         pet.setNomePet("Nome desconhecido");
                     } else {
                         pet.setNomePet(editTextNomePet.getText().toString());
@@ -141,6 +194,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
     }
 
     private void setupEditTexts() {
+
         // Watcher para o nome do pet
         editTextNomePet.addTextChangedListener(new TextWatcher() {
             @Override
@@ -240,6 +294,8 @@ public class InformacoesGeraisPetFragment extends Fragment {
         editTextSobreOPet = view.findViewById(R.id.editTextSobreOPet);
         radioButtonMacho = view.findViewById(R.id.radioButtonMacho);
         radioButtonFemea = view.findViewById(R.id.radioButtonFemea);
+        escolherImagemPet = view.findViewById(R.id.escolherImagemPet);
+        textViewEscolherImagem = view.findViewById(R.id.textViewEscolherImagem);
         radioButtonCachorro = view.findViewById(R.id.radioButtonCachorro);
         radioButtonGato = view.findViewById(R.id.radioButtonGato);
         checkBoxNaoSeiNomePet = view.findViewById(R.id.checkBoxNaoSeiNomePet);
@@ -251,4 +307,30 @@ public class InformacoesGeraisPetFragment extends Fragment {
         cadastroPetViewModel.getPet().removeObservers(getViewLifecycleOwner());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECAO_CAMERA && resultCode == getActivity().RESULT_OK) {
+            Uri imagemSelecionadaUri = data.getData();
+            if (imagemSelecionadaUri != null) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imagemSelecionadaUri);
+                    escolherImagemPet.setBackground(null); // Remove o fundo do ImageView
+                    textViewEscolherImagem.setVisibility(View.GONE);
+                    escolherImagemPet.setImageBitmap(bitmap);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imagemBytes = baos.toByteArray();
+
+                    // Armazena a imagem no ViewModel
+                    cadastroPetViewModel.setImagemPet(imagemBytes);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 }
