@@ -11,9 +11,9 @@
         android:id="@+id/buttonUsarMinhaLocalizacao"
         android:layout_width="match_parent"
         android:layout_height="36dp"
+        android:background="@drawable/btn_location_drawable"
         android:fontFamily="@font/nunito_medium"
         android:gravity="start"
-        android:background="@drawable/btn_location_drawable"
         android:text="Usar minha localização atual"
         android:textColor="@color/marromEscuro"
         android:textSize="12sp"
@@ -21,10 +21,36 @@
         app:iconGravity="start"
         app:iconTint="@color/marromEscuro" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPagerPets"
+    <TextView
+        android:id="@+id/textView34"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Pets desaparecidos"
+        android:textColor="@color/coralSuave"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCarrosselDesaparecidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Pets para adoção"
+        android:textColor="@color/coralSuave"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCarrosselAdocao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

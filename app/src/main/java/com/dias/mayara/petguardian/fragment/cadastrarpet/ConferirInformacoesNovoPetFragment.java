@@ -1,5 +1,6 @@
 package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,6 +61,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private DatabaseReference usuarioLogadoRef;
     private String idUsuarioLogado;
     private String idPet;
+    private AlertDialog dialog;
 
     private Pet pet;
     private Endereco endereco;
@@ -110,13 +112,27 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         buttonPublicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                abrirDialogCarregamento("Salvando pet");
+
                 salvarDados();
             }
         });
 
 
-
         return view;
+    }
+
+    private void abrirDialogCarregamento(String titulo) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle(titulo);
+        alert.setCancelable(false); // Impede que o usuário cancele a tela de carregamento
+        alert.setView(R.layout.dialog_carregamento);
+
+        dialog = alert.create();
+        dialog.show();
+
     }
 
     private void salvarDados() {
@@ -141,10 +157,12 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewEspecie.getText().toString(),
                     textViewSobreOPet.getText().toString(),
                     textViewStatusPet.getText().toString(),
-                    endereco.getIdEndereco()
+                    urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
+                    endereco.getIdEndereco(),
+                    idUsuarioLogado
             );
 
-            // Faz o upload da imagem e define a URL da imagem no objeto Pet após o upload bem-sucedido
+            // Faça o upload da imagem e defina a URL da imagem no objeto Pet após o upload bem-sucedido
             sharedViewModel.getImagemPet().observe(getViewLifecycleOwner(), new Observer<byte[]>() {
                 @Override
                 public void onChanged(byte[] imagemBytes) {
@@ -179,15 +197,23 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Uri> task) {
                                         if (task.isSuccessful()) {
-
                                             urlImagemPet = task.getResult();
 
                                             pet.setImagemUrl(urlImagemPet.toString());
 
                                             Log.d("URL Imagem Pet", String.valueOf(urlImagemPet));
 
-                                            // Após definir a URL da imagem, salva o objeto Pet no Firebase
-                                            pet.salvar();
+                                            if (textViewStatusPet.getText().equals("Adoção")) {
+                                                // Após definir a URL da imagem, salva o objeto Pet no Firebase
+                                                pet.salvarAdocao(); // Certifique-se que este método inclui o timestamp
+
+                                            } else if (textViewStatusPet.getText().equals("Desaparecido")) {
+                                                pet.salvarDesaparecido();
+
+                                            } else if (textViewStatusPet.getText().equals("Procurando dono")) {
+
+                                                pet.salvarProcurandoDono();
+                                            }
 
                                             // Exibe uma mensagem de sucesso
                                             Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
@@ -265,7 +291,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private void salvarDadosFirebase() {
 
     }
-
 
 
     private void inicializarComponentes(View view) {

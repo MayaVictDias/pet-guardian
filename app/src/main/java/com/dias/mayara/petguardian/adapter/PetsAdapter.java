@@ -1,24 +1,32 @@
 package com.dias.mayara.petguardian.adapter;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.model.Pet;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder> {
 
     private List<Pet> petList;
+    private Handler handler = new Handler();
 
     public PetsAdapter(List<Pet> petList) {
-        this.petList = petList; // Inicializa a lista petList
+        this.petList = petList != null ? petList : new ArrayList<>(); // Evitar NullPointerException
     }
 
     @NonNull
@@ -31,10 +39,29 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull PetViewHolder holder, int position) {
-        Pet pet = petList.get(position);
-        // Defina os dados do pet aqui
-        holder.petName.setText(pet.getNomePet());
-        // Carregue a imagem do pet, se necessário
+        if (position >= 0 && position < petList.size()) {
+            Pet pet = petList.get(position);
+            holder.textViewNomePet.setText(pet.getNomePet());
+            holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
+            holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
+
+            if (holder.textViewStatusPet.getText().equals("ADOÇÃO")) {
+                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
+            } else if (holder.textViewStatusPet.getText().equals("DESAPARECIDO")) {
+                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#FF0000"));
+            } else if (holder.textViewStatusPet.getText().equals("PROCURANDO DONO")) {
+                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#0047FF"));
+            }
+
+            Glide.with(holder.imageViewFotoPet.getContext())
+                    .load(pet.getImagemUrl()) // Aqui você insere a URL da imagem
+                    .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
+                    .error(R.drawable.no_image_found) // Imagem em caso de erro
+                    .into(holder.imageViewFotoPet);
+
+            // Atualiza o texto do tempo desde a postagem
+            holder.updateTimeSincePost(pet.getDataCadastro());
+        }
     }
 
     @Override
@@ -43,12 +70,61 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
     }
 
     static class PetViewHolder extends RecyclerView.ViewHolder {
-        TextView petName; // Exemplo de campo; adicione outros campos conforme necessário
+
+        private TextView textViewStatusPet, textViewNomePet, textViewIdadeGenero, textViewDesaparecidoHaTempo,
+                textViewCidadePet;
+        private ImageView imageViewFotoPet;
+
+        private Handler handler = new Handler();
+        private Runnable updateRunnable;
 
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
-            petName = itemView.findViewById(R.id.petName); // Id do TextView no layout do item
-            // Inicialize outros campos aqui
+            imageViewFotoPet = itemView.findViewById(R.id.imageViewFotoPet);
+            textViewStatusPet = itemView.findViewById(R.id.textViewStatusPet);
+            textViewNomePet = itemView.findViewById(R.id.textViewNomePet);
+            textViewIdadeGenero = itemView.findViewById(R.id.textViewIdadeGenero);
+            textViewDesaparecidoHaTempo = itemView.findViewById(R.id.textViewDesaparecidoHaTempo);
+            textViewCidadePet = itemView.findViewById(R.id.textViewCidadePet);
+        }
+
+        public void updateTimeSincePost(long postTimestamp) {
+            if (updateRunnable != null) {
+                handler.removeCallbacks(updateRunnable);
+            }
+
+            updateRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    textViewDesaparecidoHaTempo.setText(calculateTimeSincePost(postTimestamp));
+                    handler.postDelayed(this, 60000); // Atualiza a cada 60 segundos
+                }
+            };
+            handler.post(updateRunnable);
+        }
+
+        public String calculateTimeSincePost(long postTimestamp) {
+            long currentTime = System.currentTimeMillis();
+            long timeDifference = currentTime - postTimestamp;
+
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference);
+            long hours = TimeUnit.MILLISECONDS.toHours(timeDifference);
+            long days = TimeUnit.MILLISECONDS.toDays(timeDifference);
+
+            if (minutes < 60) {
+                return minutes + " minuto(s) atrás";
+            } else if (hours < 24) {
+                return hours + " hora(s) atrás";
+            } else {
+                return days + " dia(s) atrás";
+            }
+        }
+
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize();
+            handler.removeCallbacks(updateRunnable); // Para evitar vazamentos de memória
         }
     }
 }

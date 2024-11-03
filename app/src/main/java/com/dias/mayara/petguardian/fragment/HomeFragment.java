@@ -4,7 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +27,11 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private Button buttonUsarMinhaLocalizacao;
-
-    private ViewPager2 viewPagerPets;
-    private PetsAdapter petsCarouselAdapter;
+    private RecyclerView recyclerViewCarrosselDesaparecidos, recyclerViewCarrosselAdocao;
+    private PetsAdapter petsAdapterAdocao;
+    private PetsAdapter petsAdapterDesaparecidos;
+    private List<Pet> listaPetsAdocao = new ArrayList<>(); // Inicializando a lista de pets
+    private List<Pet> listaPetsDesaparecidos = new ArrayList<>(); // Inicializando a lista de pets
 
     public HomeFragment() {
         // Required empty public constructor
@@ -48,54 +51,97 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        viewPagerPets = view.findViewById(R.id.viewPagerPets);
+        recyclerViewCarrosselDesaparecidos = view.findViewById(R.id.recyclerViewCarrosselDesaparecidos);
+        recyclerViewCarrosselAdocao = view.findViewById(R.id.recyclerViewCarrosselAdocao);
 
-        List<Pet> pets = new ArrayList<>(); // ou obtenha a lista de onde for necessário
-        PetsAdapter petsAdapter = new PetsAdapter(pets);
-        viewPagerPets.setAdapter(petsAdapter);
+        // Inicializando a lista e os adaptadores
+        petsAdapterAdocao = new PetsAdapter(listaPetsAdocao);
+        recyclerViewCarrosselAdocao.setAdapter(petsAdapterAdocao);
+        petsAdapterDesaparecidos = new PetsAdapter(listaPetsDesaparecidos);
+        recyclerViewCarrosselDesaparecidos.setAdapter(petsAdapterDesaparecidos);
+
+        getPetsAdocao(); // Carregar pets para adoção
+        getPetsDesaparecidos(); // Carregar pets desaparecidos
+
+        // Configurando o layout manager para os RecyclerViews
+        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCarrosselAdocao.setLayoutManager(layoutManagerAdocao);
+
+        LinearLayoutManager layoutManagerDesaparecidos = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewCarrosselDesaparecidos.setLayoutManager(layoutManagerDesaparecidos);
 
         return view;
     }
 
+    private void getPetsAdocao() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference("feedPets").child("adocao");
 
-    private void inicializarComponentes(View view) {
-        buttonUsarMinhaLocalizacao = view.findViewById(R.id.buttonUsarMinhaLocalizacao);
-
-    }
-
-    private List<Pet> getPetsFromDatabase() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("pets");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Usando addValueEventListener para atualizações em tempo real
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Pet> petList = new ArrayList<>();
+                listaPetsAdocao.clear(); // Limpa a lista antes de adicionar novos dados
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String idEndereco = snapshot.child("idEndereco").getValue(String.class);
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
-
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
                     String nomePet = snapshot.child("nomePet").getValue(String.class);
                     String generoPet = snapshot.child("generoPet").getValue(String.class);
-                    String idadePet = snapshot.child("especiePet").getValue(String.class);
+                    String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
+                    String idadePet = snapshot.child("idadePet").getValue(String.class);
                     String sobreOPet = snapshot.child("sobreOPet").getValue(String.class);
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
+                    long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    int imageResId = R.drawable.pet_guardian_logotipo; // Use uma imagem padrão ou faça o download
-
-                    petList.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                            statusPet, idEndereco));
+                    listaPetsAdocao.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
-                // Atualize o adapter com a nova lista
-                petsCarouselAdapter = new PetsAdapter(petList);
-                viewPagerPets.setAdapter(petsCarouselAdapter);
+                // Notifica o adapter sobre as mudanças na lista
+                petsAdapterAdocao.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Lida com erros, se necessário
             }
         });
-        return null;
     }
 
+    private void getPetsDesaparecidos() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference("feedPets").child("desaparecidos");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listaPetsDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String idEndereco = snapshot.child("idEndereco").getValue(String.class);
+                    String idTutor = snapshot.child("idTutor").getValue(String.class);
+                    String especiePet = snapshot.child("especiePet").getValue(String.class);
+                    String nomePet = snapshot.child("nomePet").getValue(String.class);
+                    String generoPet = snapshot.child("generoPet").getValue(String.class);
+                    String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
+                    String idadePet = snapshot.child("idadePet").getValue(String.class);
+                    String sobreOPet = snapshot.child("sobreOPet").getValue(String.class);
+                    String statusPet = snapshot.child("statusPet").getValue(String.class);
+                    long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
+
+                    listaPetsDesaparecidos.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
+                }
+                petsAdapterDesaparecidos.notifyDataSetChanged(); // Notifica o adaptador sobre as mudanças
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Lida com erros, se necessário
+            }
+        });
+    }
+
+    private void inicializarComponentes(View view) {
+        buttonUsarMinhaLocalizacao = view.findViewById(R.id.buttonUsarMinhaLocalizacao);
+    }
 }
