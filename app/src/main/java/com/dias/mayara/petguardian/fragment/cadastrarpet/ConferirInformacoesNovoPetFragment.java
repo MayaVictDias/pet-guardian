@@ -51,7 +51,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private FragmentInteractionListener listener;
     private TextView textViewNomePet, textViewIdadePet, textViewBairro, textViewGeneroPet, textViewEspecie,
             textViewSobreOPet, textViewStatusPet, textViewCep, textViewEstado, textViewCidade,
-            textViewRuaAvenida, textViewNumero, textViewComplemento, textViewVistoPelaUltimaVez;
+            textViewRuaAvenida, textViewNumero, textViewComplemento, textViewVistoPelaUltimaVez, textViewPais,
+            textViewCepTitulo, textViewBairroTitulo, textViewPaisTitulo, textViewEstadoTitulo, textViewCidadeTitulo,
+            textViewRuaAvenidaTitulo, textViewNumeroTitulo, textViewComplementoTitulo, textViewSelecioneNoMapaTitulo;
     private ImageView imageViewFotoPet;
 
     private CadastroPetViewModel sharedViewModel;
@@ -145,7 +147,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewBairro.getText().toString(),
                     textViewRuaAvenida.getText().toString(),
                     textViewNumero.getText().toString(),
-                    textViewComplemento.getText().toString()
+                    textViewComplemento.getText().toString(),
+                    textViewPais.getText().toString()
             );
             endereco.salvar();
 
@@ -260,6 +263,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewRuaAvenida.setText(endereco.getRuaAvenida());
                     textViewNumero.setText(endereco.getNumero());
                     textViewComplemento.setText(endereco.getComplemento());
+                    textViewPais.setText(endereco.getPais());
                 }
             }
         });
@@ -288,11 +292,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         });
     }
 
-    private void salvarDadosFirebase() {
-
-    }
-
-
     private void inicializarComponentes(View view) {
 
         buttonVoltar = view.findViewById(R.id.buttonVoltar);
@@ -301,14 +300,24 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
         imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);
+        textViewCepTitulo = view.findViewById(R.id.textViewCepTitulo);
+        textViewBairroTitulo = view.findViewById(R.id.textViewBairroTitulo);
         textViewSobreOPet = view.findViewById(R.id.textViewSobreOPet);
+        textViewEstadoTitulo = view.findViewById(R.id.textViewEstadoTitulo);
         textViewStatusPet = view.findViewById(R.id.textViewStatusPet);
         textViewCep = view.findViewById(R.id.textViewCep);
         textViewEstado = view.findViewById(R.id.textViewEstado);
+        textViewRuaAvenidaTitulo = view.findViewById(R.id.textViewRuaAvenidaTitulo);
         textViewCidade = view.findViewById(R.id.textViewCidade);
+        textViewSelecioneNoMapaTitulo = view.findViewById(R.id.textViewSelecioneNoMapaTitulo);
+        textViewCidadeTitulo = view.findViewById(R.id.textViewCidadeTitulo);
         textViewBairro = view.findViewById(R.id.textViewBairro);
         textViewRuaAvenida = view.findViewById(R.id.textViewRuaAvenida);
         textViewNumero = view.findViewById(R.id.textViewNumero);
+        textViewPais = view.findViewById(R.id.textViewPais);
+        textViewNumeroTitulo = view.findViewById(R.id.textViewNumeroTitulo);
+        textViewComplementoTitulo = view.findViewById(R.id.textViewComplementoTitulo);
+        textViewPaisTitulo = view.findViewById(R.id.textViewPaisTitulo);
         textViewComplemento = view.findViewById(R.id.textViewComplemento);
         textViewVistoPelaUltimaVez = view.findViewById(R.id.textViewVistoPelaUltimaVez);
         buttonPublicar = view.findViewById(R.id.buttonPublicar);
@@ -323,8 +332,18 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         desaparecidoComponents = new ArrayList<>();
         desaparecidoComponents.add(textViewCep);
         desaparecidoComponents.add(textViewVistoPelaUltimaVez);
+        desaparecidoComponents.add(textViewPaisTitulo);
+        desaparecidoComponents.add(textViewPais);
         desaparecidoComponents.add(textViewEstado);
+        desaparecidoComponents.add(textViewCepTitulo);
+        desaparecidoComponents.add(textViewEstadoTitulo);
+        desaparecidoComponents.add(textViewCidadeTitulo);
+        desaparecidoComponents.add(textViewBairroTitulo);
+        desaparecidoComponents.add(textViewRuaAvenidaTitulo);
+        desaparecidoComponents.add(textViewComplementoTitulo);
         desaparecidoComponents.add(textViewCidade);
+        desaparecidoComponents.add(textViewSelecioneNoMapaTitulo);
+        desaparecidoComponents.add(textViewNumeroTitulo);
         desaparecidoComponents.add(textViewBairro);
         desaparecidoComponents.add(textViewRuaAvenida);
         desaparecidoComponents.add(textViewNumero);
@@ -339,11 +358,21 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         procurandoDonoComponents = new ArrayList<>();
         procurandoDonoComponents.add(textViewCep);
         procurandoDonoComponents.add(textViewEstado);
+        procurandoDonoComponents.add(textViewPais);
         procurandoDonoComponents.add(textViewCidade);
+        procurandoDonoComponents.add(textViewCepTitulo);
+        procurandoDonoComponents.add(textViewEstadoTitulo);
+        procurandoDonoComponents.add(textViewNumeroTitulo);
         procurandoDonoComponents.add(textViewBairro);
         procurandoDonoComponents.add(textViewVistoPelaUltimaVez);
+        procurandoDonoComponents.add(textViewSelecioneNoMapaTitulo);
+        procurandoDonoComponents.add(textViewPaisTitulo);
+        procurandoDonoComponents.add(textViewCidadeTitulo);
         procurandoDonoComponents.add(textViewRuaAvenida);
         procurandoDonoComponents.add(textViewNumero);
+        procurandoDonoComponents.add(textViewBairroTitulo);
+        procurandoDonoComponents.add(textViewComplementoTitulo);
+        procurandoDonoComponents.add(textViewRuaAvenidaTitulo);
         procurandoDonoComponents.add(textViewComplemento);
     }
 

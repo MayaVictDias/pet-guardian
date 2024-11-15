@@ -5,10 +5,15 @@ import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
 
+import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Pet {
+public class Pet implements Serializable {
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int ID_LENGTH = 6;
 
     private String idPet;
     private String idTutor;
@@ -44,11 +49,27 @@ public class Pet {
         this.idTutor = idTutor;
         this.dataCadastro = dataCadastro;
 
-        // Configuração de um ID único para o pet
-        firebaseRef = ConfiguracaoFirebase.getFirebase();
-        this.idPet = firebaseRef.child("pets").push().getKey();
+        // Gera o ID único de 6 caracteres
+        this.idPet = generateUniqueId();
         this.idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
-        this.idTutor = idUsuarioLogado; // Aqui você define o idTutor
+        this.idTutor = idUsuarioLogado;
+    }
+
+    public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
+               String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
+               String idTutor, long dataCadastro) { // Construtor com ID do pet, quando ele for puxado direto do banco de dados
+        this.idPet = idPet;
+        this.nomePet = nomePet;
+        this.idadePet = idadePet;
+        this.generoPet = generoPet;
+        this.especiePet = especiePet;
+        this.sobreOPet = sobreOPet;
+        this.statusPet = statusPet;
+        this.imagemUrl = imagemUrl;
+        this.idEndereco = idEndereco;
+        this.idTutor = idTutor;
+        this.dataCadastro = dataCadastro;
+
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
@@ -64,110 +85,100 @@ public class Pet {
         this.idEndereco = idEndereco;
         this.idTutor = idTutor;
 
-        // Configuração de um ID único para o pet
-        firebaseRef = ConfiguracaoFirebase.getFirebase();
-        this.idPet = firebaseRef.child("pets").push().getKey();
+        // Gera o ID único de 6 caracteres
+        this.idPet = generateUniqueId();
         this.idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
-        this.idTutor = idUsuarioLogado; // Aqui você define o idTutor
+        this.idTutor = idUsuarioLogado;
     }
 
+
+    // Gerador de ID único de 6 caracteres
+    private String generateUniqueId() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder id = new StringBuilder(ID_LENGTH);
+        for (int i = 0; i < ID_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            id.append(CHARACTERS.charAt(index));
+        }
+        return id.toString();
+    }
+
+
+    // Método para salvar o pet para adoção
     public void salvarAdocao() {
-        // Inclui o idUsuarioLogado no caminho para salvar o pet no nó específico do usuário
         DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
                 .child("pets")
                 .child(idUsuarioLogado)
                 .child("adocao")
-                .child(getIdPet());
+                .child(idPet);
 
         DatabaseReference feedPetsRef = ConfiguracaoFirebase.getFirebase()
                 .child("feedPets")
                 .child("adocao")
-                .child(getIdPet());
+                .child(idPet);
 
-        Map<String, Object> petData = new HashMap<>();
-        petData.put("idPet", getIdPet());
-        petData.put("idTutor", getIdTutor());
-        petData.put("nomePet", getNomePet());
-        petData.put("idadePet", getIdadePet());
-        petData.put("generoPet", getGeneroPet());
-        petData.put("especiePet", getEspeciePet());
-        petData.put("sobreOPet", getSobreOPet());
-        petData.put("statusPet", getStatusPet());
-        petData.put("imagemUrl", getImagemUrl());
-        petData.put("dataCadastro", ServerValue.TIMESTAMP);
-
-        if (idEndereco != null) {
-            petData.put("idEndereco", getIdEndereco());
-        }
-
+        Map<String, Object> petData = criarMapaPet();
         petsRef.setValue(petData);
         feedPetsRef.setValue(petData);
     }
 
+
+    // Método para salvar o pet como desaparecido
     public void salvarDesaparecido() {
-        // Inclui o idUsuarioLogado no caminho para salvar o pet no nó específico do usuário
         DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
                 .child("pets")
                 .child(idUsuarioLogado)
                 .child("desaparecido")
-                .child(getIdPet());
+                .child(idPet);
 
         DatabaseReference feedPetsRef = ConfiguracaoFirebase.getFirebase()
                 .child("feedPets")
                 .child("desaparecido")
-                .child(getIdPet());
+                .child(idPet);
 
-        Map<String, Object> petData = new HashMap<>();
-        petData.put("idPet", getIdPet());
-        petData.put("idTutor", getIdTutor());
-        petData.put("nomePet", getNomePet());
-        petData.put("idadePet", getIdadePet());
-        petData.put("generoPet", getGeneroPet());
-        petData.put("especiePet", getEspeciePet());
-        petData.put("sobreOPet", getSobreOPet());
-        petData.put("statusPet", getStatusPet());
-        petData.put("imagemUrl", getImagemUrl());
-        petData.put("dataCadastro", ServerValue.TIMESTAMP);
-
-        if (idEndereco != null) {
-            petData.put("idEndereco", getIdEndereco());
-        }
-
+        Map<String, Object> petData = criarMapaPet();
         petsRef.setValue(petData);
         feedPetsRef.setValue(petData);
     }
 
+    // Método para salvar o pet procurando dono
     public void salvarProcurandoDono() {
-        // Inclui o idUsuarioLogado no caminho para salvar o pet no nó específico do usuário
         DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
                 .child("pets")
                 .child(idUsuarioLogado)
                 .child("procurandoDono")
-                .child(getIdPet());
+                .child(idPet);
 
         DatabaseReference feedPetsRef = ConfiguracaoFirebase.getFirebase()
                 .child("feedPets")
                 .child("desaparecido")
-                .child(getIdPet());
+                .child(idPet);
 
+        Map<String, Object> petData = criarMapaPet();
+        petsRef.setValue(petData);
+        feedPetsRef.setValue(petData);
+    }
+
+
+
+    // Método para criar o mapa de dados do pet
+    private Map<String, Object> criarMapaPet() {
         Map<String, Object> petData = new HashMap<>();
-        petData.put("idPet", getIdPet());
-        petData.put("idTutor", getIdTutor());
-        petData.put("nomePet", getNomePet());
-        petData.put("idadePet", getIdadePet());
-        petData.put("generoPet", getGeneroPet());
-        petData.put("especiePet", getEspeciePet());
-        petData.put("sobreOPet", getSobreOPet());
-        petData.put("statusPet", getStatusPet());
-        petData.put("imagemUrl", getImagemUrl());
+        petData.put("idPet", idPet);
+        petData.put("idTutor", idTutor);
+        petData.put("nomePet", nomePet);
+        petData.put("idadePet", idadePet);
+        petData.put("generoPet", generoPet);
+        petData.put("especiePet", especiePet);
+        petData.put("sobreOPet", sobreOPet);
+        petData.put("statusPet", statusPet);
+        petData.put("imagemUrl", imagemUrl);
         petData.put("dataCadastro", ServerValue.TIMESTAMP);
 
         if (idEndereco != null) {
-            petData.put("idEndereco", getIdEndereco());
+            petData.put("idEndereco", idEndereco);
         }
-
-        petsRef.setValue(petData);
-        feedPetsRef.setValue(petData);
+        return petData;
     }
 
     public long getDataCadastro() {
@@ -262,13 +273,18 @@ public class Pet {
     public String toString() {
         return "Pet{" +
                 "idPet='" + idPet + '\'' +
+                ", idTutor='" + idTutor + '\'' +
                 ", nomePet='" + nomePet + '\'' +
                 ", idadePet='" + idadePet + '\'' +
                 ", generoPet='" + generoPet + '\'' +
                 ", especiePet='" + especiePet + '\'' +
                 ", sobreOPet='" + sobreOPet + '\'' +
                 ", statusPet='" + statusPet + '\'' +
-                ", id=" + idEndereco +
+                ", idEndereco='" + idEndereco + '\'' +
+                ", imagemUrl='" + imagemUrl + '\'' +
+                ", dataCadastro=" + dataCadastro +
+                ", firebaseRef=" + firebaseRef +
+                ", idUsuarioLogado='" + idUsuarioLogado + '\'' +
                 '}';
     }
 }

@@ -7,6 +7,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="6dp"
@@ -14,6 +15,7 @@
         android:elevation="10dp">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="245dp"
             android:layout_height="wrap_content"
             android:background="@color/begeClaro"

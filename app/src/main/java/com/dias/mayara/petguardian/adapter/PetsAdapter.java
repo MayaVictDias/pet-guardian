@@ -1,5 +1,6 @@
 package com.dias.mayara.petguardian.adapter;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +11,18 @@ import android.widget.TextView;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.activity.InformacoesPetActivity;
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +49,22 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
     public void onBindViewHolder(@NonNull PetViewHolder holder, int position) {
         if (position >= 0 && position < petList.size()) {
             Pet pet = petList.get(position);
+
+            String nomeBancoDadosStatus = "";
+            
+            if(pet.getStatusPet().equals("Adoção")) {
+                nomeBancoDadosStatus = "adocao";
+            } else if (pet.getStatusPet().equals("Desaparecido")) {
+                nomeBancoDadosStatus = "desaparecido";
+            } else if (pet.getStatusPet().equals("Procurando dono")) {
+                nomeBancoDadosStatus = "procurandoDono";
+            }
+            
+            DatabaseReference petRef = ConfiguracaoFirebase.getFirebase().child("pets")
+                    .child(pet.getIdTutor())
+                    .child(nomeBancoDadosStatus)
+                    .child(pet.getIdPet());
+
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
@@ -59,6 +83,34 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                     .error(R.drawable.no_image_found) // Imagem em caso de erro
                     .into(holder.imageViewFotoPet);
 
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Log.d("Pet database ref", petRef.toString());
+
+                    petRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            Pet petSelecionado = snapshot.getValue(Pet.class);
+
+                            if (petSelecionado != null) {
+                                Intent i = new Intent(holder.itemView.getContext(), InformacoesPetActivity.class);
+                                i.putExtra("petSelecionado", petSelecionado);
+                                holder.itemView.getContext().startActivity(i);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            });
+
             // Atualiza o texto do tempo desde a postagem
             holder.updateTimeSincePost(pet.getDataCadastro());
         }
@@ -74,6 +126,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
         private TextView textViewStatusPet, textViewNomePet, textViewIdadeGenero, textViewDesaparecidoHaTempo,
                 textViewCidadePet;
         private ImageView imageViewFotoPet;
+        private CardView cardView;
 
         private Handler handler = new Handler();
         private Runnable updateRunnable;
@@ -86,6 +139,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             textViewIdadeGenero = itemView.findViewById(R.id.textViewIdadeGenero);
             textViewDesaparecidoHaTempo = itemView.findViewById(R.id.textViewDesaparecidoHaTempo);
             textViewCidadePet = itemView.findViewById(R.id.textViewCidadePet);
+            cardView = itemView.findViewById(R.id.cardView);
         }
 
         public void updateTimeSincePost(long postTimestamp) {
