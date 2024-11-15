@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -97,6 +98,8 @@ public class HomeFragment extends Fragment {
 
                     listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
+
+                    Collections.reverse(listaPetsAdocao); // Traz os eventos mais recentes como primeiros do feed
                 }
                 // Notifica o adapter sobre as mudanças na lista
                 petsAdapterAdocao.notifyDataSetChanged();
@@ -118,6 +121,7 @@ public class HomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listaPetsDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String idPet = snapshot.child("idPet").getValue(String.class);
                     String idEndereco = snapshot.child("idEndereco").getValue(String.class);
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
@@ -129,8 +133,10 @@ public class HomeFragment extends Fragment {
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
                     long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    listaPetsDesaparecidos.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                    listaPetsDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
+
+                    Collections.reverse(listaPetsDesaparecidos); // Traz os eventos mais recentes como primeiros do feed
                 }
                 petsAdapterDesaparecidos.notifyDataSetChanged(); // Notifica o adaptador sobre as mudanças
             }

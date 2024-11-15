@@ -87,7 +87,8 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                 @Override
                 public void onClick(View view) {
 
-                    Log.d("cardview click", "cardview click");
+                    Log.d("Pet database ref", petRef.toString());
+
                     petRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {

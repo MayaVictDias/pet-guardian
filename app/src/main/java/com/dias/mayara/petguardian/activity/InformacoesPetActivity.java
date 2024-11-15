@@ -3,6 +3,7 @@ package com.dias.mayara.petguardian.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class InformacoesPetActivity extends AppCompatActivity {
@@ -37,6 +40,10 @@ public class InformacoesPetActivity extends AppCompatActivity {
 
     private Handler handler = new Handler();
     private Runnable updateRunnable;
+
+    private List<View> adocaoComponents;
+    private List<View> desaparecidoComponents;
+    private List<View> procurandoDonoComponents;
 
 
     @Override
@@ -59,9 +66,15 @@ public class InformacoesPetActivity extends AppCompatActivity {
 
         enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos").child(petSelecionado.getIdEndereco());
 
-        Log.d("ID endereço", enderecoRef.toString());
-
         configurarCampos();
+
+        if (petSelecionado.getStatusPet().equals("Adoção")) {
+            toggleViewsVisibility(adocaoComponents, View.VISIBLE);
+        } else if (petSelecionado.getStatusPet().equals("Desaparecido")) {
+            toggleViewsVisibility(desaparecidoComponents, View.VISIBLE);
+        } else if (petSelecionado.getStatusPet().equals("Procurando dono")) {
+            toggleViewsVisibility(procurandoDonoComponents, View.VISIBLE);
+        }
 
     }
 
@@ -162,6 +175,80 @@ public class InformacoesPetActivity extends AppCompatActivity {
         textViewCorOlhos = findViewById(R.id.textViewCorOlhos);
         textViewPorte = findViewById(R.id.textViewPorte);
         textViewCorPredominante = findViewById(R.id.textViewCorPredominante);
+
+        // Inicializa as listas de componentes
+        inicializarListaDesaparecidoComponentes();
+        inicializarListaAdocaoComponentes();
+        inicializarListaProcurandoDonoComponents();
+    }
+
+    private void inicializarListaDesaparecidoComponentes() {
+        desaparecidoComponents = new ArrayList<>();
+        desaparecidoComponents.add(imageViewFotoPet);
+        desaparecidoComponents.add(textViewDesaparecidoHaTempo);
+        desaparecidoComponents.add(textViewNomeTitulo);
+        desaparecidoComponents.add(textViewIdadeGenero);
+        desaparecidoComponents.add(textViewId);
+
+        desaparecidoComponents.add(textViewVistoPorUltimoTitulo);
+        desaparecidoComponents.add(textViewEnderecoTitulo);
+        desaparecidoComponents.add(textViewEnderecoCompletoDado);
+        desaparecidoComponents.add(textViewPontoReferenciaTitulo);
+        desaparecidoComponents.add(textViewPontoReferenciaDado);
+
+        desaparecidoComponents.add(textViewInformacoesGeraisTituloDado);
+        desaparecidoComponents.add(textViewEspecie);
+        desaparecidoComponents.add(textViewRaca);
+        desaparecidoComponents.add(textViewCorOlhos);
+        desaparecidoComponents.add(textViewPorte);
+        desaparecidoComponents.add(textViewCorPredominante);
+    }
+
+    private void inicializarListaAdocaoComponentes() {
+        adocaoComponents = new ArrayList<>();
+
+        adocaoComponents = new ArrayList<>();
+        adocaoComponents.add(imageViewFotoPet);
+        adocaoComponents.add(textViewDesaparecidoHaTempo);
+        adocaoComponents.add(textViewNomeTitulo);
+        adocaoComponents.add(textViewIdadeGenero);
+        adocaoComponents.add(textViewId);
+
+        adocaoComponents.add(textViewInformacoesGeraisTituloDado);
+        adocaoComponents.add(textViewEspecie);
+        adocaoComponents.add(textViewRaca);
+        adocaoComponents.add(textViewCorOlhos);
+        adocaoComponents.add(textViewPorte);
+        adocaoComponents.add(textViewCorPredominante);
+    }
+
+    private void inicializarListaProcurandoDonoComponents() {
+        procurandoDonoComponents = new ArrayList<>();
+
+        procurandoDonoComponents.add(imageViewFotoPet);
+        procurandoDonoComponents.add(textViewDesaparecidoHaTempo);
+        procurandoDonoComponents.add(textViewNomeTitulo);
+        procurandoDonoComponents.add(textViewIdadeGenero);
+        procurandoDonoComponents.add(textViewId);
+
+        procurandoDonoComponents.add(textViewVistoPorUltimoTitulo);
+        procurandoDonoComponents.add(textViewEnderecoTitulo);
+        procurandoDonoComponents.add(textViewEnderecoCompletoDado);
+        procurandoDonoComponents.add(textViewPontoReferenciaTitulo);
+        procurandoDonoComponents.add(textViewPontoReferenciaDado);
+
+        procurandoDonoComponents.add(textViewInformacoesGeraisTituloDado);
+        procurandoDonoComponents.add(textViewEspecie);
+        procurandoDonoComponents.add(textViewRaca);
+        procurandoDonoComponents.add(textViewCorOlhos);
+        procurandoDonoComponents.add(textViewPorte);
+        procurandoDonoComponents.add(textViewCorPredominante);
+    }
+
+    private void toggleViewsVisibility(List<View> views, int visibility) {
+        for (View view : views) {
+            view.setVisibility(visibility);
+        }
     }
 
     // Método para lidar com o clique no botão de voltar

@@ -16,6 +16,7 @@ import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,9 @@ public class StatusPetFragment extends Fragment {
             textViewSelecioneMapaInstrucoes;
     private TextInputEditText editTextCep, editTextEstado, editTextCidade, editTextBairro,
             editTextRuaAvenida, editTextNumeroEndereco, editTextComplementoEndereco, editTextPais;
+    private TextInputLayout textInputLayoutPais, textInputLayoutCidade, textInputLayoutComplementoEndereco,
+            textInputLayoutCep, textInputLayoutBairro, textInputLayoutEndereco, textInputLayoutEstado,
+            textInputLayoutRuaAvenida;
 
     private Endereco endereco;
 
@@ -264,6 +268,15 @@ public class StatusPetFragment extends Fragment {
         editTextComplementoEndereco = view.findViewById(R.id.editTextComplementoEndereco);
         textViewSelecioneMapa = view.findViewById(R.id.textViewSelecioneMapa);
         textViewSelecioneMapaInstrucoes = view.findViewById(R.id.textViewSelecioneMapaInstrucoes);
+
+        textInputLayoutPais = view.findViewById(R.id.textInputLayoutPais);
+        textInputLayoutComplementoEndereco = view.findViewById(R.id.textInputLayoutComplementoEndereco);
+        textInputLayoutBairro = view.findViewById(R.id.textInputLayoutBairro);
+        textInputLayoutCidade = view.findViewById(R.id.textInputLayoutCidade);
+        textInputLayoutRuaAvenida = view.findViewById(R.id.textInputLayoutRuaAvenida);
+        textInputLayoutCep = view.findViewById(R.id.textInputLayoutCep);
+        textInputLayoutEstado = view.findViewById(R.id.textInputLayoutEstado);
+        textInputLayoutEndereco = view.findViewById(R.id.textInputLayoutEndereco);
     }
 
     private void inicializarListaDesaparecidoComponentes(View view) {
@@ -288,6 +301,15 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(editTextComplementoEndereco);
         desaparecidoComponents.add(textViewSelecioneMapa);
         desaparecidoComponents.add(textViewSelecioneMapaInstrucoes);
+
+        desaparecidoComponents.add(textInputLayoutPais);
+        desaparecidoComponents.add(textInputLayoutCidade);
+        desaparecidoComponents.add(textInputLayoutComplementoEndereco);
+        desaparecidoComponents.add(textInputLayoutCep);
+        desaparecidoComponents.add(textInputLayoutBairro);
+        desaparecidoComponents.add(textInputLayoutRuaAvenida);
+        desaparecidoComponents.add(textInputLayoutEndereco);
+        desaparecidoComponents.add(textInputLayoutEstado);
     }
 
     private void inicializarListaAdocaoComponentes(View view) {
@@ -316,6 +338,15 @@ public class StatusPetFragment extends Fragment {
         procurandoDonoComponents.add(editTextComplementoEndereco);
         procurandoDonoComponents.add(textViewSelecioneMapa);
         procurandoDonoComponents.add(textViewSelecioneMapaInstrucoes);
+
+        procurandoDonoComponents.add(textInputLayoutPais);
+        procurandoDonoComponents.add(textInputLayoutCidade);
+        procurandoDonoComponents.add(textInputLayoutComplementoEndereco);
+        procurandoDonoComponents.add(textInputLayoutCep);
+        procurandoDonoComponents.add(textInputLayoutBairro);
+        procurandoDonoComponents.add(textInputLayoutEndereco);
+        procurandoDonoComponents.add(textInputLayoutEstado);
+        procurandoDonoComponents.add(textInputLayoutRuaAvenida);
     }
 
     private void toggleViewsVisibility(List<View> views, int visibility) {

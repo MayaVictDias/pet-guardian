@@ -134,6 +134,7 @@ public class PerfilFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 petListAdocao.clear(); // Limpa a lista antes de adicionar novos dados
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String idPet = snapshot.child("idPet").getValue(String.class);
                     String idEndereco = snapshot.child("idEndereco").getValue(String.class);
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
@@ -145,7 +146,7 @@ public class PerfilFragment extends Fragment {
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
                     long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    petListAdocao.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                    petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
                 // Notifica o adapter sobre as mudanças na lista
@@ -169,6 +170,7 @@ public class PerfilFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 petListDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String idPet = snapshot.child("idPet").getValue(String.class);
                     String idEndereco = snapshot.child("idEndereco").getValue(String.class);
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
@@ -180,7 +182,7 @@ public class PerfilFragment extends Fragment {
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
                     long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    petListDesaparecidos.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                    petListDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
                 // Notifica o adapter sobre as mudanças na lista

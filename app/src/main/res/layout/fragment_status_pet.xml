@@ -116,9 +116,11 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPais"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -141,7 +143,9 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCep"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp">
 
@@ -168,8 +172,10 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -195,8 +201,10 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -222,8 +230,10 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutBairro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -259,8 +269,10 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutRuaAvenida"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -285,8 +297,10 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEndereco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -312,8 +326,10 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutComplementoEndereco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:tag="perdido_group, desaparecido_group">
 
             <com.google.android.material.textfield.TextInputEditText
