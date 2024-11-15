@@ -83,6 +83,7 @@ public class HomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listaPetsAdocao.clear(); // Limpa a lista antes de adicionar novos dados
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String idPet = snapshot.child("idPet").getValue(String.class);
                     String idEndereco = snapshot.child("idEndereco").getValue(String.class);
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
@@ -94,7 +95,7 @@ public class HomeFragment extends Fragment {
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
                     long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    listaPetsAdocao.add(new Pet(nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
                 // Notifica o adapter sobre as mudanças na lista
@@ -110,7 +111,7 @@ public class HomeFragment extends Fragment {
 
     private void getPetsDesaparecidos() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference("feedPets").child("desaparecidos");
+                .getReference("feedPets").child("desaparecido");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

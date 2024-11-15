@@ -161,7 +161,7 @@ public class PerfilFragment extends Fragment {
 
     private void getPetsDesaparecidos() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference("pets").child(idUsuarioLogado).child("desaparecidos");
+                .getReference("pets").child(idUsuarioLogado).child("desaparecido");
 
         // Usando addValueEventListener para atualizações em tempo real
         databaseReference.addValueEventListener(new ValueEventListener() {

@@ -14,6 +14,7 @@ public class Endereco {
     private String ruaAvenida;
     private String numero;
     private String complemento;
+    private String pais;
 
     private DatabaseReference firebaseRef;
     private DatabaseReference enderecoRef;
@@ -21,11 +22,11 @@ public class Endereco {
     public Endereco() {
     }
 
-    public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento) {
+    public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento, String pais) {
 
         // Configuração de um ID único para o pet
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        String idEndereco = firebaseRef.child("endereco").push().getKey();
+        String idEndereco = firebaseRef.child("enderecos").push().getKey();
         this.setIdEndereco(idEndereco);
 
         this.complemento = complemento;
@@ -35,6 +36,7 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
+        this.pais = pais;
     }
 
     public void salvar() {
@@ -63,6 +65,14 @@ public class Endereco {
 
     public String getCep() {
         return cep;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
     public void setCep(String cep) {
@@ -115,5 +125,23 @@ public class Endereco {
 
     public void setComplemento(String complemento) {
         this.complemento = complemento;
+    }
+
+    @Override
+    public String toString() {
+        return "Endereco{" +
+                "idEndereco='" + idEndereco + '\'' +
+                ", idPet='" + idPet + '\'' +
+                ", cep='" + cep + '\'' +
+                ", estado='" + estado + '\'' +
+                ", cidade='" + cidade + '\'' +
+                ", bairro='" + bairro + '\'' +
+                ", ruaAvenida='" + ruaAvenida + '\'' +
+                ", numero='" + numero + '\'' +
+                ", complemento='" + complemento + '\'' +
+                ", pais='" + pais + '\'' +
+                ", firebaseRef=" + firebaseRef +
+                ", enderecoRef=" + enderecoRef +
+                '}';
     }
 }

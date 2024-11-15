@@ -105,13 +105,13 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textViewCep"
+            android:id="@+id/textViewPais"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
             android:tag="perdido_group, desaparecido_group"
-            android:text="CEP"
+            android:text="País"
             android:textSize="15sp"
             android:visibility="gone" />
 
@@ -120,6 +120,30 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:tag="perdido_group, desaparecido_group">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPais"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background_outline_gray"
+                android:tag="perdido_group, desaparecido_group"
+                android:visibility="gone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textViewCep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="CEP"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCep"

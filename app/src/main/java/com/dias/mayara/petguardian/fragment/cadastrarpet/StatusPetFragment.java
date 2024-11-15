@@ -2,6 +2,7 @@ package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +42,12 @@ public class StatusPetFragment extends Fragment {
     private FragmentInteractionListener listener;
     private RadioGroup radioGroupOptions;
     private RadioButton radioButtonAdocao, radioButtonDesaparecido, radioButtonProcurandoDono;
-    private TextView textViewVistoUltimaVez, textViewCep, textViewEstado, textViewCidade,
+    private TextView textViewVistoUltimaVez, textViewPais, textViewCep, textViewEstado, textViewCidade,
             textViewBairro, textViewRuaAvenida, textViewSomenteNomeRuaAvenida,
             textViewNumeroEndereco, textViewComplementoEndereco, textViewSelecioneMapa,
             textViewSelecioneMapaInstrucoes;
     private TextInputEditText editTextCep, editTextEstado, editTextCidade, editTextBairro,
-            editTextRuaAvenida, editTextNumeroEndereco, editTextComplementoEndereco;
+            editTextRuaAvenida, editTextNumeroEndereco, editTextComplementoEndereco, editTextPais;
 
     private Endereco endereco;
 
@@ -105,6 +106,11 @@ public class StatusPetFragment extends Fragment {
 
                     Toast.makeText(getView().getContext(), "Preencha o campo 'Bairro'", Toast.LENGTH_SHORT).show();
 
+                } else if(editTextPais.getText() == null && editTextPais.getVisibility() == View.VISIBLE ||
+                        editTextPais.getText().toString().trim().isEmpty() && editTextPais.getVisibility() == View.VISIBLE ) {
+
+                    Toast.makeText(getView().getContext(), "Preencha o campo 'País'", Toast.LENGTH_SHORT).show();
+
                 } else if(editTextRuaAvenida.getText() == null && editTextRuaAvenida.getVisibility() == View.VISIBLE ||
                         editTextRuaAvenida.getText().toString().trim().isEmpty() && editTextRuaAvenida.getVisibility() == View.VISIBLE ) {
 
@@ -145,6 +151,11 @@ public class StatusPetFragment extends Fragment {
             @Override
             public void onChanged(Endereco endereco) {
                 if (endereco != null) {
+
+                    Log.d("Endereço conferir informacoes", endereco.toString());
+
+                    /*
+                    editTextPais.setText(endereco.getPais());
                     editTextCep.setText(endereco.getCep());
                     editTextEstado.setText(endereco.getEstado());
                     editTextCidade.setText(endereco.getCidade());
@@ -152,6 +163,8 @@ public class StatusPetFragment extends Fragment {
                     editTextRuaAvenida.setText(endereco.getRuaAvenida());
                     editTextNumeroEndereco.setText(endereco.getNumero());
                     editTextComplementoEndereco.setText(endereco.getComplemento());
+
+                     */
                 }
             }
         });
@@ -201,7 +214,8 @@ public class StatusPetFragment extends Fragment {
                 editTextBairro.getText().toString(),
                 editTextRuaAvenida.getText().toString(),
                 editTextNumeroEndereco.getText().toString(),
-                editTextComplementoEndereco.getText().toString()
+                editTextComplementoEndereco.getText().toString(),
+                editTextPais.getText().toString()
         );
         cadastroPetViewModel.setEndereco(endereco);
     }
@@ -231,6 +245,8 @@ public class StatusPetFragment extends Fragment {
         radioButtonProcurandoDono = view.findViewById(R.id.radioButtonProcurandoDono);
 
         textViewVistoUltimaVez = view.findViewById(R.id.textViewVistoUltimaVez);
+        textViewPais = view.findViewById(R.id.textViewPais);
+        editTextPais = view.findViewById(R.id.editTextPais);
         textViewCep = view.findViewById(R.id.textViewCep);
         editTextCep = view.findViewById(R.id.editTextCep);
         textViewEstado = view.findViewById(R.id.textViewEstado);
@@ -254,6 +270,8 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents = new ArrayList<>();
         desaparecidoComponents.add(textViewVistoUltimaVez);
         desaparecidoComponents.add(textViewCep);
+        desaparecidoComponents.add(editTextPais);
+        desaparecidoComponents.add(textViewPais);
         desaparecidoComponents.add(editTextCep);
         desaparecidoComponents.add(textViewEstado);
         desaparecidoComponents.add(editTextEstado);
@@ -279,6 +297,8 @@ public class StatusPetFragment extends Fragment {
     private void inicializarListaProcurandoDonoComponents(View view) {
         procurandoDonoComponents = new ArrayList<>();
         procurandoDonoComponents.add(textViewVistoUltimaVez);
+        procurandoDonoComponents.add(editTextPais);
+        procurandoDonoComponents.add(textViewPais);
         procurandoDonoComponents.add(textViewCep);
         procurandoDonoComponents.add(editTextCep);
         procurandoDonoComponents.add(textViewEstado);
