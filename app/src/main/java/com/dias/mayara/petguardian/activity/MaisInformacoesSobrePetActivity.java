@@ -1,9 +1,12 @@
 package com.dias.mayara.petguardian.activity;
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class InformacoesPetActivity extends AppCompatActivity {
+public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ImageView imageViewFotoPet;
@@ -33,8 +37,9 @@ public class InformacoesPetActivity extends AppCompatActivity {
             textViewVistoPorUltimoTitulo, textViewEnderecoTitulo, textViewEnderecoCompletoDado,
             textViewPontoReferenciaTitulo, textViewPontoReferenciaDado, textViewRaca,
             textViewInformacoesGeraisTituloDado, textViewEspecie, textViewCorOlhos, textViewPorte,
-            textViewCorPredominante;
+            textViewCorPredominante, textViewStatusPet;
     private Pet petSelecionado;
+    private Button buttonEntrarEmContato;
 
     private DatabaseReference enderecoRef;
 
@@ -76,6 +81,20 @@ public class InformacoesPetActivity extends AppCompatActivity {
             toggleViewsVisibility(procurandoDonoComponents, View.VISIBLE);
         }
 
+        buttonEntrarEmContato.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MaisInformacoesSobrePetActivity.this);
+                View modalView = getLayoutInflater().inflate(R.layout.modal_entrar_em_contato_pet, null);
+                bottomSheetDialog.setContentView(modalView);
+
+                Button closeButton = modalView.findViewById(R.id.modalButton);
+                closeButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
+
+                bottomSheetDialog.show();
+            }
+        });
+
     }
 
     private void configurarCampos() {
@@ -92,6 +111,17 @@ public class InformacoesPetActivity extends AppCompatActivity {
         textViewIdadeGenero.setText(petSelecionado.getIdadePet() + " • " + petSelecionado.getGeneroPet());
         textViewId.setText(petSelecionado.getIdPet());
         textViewEspecie.setText(petSelecionado.getEspeciePet());
+
+        if(petSelecionado.getStatusPet().equals("Adoção")) {
+            textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
+            textViewStatusPet.setText("ADOÇÃO");
+        } else if (petSelecionado.getStatusPet().equals("Desaparecido")) {
+            textViewStatusPet.setBackgroundColor(Color.parseColor("#FF0000"));
+            textViewStatusPet.setText("DESAPARECIDO");
+        } else if (petSelecionado.getStatusPet().equals("Procurando dono")) {
+            textViewStatusPet.setBackgroundColor(Color.parseColor("#0047FF"));
+            textViewStatusPet.setText("PROCURANDO DONO");
+        }
 
         // Configurar campos de endereço
         enderecoRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -172,9 +202,11 @@ public class InformacoesPetActivity extends AppCompatActivity {
         textViewInformacoesGeraisTituloDado = findViewById(R.id.textViewInformacoesGeraisTituloDado);
         textViewEspecie = findViewById(R.id.textViewEspecie);
         textViewRaca = findViewById(R.id.textViewRaca);
+        textViewStatusPet = findViewById(R.id.textViewStatusPet);
         textViewCorOlhos = findViewById(R.id.textViewCorOlhos);
         textViewPorte = findViewById(R.id.textViewPorte);
         textViewCorPredominante = findViewById(R.id.textViewCorPredominante);
+        buttonEntrarEmContato = findViewById(R.id.buttonEntrarEmContato);
 
         // Inicializa as listas de componentes
         inicializarListaDesaparecidoComponentes();
@@ -185,6 +217,7 @@ public class InformacoesPetActivity extends AppCompatActivity {
     private void inicializarListaDesaparecidoComponentes() {
         desaparecidoComponents = new ArrayList<>();
         desaparecidoComponents.add(imageViewFotoPet);
+        desaparecidoComponents.add(textViewStatusPet);
         desaparecidoComponents.add(textViewDesaparecidoHaTempo);
         desaparecidoComponents.add(textViewNomeTitulo);
         desaparecidoComponents.add(textViewIdadeGenero);
@@ -202,6 +235,7 @@ public class InformacoesPetActivity extends AppCompatActivity {
         desaparecidoComponents.add(textViewCorOlhos);
         desaparecidoComponents.add(textViewPorte);
         desaparecidoComponents.add(textViewCorPredominante);
+        desaparecidoComponents.add(buttonEntrarEmContato);
     }
 
     private void inicializarListaAdocaoComponentes() {
@@ -209,6 +243,7 @@ public class InformacoesPetActivity extends AppCompatActivity {
 
         adocaoComponents = new ArrayList<>();
         adocaoComponents.add(imageViewFotoPet);
+        adocaoComponents.add(textViewStatusPet);
         adocaoComponents.add(textViewDesaparecidoHaTempo);
         adocaoComponents.add(textViewNomeTitulo);
         adocaoComponents.add(textViewIdadeGenero);
@@ -220,12 +255,14 @@ public class InformacoesPetActivity extends AppCompatActivity {
         adocaoComponents.add(textViewCorOlhos);
         adocaoComponents.add(textViewPorte);
         adocaoComponents.add(textViewCorPredominante);
+        adocaoComponents.add(buttonEntrarEmContato);
     }
 
     private void inicializarListaProcurandoDonoComponents() {
         procurandoDonoComponents = new ArrayList<>();
 
         procurandoDonoComponents.add(imageViewFotoPet);
+        procurandoDonoComponents.add(textViewStatusPet);
         procurandoDonoComponents.add(textViewDesaparecidoHaTempo);
         procurandoDonoComponents.add(textViewNomeTitulo);
         procurandoDonoComponents.add(textViewIdadeGenero);

@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
-import com.dias.mayara.petguardian.activity.InformacoesPetActivity;
+import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,6 +66,9 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                     .child(nomeBancoDadosStatus)
                     .child(pet.getIdPet());
 
+            DatabaseReference enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos")
+                            .child(pet.getIdEndereco());
+
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
@@ -83,11 +87,27 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                     .error(R.drawable.no_image_found) // Imagem em caso de erro
                     .into(holder.imageViewFotoPet);
 
+            enderecoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Endereco endereco = snapshot.getValue(Endereco.class);
+                    if (endereco != null && !pet.getStatusPet().equals("Adoção")) {
+                        holder.textViewCidadePet.setText(endereco.getCidade() + " - " + endereco.getEstado());
+                    } else {
+                        holder.textViewCidadePet.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("PetsAdapter", "Erro ao buscar endereço: " + error.getMessage());
+                }
+            });
+
+
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Log.d("Pet database ref", petRef.toString());
 
                     petRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -96,7 +116,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                             Pet petSelecionado = snapshot.getValue(Pet.class);
 
                             if (petSelecionado != null) {
-                                Intent i = new Intent(holder.itemView.getContext(), InformacoesPetActivity.class);
+                                Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
                                 i.putExtra("petSelecionado", petSelecionado);
                                 holder.itemView.getContext().startActivity(i);
 
@@ -140,6 +160,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             textViewDesaparecidoHaTempo = itemView.findViewById(R.id.textViewDesaparecidoHaTempo);
             textViewCidadePet = itemView.findViewById(R.id.textViewCidadePet);
             cardView = itemView.findViewById(R.id.cardView);
+            textViewCidadePet = itemView.findViewById(R.id.textViewCidadePet);
         }
 
         public void updateTimeSincePost(long postTimestamp) {

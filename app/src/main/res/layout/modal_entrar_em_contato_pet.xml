@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/begeClaro"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/modalTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="ENTRE EM CONTATO"
+        android:textColor="@color/marromEscuro"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView38"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/nunito_medium"
+        android:gravity="center_horizontal"
+        android:text="Tem informações sobre esse pet? Entre em contato com o responsável:"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewNomeResponsavel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="6dp"
+        android:drawableStart="@drawable/ic_badge_16x16"
+        android:drawablePadding="6dp"
+        android:fontFamily="@font/nunito_medium"
+        android:gravity="center_horizontal"
+        android:text="Nome do responsável"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewEmailResponsavel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="6dp"
+        android:drawableStart="@drawable/ic_mail_16x16"
+        android:drawablePadding="6dp"
+        android:fontFamily="@font/nunito_medium"
+        android:gravity="center_horizontal"
+        android:text="Email do responsável"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textViewCelularResponsavel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="12dp"
+        android:drawableStart="@drawable/ic_smartphone_16x16"
+        android:drawablePadding="6dp"
+        android:gravity="center_horizontal"
+        android:text="Celular do responsável"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/modalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FECHAR" />
+</LinearLayout>
