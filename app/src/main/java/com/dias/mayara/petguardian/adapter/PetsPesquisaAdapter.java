@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder> {
+public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapter.PetViewHolder> {
 
     private List<Pet> petList;
     private Handler handler = new Handler();
 
-    public PetsAdapter(List<Pet> petList) {
+    public PetsPesquisaAdapter(List<Pet> petList) {
         this.petList = petList != null ? petList : new ArrayList<>(); // Evitar NullPointerException
     }
 
@@ -67,7 +67,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                     .child(pet.getIdPet());
 
             DatabaseReference enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos")
-                            .child(pet.getIdEndereco());
+                    .child(pet.getIdEndereco());
 
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
@@ -100,7 +100,6 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("PetsAdapter", "Erro ao buscar endereço: " + error.getMessage());
                 }
             });
 
