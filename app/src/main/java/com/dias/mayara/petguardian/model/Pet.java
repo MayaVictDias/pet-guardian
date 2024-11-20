@@ -117,9 +117,14 @@ public class Pet implements Serializable {
                 .child("adocao")
                 .child(idPet);
 
+        DatabaseReference todosPets = ConfiguracaoFirebase.getFirebase()
+                .child("todosPets")
+                .child(idPet);
+
         Map<String, Object> petData = criarMapaPet();
         petsRef.setValue(petData);
         feedPetsRef.setValue(petData);
+        todosPets.setValue(petData);
     }
 
 
@@ -136,9 +141,14 @@ public class Pet implements Serializable {
                 .child("desaparecido")
                 .child(idPet);
 
+        DatabaseReference todosPets = ConfiguracaoFirebase.getFirebase()
+                .child("todosPets")
+                .child(idPet);
+
         Map<String, Object> petData = criarMapaPet();
         petsRef.setValue(petData);
         feedPetsRef.setValue(petData);
+        todosPets.setValue(petData);
     }
 
     // Método para salvar o pet procurando dono
@@ -154,9 +164,14 @@ public class Pet implements Serializable {
                 .child("desaparecido")
                 .child(idPet);
 
+        DatabaseReference todosPets = ConfiguracaoFirebase.getFirebase()
+                .child("todosPets")
+                .child(idPet);
+
         Map<String, Object> petData = criarMapaPet();
         petsRef.setValue(petData);
         feedPetsRef.setValue(petData);
+        todosPets.setValue(petData);
     }
 
 

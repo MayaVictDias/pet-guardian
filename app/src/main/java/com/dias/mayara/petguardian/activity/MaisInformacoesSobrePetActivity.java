@@ -1,14 +1,20 @@
 package com.dias.mayara.petguardian.activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -40,8 +47,16 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             textViewCorPredominante, textViewStatusPet;
     private Pet petSelecionado;
     private Button buttonEntrarEmContato;
+    private ImageButton buttonMenu;
+
+    private String idUsuarioLogado;
 
     private DatabaseReference enderecoRef;
+    private DatabaseReference todosPetsRef;
+    private DatabaseReference petsRef;
+    private DatabaseReference feedPetsRef;
+
+    private AlertDialog dialog;
 
     private Handler handler = new Handler();
     private Runnable updateRunnable;
@@ -69,6 +84,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             petSelecionado = (Pet) bundle.getSerializable("petSelecionado");
         }
 
+        idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
         enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos").child(petSelecionado.getIdEndereco());
 
         configurarCampos();
@@ -95,6 +111,78 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             }
         });
 
+        if (petSelecionado.getIdTutor().equals(idUsuarioLogado)) {
+            buttonMenu.setVisibility(View.VISIBLE);
+
+            buttonMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Lógica para abrir o menu
+                    showPopupMenu(view);
+                }
+            });
+        } else if (!petSelecionado.getIdTutor().equals(idUsuarioLogado)) {
+            buttonMenu.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void showPopupMenu(View view) {
+
+        PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.menu_pet, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.action_delete) {
+
+                    abrirDialogCarregamento("Deletando evento");
+
+                    todosPetsRef = ConfiguracaoFirebase.getFirebase().child("todosPets")
+                            .child(petSelecionado.getIdPet());
+
+                    petsRef = ConfiguracaoFirebase.getFirebase().child("pets")
+                            .child(idUsuarioLogado)
+                            .child(petSelecionado.getStatusPet())
+                            .child(petSelecionado.getIdPet());
+
+                    feedPetsRef = ConfiguracaoFirebase.getFirebase().child("feedPets")
+                            .child(petSelecionado.getStatusPet())
+                            .child(petSelecionado.getIdPet());
+
+                    // Código para excluir o item
+                    todosPetsRef.removeValue();
+                    petsRef.removeValue();
+                    feedPetsRef.removeValue();
+
+                    dialog.cancel();
+
+                    Toast.makeText(view.getContext(),
+                            "Pet deletado com sucesso!",
+                            Toast.LENGTH_SHORT).show();
+
+                    finish();
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        popupMenu.show();
+    }
+
+    private void abrirDialogCarregamento(String titulo) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(titulo);
+        alert.setCancelable(false); // Impede que o usuário cancele a tela de carregamento
+        alert.setView(R.layout.dialog_carregamento);
+
+        dialog = alert.create();
+        dialog.show();
     }
 
     private void configurarCampos() {
@@ -207,6 +295,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewPorte = findViewById(R.id.textViewPorte);
         textViewCorPredominante = findViewById(R.id.textViewCorPredominante);
         buttonEntrarEmContato = findViewById(R.id.buttonEntrarEmContato);
+        buttonMenu = findViewById(R.id.buttonMenu);
 
         // Inicializa as listas de componentes
         inicializarListaDesaparecidoComponentes();

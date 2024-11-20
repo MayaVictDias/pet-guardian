@@ -32,7 +32,7 @@ public class PesquisaUsuarioAdapter extends RecyclerView.Adapter<PesquisaUsuario
 
         public UsuarioViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewNomeUsuario = itemView.findViewById(R.id.textViewNomeUsuario);
+            textViewNomeUsuario = itemView.findViewById(R.id.textViewPesquisaNomeUsuario);
             textViewPesquisaCidadeUsuario = itemView.findViewById(R.id.textViewPesquisaCidadeUsuario);
             imageViewPesquisaFotoUsuario = itemView.findViewById(R.id.imageViewPesquisaFotoUsuario);
             textViewPesquisaQuantidadePetsUsuario = itemView.findViewById(R.id.textViewPesquisaQuantidadePetsUsuario);

@@ -1,5 +1,4 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -36,6 +35,16 @@
                     android:text="Pet Guardian"
                     android:textColor="@color/marromEscuro"
                     android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/buttonMenu"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_more_horiz_24x24"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="24dp"
+                    android:backgroundTint="@color/begeClaro"
+                    android:text="Button" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -282,6 +291,12 @@
                     android:text="ENTRAR EM CONTATO" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
