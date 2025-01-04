@@ -1,9 +1,11 @@
 package com.dias.mayara.petguardian.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.SearchView;
 
@@ -13,9 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
+import com.dias.mayara.petguardian.activity.PerfilAmigoActivity;
 import com.dias.mayara.petguardian.adapter.PesquisaUsuarioAdapter;
 import com.dias.mayara.petguardian.adapter.PetsPesquisaAdapter;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.dias.mayara.petguardian.helper.RecyclerItemClickListener;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,6 +89,62 @@ public class SearchFragment extends Fragment {
         recyclerViewPesquisaPet.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         recyclerViewPesquisaPet.setAdapter(petsPesquisaAdapter);
+
+        // Configuração do evento de clique
+        recyclerViewPesquisaPessoas.addOnItemTouchListener(new RecyclerItemClickListener(
+                getActivity(),
+                recyclerViewPesquisaPessoas,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        Usuario usuarioSelecionado = listaUsuarios.get(position);
+                        Intent i = new Intent(getActivity(), PerfilAmigoActivity.class);
+
+                        i.putExtra("usuarioSelecionado", (CharSequence) usuarioSelecionado);
+                        startActivity(i);
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }
+        ));
+
+        // COnfiguração do evento de clique
+        recyclerViewPesquisaPet.addOnItemTouchListener(new RecyclerItemClickListener(
+                getActivity(),
+                recyclerViewPesquisaPet,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        Pet petSelecionado = listaPets.get(position);
+                        Intent i = new Intent(getActivity(), MaisInformacoesSobrePetActivity.class);
+
+                        i.putExtra("petSelecionado", petSelecionado);
+                        startActivity(i);
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }
+        ));
 
         // Configuração da searchView
         searchViewPesquisa.setQueryHint("Buscar");

@@ -2,6 +2,7 @@ package com.dias.mayara.petguardian.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,17 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), EditarPerfilActivity.class));
+            }
+        });
+
+        buttonCentralAjuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://forms.gle/BUpf17vrwBnVpwxQ7";
+                // Criar uma Intent para abrir o navegador
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                // Iniciar a Intent
+                startActivity(intent);
             }
         });
 

@@ -138,19 +138,35 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_delete) {
 
+                    String status = "";
+
+                    if(petSelecionado.getStatusPet().equals("Desaparecido")) {
+                        status = "desaparecido";
+                    } else if (petSelecionado.getStatusPet().equals("Adoção")) {
+                        status = "adocao";
+                    } else if (petSelecionado.getStatusPet().equals("Procurando dono")) {
+                        status = "procurandoDono";
+                    }
+
                     abrirDialogCarregamento("Deletando evento");
 
                     todosPetsRef = ConfiguracaoFirebase.getFirebase().child("todosPets")
                             .child(petSelecionado.getIdPet());
 
+                    Log.d("TodosPetsRef", todosPetsRef.toString());
+
                     petsRef = ConfiguracaoFirebase.getFirebase().child("pets")
                             .child(idUsuarioLogado)
-                            .child(petSelecionado.getStatusPet())
+                            .child(status)
                             .child(petSelecionado.getIdPet());
 
+                    Log.d("PetsRef", petsRef.toString());
+
                     feedPetsRef = ConfiguracaoFirebase.getFirebase().child("feedPets")
-                            .child(petSelecionado.getStatusPet())
+                            .child(status)
                             .child(petSelecionado.getIdPet());
+
+                    Log.d("FeedPetsRef", feedPetsRef.toString());
 
                     // Código para excluir o item
                     todosPetsRef.removeValue();
