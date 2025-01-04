@@ -1,4 +1,4 @@
-package com.dias.mayara.petguardian.activity;
+package com.dias.mayara.petguardian.activity.CadastrarNovoUsuario;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ToolbarHelper;
 
-public class CadastrarNovoUsuarioInserirNomeActivity extends AppCompatActivity {
+public class InserirNomeActivity extends AppCompatActivity {
 
     private Button buttonCadastrarUsuarioAvancar;
     private Toolbar toolbar;
-    private EditText editTextNomeNovoUsuario, editTextCidadeUsuario;
+    private EditText editTextNomeNovoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,11 @@ public class CadastrarNovoUsuarioInserirNomeActivity extends AppCompatActivity {
 
                 if( !editTextNomeNovoUsuario.getText().toString().trim().isEmpty() ){
 
-                    Intent intent = new Intent(getApplicationContext(), CadastrarNovoUsuarioInserirEmailActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), InserirEmailTelefoneActivity.class);
                     intent.putExtra("nome_usuario", editTextNomeNovoUsuario.getText().toString());
-                    intent.putExtra("cidade_usuario", editTextCidadeUsuario.getText().toString());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(CadastrarNovoUsuarioInserirNomeActivity.this,
+                    Toast.makeText(InserirNomeActivity.this,
                             "Por favor, digite o seu nome",
                             Toast.LENGTH_SHORT).show();
                 }
@@ -66,7 +65,6 @@ public class CadastrarNovoUsuarioInserirNomeActivity extends AppCompatActivity {
         buttonCadastrarUsuarioAvancar = findViewById(R.id.buttonCadastrarUsuarioAvancar);
         toolbar = findViewById(R.id.toolbarPrincipal);
         editTextNomeNovoUsuario = findViewById(R.id.editTextNomeNovoUsuario);
-        editTextCidadeUsuario = findViewById(R.id.editTextCidadeUsuario);
     }
 
 }

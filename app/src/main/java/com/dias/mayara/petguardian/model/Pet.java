@@ -16,6 +16,7 @@ public class Pet implements Serializable {
     private static final int ID_LENGTH = 6;
 
     private String idPet;
+    private String nomeUppercasePet;
     private String idTutor;
     private String nomePet;
     private String idadePet;
@@ -35,10 +36,11 @@ public class Pet implements Serializable {
 
     }
 
-    public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
+    public Pet(String nomePet, String nomeUppercasePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
                String idTutor, long dataCadastro) { // Construtor com data de cadastro
         this.nomePet = nomePet;
+        this.nomeUppercasePet = nomeUppercasePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
@@ -55,11 +57,12 @@ public class Pet implements Serializable {
         this.idTutor = idUsuarioLogado;
     }
 
-    public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
+    public Pet(String idPet, String nomePet, String nomeUppercasePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
                String idTutor, long dataCadastro) { // Construtor com ID do pet, quando ele for puxado direto do banco de dados
         this.idPet = idPet;
         this.nomePet = nomePet;
+        this.nomeUppercasePet = nomeUppercasePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
@@ -72,10 +75,11 @@ public class Pet implements Serializable {
 
     }
 
-    public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
+    public Pet(String nomePet, String nomeUppercasePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
                String idTutor) { // Construtor sem data de cadastro
         this.nomePet = nomePet;
+        this.nomeUppercasePet = nomeUppercasePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
@@ -182,6 +186,7 @@ public class Pet implements Serializable {
         petData.put("idPet", idPet);
         petData.put("idTutor", idTutor);
         petData.put("nomePet", nomePet);
+        petData.put("nomeUppercasePet", nomeUppercasePet);
         petData.put("idadePet", idadePet);
         petData.put("generoPet", generoPet);
         petData.put("especiePet", especiePet);
@@ -206,6 +211,14 @@ public class Pet implements Serializable {
 
     public String getImagemUrl() {
         return imagemUrl;
+    }
+
+    public String getNomeUppercasePet() {
+        return nomeUppercasePet;
+    }
+
+    public void setNomeUppercasePet(String nomeUppercasePet) {
+        this.nomeUppercasePet = nomeUppercasePet;
     }
 
     public void setImagemUrl(String imagemUrl) {

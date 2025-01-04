@@ -1,13 +1,16 @@
-package com.dias.mayara.petguardian.activity;
+package com.dias.mayara.petguardian.activity.CadastrarNovoUsuario;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.dias.mayara.petguardian.activity.MainActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,15 +29,18 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
-public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity {
+public class InserirSenhaActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private EditText editTextNovoUsuarioInserirSenha, editTextNovoUsuarioConfirmarSenha;
     private ProgressBar progressBar;
+    private CheckBox checkBoxPoliticaPrivacidadeTermosUso;
     ;
     private Button buttonCadastrarNovoUsuario;
 
     private Usuario usuario;
+
+    private AlertDialog dialog;
 
     private FirebaseAuth autenticacao;
 
@@ -49,6 +55,7 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
         Intent intent = getIntent();
         String nomeUsuario = intent.getStringExtra("nome_usuario");
         String emailUsuario = intent.getStringExtra("email_usuario");
+        String telefoneUsuario = intent.getStringExtra("telefone_usuario");
         String cidadeUsuario = intent.getStringExtra("cidade_usuario");
 
         // Configurações da toolbar
@@ -70,36 +77,56 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
 
                 if (!textoInserirSenha.isEmpty()) {
                     if (!textoConfirmarSenha.isEmpty()) {
+                        if (!checkBoxPoliticaPrivacidadeTermosUso.isChecked()) {
 
-                        usuario = new Usuario();
+                            Toast.makeText(InserirSenhaActivity.this,
+                                    "Você precisa concordar com a política de privacidade e termos de uso!",
+                                    Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            return;
 
-                        usuario.setEmailUsuario(emailUsuario);
-                        usuario.setNomeUsuario(nomeUsuario);
-                        usuario.setCidadeUsuario(cidadeUsuario);
-                        usuario.setSenhaUsuario(textoConfirmarSenha);
+                        } else {
 
-                        cadastrar(usuario);
+                            usuario = new Usuario();
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("exibir_modal_boas_vindas", true);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
+                            usuario.setEmailUsuario(emailUsuario);
+                            usuario.setNomeUsuario(nomeUsuario);
+                            usuario.setCidadeUsuario(cidadeUsuario);
+                            usuario.setTelefoneUsuario(telefoneUsuario);
+                            usuario.setSenhaUsuario(textoConfirmarSenha);
+
+                            abrirDialogCarregamento("Cadastrando usuário");
+
+                            cadastrar(usuario);
+
+                        }
 
                     } else {
-                        Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                        Toast.makeText(InserirSenhaActivity.this,
                                 "Preencha o campo Confirme a sua Senha!",
                                 Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     }
                 } else {
-                    Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                    Toast.makeText(InserirSenhaActivity.this,
                             "Preencha o campo Digite a sua Senha!",
                             Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
         });
+
+    }
+
+    private void abrirDialogCarregamento(String titulo) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(titulo);
+        alert.setCancelable(false); // Impede que o usuário cancele a tela de carregamento
+        alert.setView(R.layout.dialog_carregamento);
+
+        dialog = alert.create();
+        dialog.show();
 
     }
 
@@ -130,7 +157,7 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
                                 // Salvar nome do usuário
                                 UsuarioFirebase.atualizarNomeUsuario(usuario.getNomeUsuario());
 
-                                Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                                Toast.makeText(InserirSenhaActivity.this,
                                         "Cadastro realizado com sucesso!",
                                         Toast.LENGTH_SHORT).show();
 
@@ -161,9 +188,11 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
                                 e.printStackTrace();
                             }
 
-                            Toast.makeText(CadastrarNovoUsuarioInserirSenhaActivity.this,
+                            Toast.makeText(InserirSenhaActivity.this,
                                     "Erro: " + erroExcecao,
                                     Toast.LENGTH_SHORT).show();
+
+                            dialog.dismiss();
                         }
 
                     }
@@ -186,5 +215,6 @@ public class CadastrarNovoUsuarioInserirSenhaActivity extends AppCompatActivity 
         editTextNovoUsuarioConfirmarSenha = findViewById(R.id.editTextNovoUsuarioConfirmarSenha);
         progressBar = findViewById(R.id.progressBar2);
         buttonCadastrarNovoUsuario = findViewById(R.id.buttonCadastrarNovoUsuario);
+        checkBoxPoliticaPrivacidadeTermosUso = findViewById(R.id.checkBoxPoliticaPrivacidadeTermosUso);
     }
 }

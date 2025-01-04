@@ -51,9 +51,12 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private String idUsuarioLogado;
 
+    private DatabaseReference firebaseRef;
     private DatabaseReference enderecoRef;
     private DatabaseReference todosPetsRef;
+    private DatabaseReference usuarioRef;
     private DatabaseReference petsRef;
+    private DatabaseReference usuariosRef;
     private DatabaseReference feedPetsRef;
 
     private AlertDialog dialog;
@@ -71,18 +74,22 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_informacoes_pet_activity);
 
-        inicializarComponentes();
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         // Recuperar pet selecionado
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
             petSelecionado = (Pet) bundle.getSerializable("petSelecionado");
         }
+
+        inicializarComponentes();
+
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
+        usuariosRef = firebaseRef.child("usuarios");
+        usuarioRef = usuariosRef.child(petSelecionado.getIdTutor());
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
         enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos").child(petSelecionado.getIdEndereco());
@@ -103,6 +110,30 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MaisInformacoesSobrePetActivity.this);
                 View modalView = getLayoutInflater().inflate(R.layout.modal_entrar_em_contato_pet, null);
                 bottomSheetDialog.setContentView(modalView);
+
+                TextView textViewNomeResponsavel = modalView.findViewById(R.id.textViewNomeResponsavel);
+                TextView textViewEmailResponsavel = modalView.findViewById(R.id.textViewEmailResponsavel);
+                TextView textViewCelularResponsavel = modalView.findViewById(R.id.textViewCelularResponsavel);
+
+                usuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String nomeUsuario = snapshot.child("nomeUsuario").getValue(String.class);
+                        String emailUsuario = snapshot.child("emailUsuario").getValue(String.class);
+                        String telefoneUsuario = snapshot.child("telefoneUsuario").getValue(String.class);
+
+                        textViewNomeResponsavel.setText(nomeUsuario);
+                        textViewEmailResponsavel.setText(emailUsuario);
+                        textViewCelularResponsavel.setText(telefoneUsuario);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                //textViewNomeResponsavel.setText(petSelecionado.getNomeResponsavel());
 
                 Button closeButton = modalView.findViewById(R.id.modalButton);
                 closeButton.setOnClickListener(v -> bottomSheetDialog.dismiss());

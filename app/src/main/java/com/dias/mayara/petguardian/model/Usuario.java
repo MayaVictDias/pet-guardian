@@ -13,6 +13,7 @@ public class Usuario {
     private String nomeUsuario;
     private String emailUsuario;
     private String senhaUsuario;
+    private String telefoneUsuario;
     private String caminhoFotoUsuario;
     private String cidadeUsuario;
     private int quantidadePetsCadastrados;
@@ -47,6 +48,7 @@ public class Usuario {
         HashMap<String, Object> usuarioMap = new HashMap<>();
         usuarioMap.put("emailUsuario", getEmailUsuario());
         usuarioMap.put("nomeUsuario", getNomeUsuario());
+        usuarioMap.put("telefoneUsuario", telefoneUsuario);
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFotoUsuario());
@@ -81,6 +83,14 @@ public class Usuario {
 
     public String getEmailUsuario() {
         return emailUsuario;
+    }
+
+    public String getTelefoneUsuario() {
+        return telefoneUsuario;
+    }
+
+    public void setTelefoneUsuario(String telefoneUsuario) {
+        this.telefoneUsuario = telefoneUsuario;
     }
 
     public void setEmailUsuario(String emailUsuario) {

@@ -101,7 +101,6 @@ public class SearchFragment extends Fragment {
                         Usuario usuarioSelecionado = listaUsuarios.get(position);
                         Intent i = new Intent(getActivity(), PerfilAmigoActivity.class);
 
-                        i.putExtra("usuarioSelecionado", (CharSequence) usuarioSelecionado);
                         startActivity(i);
 
                     }
@@ -213,18 +212,20 @@ public class SearchFragment extends Fragment {
             });
         }
     }
+
     private void pesquisarPets(String textoDigitado) {
 
         // Limpa a lista
         listaPets.clear();
 
         // Confere se tem algum texto pra ser pesquisado
-        if(textoDigitado.length() > 0) {
-            Query query = petsRef.orderByChild("nomePet")
-                    .startAt(textoDigitado).endAt(textoDigitado + "\uf8ff");
-            // OrderByChild: Ordenar por nome que começa com textoDigitado ou termina com ele
+        if (textoDigitado.length() > 0) {
+            // Converte o texto digitado para uppercase para a busca
+            String textoUppercase = textoDigitado.toUpperCase();
 
-            // @TODO adicionar nó no firebase para salvar os nomes com uppercase, pra fazer o filtro com ele
+            Query query = petsRef.orderByChild("nomeUppercasePet")
+                    .startAt(textoUppercase)
+                    .endAt(textoUppercase + "\uf8ff");
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -233,15 +234,15 @@ public class SearchFragment extends Fragment {
                     // Limpa a lista
                     listaPets.clear();
 
-                    for (DataSnapshot ds : snapshot.getChildren()){
+                    for (DataSnapshot ds : snapshot.getChildren()) {
 
-                        // Verifica se é o usuário logado e remove da lista
+                        // Obtem o objeto Pet e adiciona à lista
                         Pet pet = ds.getValue(Pet.class);
-                        listaPets.add(pet);
 
+                        if (pet != null) {
+                            listaPets.add(pet);
+                        }
                     }
-
-                    int totalUsuariosRetornados = listaPets.size();
 
                     // Avisar o adapter que houve uma atualização nos itens retornados
                     petsPesquisaAdapter.notifyDataSetChanged();
@@ -249,9 +250,10 @@ public class SearchFragment extends Fragment {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    // Trate possíveis erros aqui
                 }
             });
         }
     }
+
 }

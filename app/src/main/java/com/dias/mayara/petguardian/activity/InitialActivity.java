@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.activity.CadastrarNovoUsuario.InserirNomeActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -54,7 +55,7 @@ public class InitialActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Criar um Intent para navegar para CadastrarActivity
-                Intent intent = new Intent(InitialActivity.this, CadastrarNovoUsuarioInserirNomeActivity.class);
+                Intent intent = new Intent(InitialActivity.this, InserirNomeActivity.class);
                 startActivity(intent);
             }
         });

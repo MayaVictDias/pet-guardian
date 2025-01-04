@@ -155,6 +155,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             // Cria o objeto Pet com os dados necessários, mas sem a URL da imagem ainda
             pet = new Pet(
                     textViewNomePet.getText().toString(),
+                    textViewNomePet.getText().toString().toUpperCase(),
                     textViewIdadePet.getText().toString(),
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),

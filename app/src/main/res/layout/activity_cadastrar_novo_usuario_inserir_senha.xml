@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".activity.CadastrarNovoUsuarioInserirSenhaActivity">
+    tools:context=".activity.CadastrarNovoUsuario.InserirSenhaActivity">
 
     <include
         android:id="@+id/include"
@@ -121,7 +121,7 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBoxPoliticaPrivacidadeTermosUso"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"

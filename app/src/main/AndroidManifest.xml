@@ -41,13 +41,13 @@
             android:name=".activity.ConfiguracoesActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.CadastrarNovoUsuarioInserirNomeActivity"
+            android:name=".activity.CadastrarNovoUsuario.InserirNomeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.CadastrarNovoUsuarioInserirSenhaActivity"
+            android:name=".activity.CadastrarNovoUsuario.InserirSenhaActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.CadastrarNovoUsuarioInserirEmailActivity"
+            android:name=".activity.CadastrarNovoUsuario.InserirEmailTelefoneActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"

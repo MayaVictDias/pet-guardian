@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment {
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
                     String nomePet = snapshot.child("nomePet").getValue(String.class);
+                    String nomeUppercasePet = snapshot.child("nomeUppercasePet").getValue(String.class);
                     String generoPet = snapshot.child("generoPet").getValue(String.class);
                     String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
                     String idadePet = snapshot.child("idadePet").getValue(String.class);
@@ -96,7 +97,7 @@ public class HomeFragment extends Fragment {
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
                     long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                    listaPetsAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
 
                     Collections.reverse(listaPetsAdocao); // Traz os eventos mais recentes como primeiros do feed
@@ -125,6 +126,7 @@ public class HomeFragment extends Fragment {
                     String idTutor = snapshot.child("idTutor").getValue(String.class);
                     String especiePet = snapshot.child("especiePet").getValue(String.class);
                     String nomePet = snapshot.child("nomePet").getValue(String.class);
+                    String nomeUppercasePet = snapshot.child("nomeUppercasePet").getValue(String.class);
                     String generoPet = snapshot.child("generoPet").getValue(String.class);
                     String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
                     String idadePet = snapshot.child("idadePet").getValue(String.class);
@@ -132,7 +134,7 @@ public class HomeFragment extends Fragment {
                     String statusPet = snapshot.child("statusPet").getValue(String.class);
                     long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
 
-                    listaPetsDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
+                    listaPetsDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
 
                     Collections.reverse(listaPetsDesaparecidos); // Traz os eventos mais recentes como primeiros do feed
