@@ -13,10 +13,6 @@
         android:icon="@drawable/ic_add_pet_brown"
         android:title="Adicionar pet" />
     <item
-        android:id="@+id/nav_camera_ia"
-        android:icon="@drawable/ic_camera_ia_brown_27x28"
-        android:title="Camera IA" />
-    <item
         android:id="@+id/nav_perfil"
         android:icon="@drawable/ic_perfil_brown_25x26"
         android:title="Perfil" />

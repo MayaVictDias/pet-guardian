@@ -26,6 +26,12 @@
         android:theme="@style/Theme.PetGuardian"
         tools:targetApi="31">
         <activity
+            android:name=".activity.FiltroActivity$TermosDeUsoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.FiltroActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.PerfilAmigoActivity"
             android:exported="false" />
         <activity

@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                         // Se checkbox não marcada, remove a preferência
                         editor.putBoolean("manterLogado", false);
                         // Aqui você pode fazer o logout imediato, se desejar não manter a sessão
-                        autenticacao.signOut();
                     }
 
                     editor.apply(); // Aplica as mudanças nas SharedPreferences

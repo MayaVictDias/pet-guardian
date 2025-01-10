@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.dias.mayara.petguardian.activity.CadastrarNovoUsuario.InserirSenhaActivity;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -63,6 +64,9 @@ public class UsuarioFirebase {
     public static Usuario getDadosUsuarioLogado() {
 
         FirebaseUser firebaseUser = getUsuarioAtual();
+
+
+
         Usuario usuario = new Usuario();
         usuario.setEmailUsuario(firebaseUser.getEmail());
         usuario.setNomeUsuario(firebaseUser.getDisplayName());

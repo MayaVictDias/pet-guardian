@@ -1,5 +1,6 @@
 package com.dias.mayara.petguardian.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,10 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.activity.EditarPerfilActivity;
+import com.dias.mayara.petguardian.activity.FiltroActivity;
 import com.dias.mayara.petguardian.adapter.PetsAdapter;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
@@ -39,6 +43,7 @@ public class PerfilFragment extends Fragment {
 
     private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewPetsDesaparecidos;
     private CircleImageView imagemPerfilUsuario;
+    private ImageButton buttonFiltrar;
     private RecyclerView recyclerViewPetsDesaparecidos, recyclerViewPetsParaAdocao;
 
     private FirebaseUser usuarioPerfil;
@@ -120,6 +125,13 @@ public class PerfilFragment extends Fragment {
 
         getPetsAdocao();
         getPetsDesaparecidos(); // Carregar pets desaparecidos
+
+        buttonFiltrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), FiltroActivity.class));
+            }
+        });
 
         return view;
     }
@@ -224,5 +236,6 @@ public class PerfilFragment extends Fragment {
         textViewPetsDesaparecidos = view.findViewById(R.id.textViewPetsDesaparecidos);
         recyclerViewPetsDesaparecidos = view.findViewById(R.id.recyclerViewPetsDesaparecidos);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
+        buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
     }
 }

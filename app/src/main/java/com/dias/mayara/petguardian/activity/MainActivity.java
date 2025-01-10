@@ -59,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // Se o usuário estiver vindo da tela de cadastro de novo usuário, irá visualizar a modal de boas vindas
@@ -150,8 +152,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_add_pet) {
                     startActivity(new Intent(getApplicationContext(), CadastrarPetActivity.class));
                     return true;
-                } else if (id == R.id.nav_camera_ia) {
-                    selectedFragment = new CameraIAFragment();
                 } else if (id == R.id.nav_perfil) {
                     selectedFragment = new PerfilFragment();
                 }

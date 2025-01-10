@@ -1,6 +1,16 @@
 package com.dias.mayara.petguardian.model;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.text.InputType;
+import android.widget.EditText;
+
+import com.dias.mayara.petguardian.activity.LoginActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
@@ -38,7 +48,6 @@ public class Usuario {
         usuariosRef.updateChildren(valoresUsuario);
 
     }
-
 
     /*
      * Recupera os valores do firebase que estão nos formatos que são do tipo chave String e valor
