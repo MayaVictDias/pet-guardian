@@ -157,6 +157,7 @@ public class FiltroActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         imageButtonClose = findViewById(R.id.imageButtonClose);
         spinnerStatusPet = findViewById(R.id.spinnerStatusPet);
+
         spinnerIdadePet = findViewById(R.id.spinnerIdadePet);
         spinnerGeneroPet = findViewById(R.id.spinnerGeneroPet);
         spinnerEspeciePet = findViewById(R.id.spinnerEspeciePet);
