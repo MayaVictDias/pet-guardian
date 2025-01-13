@@ -65,18 +65,34 @@ public class UsuarioFirebase {
 
         FirebaseUser firebaseUser = getUsuarioAtual();
 
-
-
         Usuario usuario = new Usuario();
         usuario.setEmailUsuario(firebaseUser.getEmail());
         usuario.setNomeUsuario(firebaseUser.getDisplayName());
         usuario.setIdUsuario(firebaseUser.getUid());
 
+        // Defina o caminho do celular do usuário no Realtime Database
+        DatabaseReference celularUsuarioRef = FirebaseDatabase.getInstance().getReference()
+                .child("usuarios") // Nó principal dos usuários
+                .child(firebaseUser.getUid()) // UID do usuário atual
+                .child("celularUsuario"); // Especificamente o campo cidadeUsuario
+
         // Defina o caminho da cidade do usuário no Realtime Database
-        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference cidadeUsuarioRef = FirebaseDatabase.getInstance().getReference()
                 .child("usuarios") // Nó principal dos usuários
                 .child(firebaseUser.getUid()) // UID do usuário atual
                 .child("cidadeUsuario"); // Especificamente o campo cidadeUsuario
+
+        // Defina o caminho do estado do usuário no Realtime Database
+        DatabaseReference estadoUsuarioRef = FirebaseDatabase.getInstance().getReference()
+                .child("usuarios") // Nó principal dos usuários
+                .child(firebaseUser.getUid()) // UID do usuário atual
+                .child("estadoUsuario"); // Especificamente o campo cidadeUsuario
+
+        // Defina o caminho do estado do usuário no Realtime Database
+        DatabaseReference estadoUsuarioRefqtdPetsCadastrados = FirebaseDatabase.getInstance().getReference()
+                .child("usuarios") // Nó principal dos usuários
+                .child(firebaseUser.getUid()) // UID do usuário atual
+                .child("quantidadePetsCadastrados"); // Especificamente o campo cidadeUsuario
 
         if (firebaseUser.getPhotoUrl() == null) {
             usuario.setCaminhoFotoUsuario("");

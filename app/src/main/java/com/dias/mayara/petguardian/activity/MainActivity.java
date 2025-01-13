@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 if (usuario != null) {
 
                     userName.setText(usuario.getNomeUsuario());
-                    userLocation.setText(usuario.getCidadeUsuario());
+                    userLocation.setText(usuario.getCidadeUsuario() + " - " +
+                        usuario.getEstadoUsuario());
                 }
             }
 

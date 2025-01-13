@@ -28,6 +28,7 @@ import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,6 +65,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private String idUsuarioLogado;
     private String idPet;
     private AlertDialog dialog;
+    private Usuario usuario;
 
     private Pet pet;
     private Endereco endereco;
@@ -92,6 +94,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         usuariosRef = ConfiguracaoFirebase.getFirebase().child("usuarios");
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
+        usuario = UsuarioFirebase.getDadosUsuarioLogado();
 
         inicializarComponentes(view);
 
@@ -166,6 +169,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     idUsuarioLogado
             );
 
+            usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() + 1);
+            usuario.atualizar();
+
             // Faça o upload da imagem e defina a URL da imagem no objeto Pet após o upload bem-sucedido
             sharedViewModel.getImagemPet().observe(getViewLifecycleOwner(), new Observer<byte[]>() {
                 @Override
@@ -234,6 +240,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             });
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            dialog.dismiss(); // Após sucesso ou erro
         }
     }
 

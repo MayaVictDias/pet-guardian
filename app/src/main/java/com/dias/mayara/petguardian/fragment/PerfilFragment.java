@@ -218,7 +218,8 @@ public class PerfilFragment extends Fragment {
 
                 if (usuario != null) {
                     textViewNomeUsuario.setText(usuario.getNomeUsuario());
-                    textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario());
+                    textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() +
+                            " - " + usuario.getEstadoUsuario());
                 }
             }
 
