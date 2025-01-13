@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.CadastrarNovoUsuario.InserirEmailTelefoneActivity">
+    tools:context=".activity.CadastrarNovoUsuario.InserirEnderecoActivity">
 
     <include
         android:id="@+id/include"
@@ -22,7 +22,7 @@
         android:layout_marginTop="42dp"
         android:layout_marginRight="24dp"
         android:fontFamily="@font/nunito_medium"
-        android:text="Agora insira o seu email" />
+        android:text="Informe sua localidade" />
 
     <TextView
         android:id="@+id/textView5"
@@ -32,7 +32,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginRight="24dp"
         android:fontFamily="@font/nunito_bold"
-        android:text="Email" />
+        android:text="Estado" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
         android:layout_marginRight="24dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextNomeNovoUsuario"
+            android:id="@+id/editTextEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_background_outline_gray"
@@ -51,14 +51,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textViewTelefone"
+        android:id="@+id/textViewCidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginRight="24dp"
         android:fontFamily="@font/nunito_bold"
-        android:text="Telefone" />
+        android:text="Cidade" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -68,20 +68,13 @@
         android:layout_marginRight="24dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTelefoneNovoUsuario"
+            android:id="@+id/editTextCidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_background_outline_gray"
             android:maxLines="1"
             android:scrollHorizontally="true" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginRight="24dp"/>
 
     <Button
         android:id="@+id/buttonCadastrarUsuarioAvancar"

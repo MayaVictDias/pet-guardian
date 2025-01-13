@@ -1,17 +1,6 @@
 package com.dias.mayara.petguardian.model;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.text.InputType;
-import android.widget.EditText;
-
-import com.dias.mayara.petguardian.activity.LoginActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
@@ -26,6 +15,7 @@ public class Usuario {
     private String telefoneUsuario;
     private String caminhoFotoUsuario;
     private String cidadeUsuario;
+    private String estadoUsuario;
     private int quantidadePetsCadastrados;
 
     public Usuario() {
@@ -57,8 +47,9 @@ public class Usuario {
         HashMap<String, Object> usuarioMap = new HashMap<>();
         usuarioMap.put("emailUsuario", getEmailUsuario());
         usuarioMap.put("nomeUsuario", getNomeUsuario());
-        usuarioMap.put("telefoneUsuario", telefoneUsuario);
+        usuarioMap.put("telefoneUsuario", getTelefoneUsuario());
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
+        usuarioMap.put("estadoUsuario", getCidadeUsuario());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFotoUsuario());
         usuarioMap.put("quantidadePetsCadastrados", getQuantidadePetsCadastrados());
@@ -120,6 +111,14 @@ public class Usuario {
 
     public void setCaminhoFotoUsuario(String caminhoFotoUsuario) {
         this.caminhoFotoUsuario = caminhoFotoUsuario;
+    }
+
+    public String getEstadoUsuario() {
+        return estadoUsuario;
+    }
+
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
     }
 
     public String getCidadeUsuario() {

@@ -55,8 +55,9 @@ public class InserirSenhaActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String nomeUsuario = intent.getStringExtra("nome_usuario");
         String emailUsuario = intent.getStringExtra("email_usuario");
-        String telefoneUsuario = intent.getStringExtra("telefone_usuario");
+        String celularUsuario = intent.getStringExtra("celular_usuario");
         String cidadeUsuario = intent.getStringExtra("cidade_usuario");
+        String estadoUsuario = intent.getStringExtra("estado_usuario");
 
         // Configurações da toolbar
         setSupportActionBar(toolbar);
@@ -91,8 +92,9 @@ public class InserirSenhaActivity extends AppCompatActivity {
 
                             usuario.setEmailUsuario(emailUsuario);
                             usuario.setNomeUsuario(nomeUsuario);
+                            usuario.setTelefoneUsuario(celularUsuario);
                             usuario.setCidadeUsuario(cidadeUsuario);
-                            usuario.setTelefoneUsuario(telefoneUsuario);
+                            usuario.setEstadoUsuario(estadoUsuario);
                             usuario.setSenhaUsuario(textoConfirmarSenha);
 
                             abrirDialogCarregamento("Cadastrando usuário");

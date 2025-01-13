@@ -18,7 +18,7 @@ public class InserirEmailTelefoneActivity extends AppCompatActivity {
 
     private Button buttonCadastrarUsuarioAvancar;
     private Toolbar toolbar;
-    private EditText editTextEmailNovoUsuario, editTextTelefoneNovoUsuario, editTextCidadeNovoUsuario;
+    private EditText editTextEmailNovoUsuario, editTextCelularNovoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,11 @@ public class InserirEmailTelefoneActivity extends AppCompatActivity {
                                 "Digite um e-mail válido",
                                 Toast.LENGTH_SHORT).show();
 
-                    } else if (!editTextTelefoneNovoUsuario.getText().toString().trim().isEmpty()) {
+                    } else if (!editTextCelularNovoUsuario.getText().toString().trim().isEmpty()) {
 
-                        Intent intent = new Intent(getApplicationContext(), InserirSenhaActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), InserirEnderecoActivity.class);
                         intent.putExtra("nome_usuario", nomeUsuario);
-                        intent.putExtra("telefone_usuario", editTextTelefoneNovoUsuario.getText().toString());
-                        intent.putExtra("cidade_usuario", editTextCidadeNovoUsuario.getText().toString());
+                        intent.putExtra("celular_usuario", editTextCelularNovoUsuario.getText().toString());
                         intent.putExtra("email_usuario", editTextEmailNovoUsuario.getText().toString());
                         startActivity(intent);
 
@@ -80,7 +79,6 @@ public class InserirEmailTelefoneActivity extends AppCompatActivity {
         buttonCadastrarUsuarioAvancar = findViewById(R.id.buttonCadastrarUsuarioAvancar);
         toolbar = findViewById(R.id.toolbarPrincipal);
         editTextEmailNovoUsuario = findViewById(R.id.editTextNomeNovoUsuario);
-        editTextTelefoneNovoUsuario = findViewById(R.id.editTextTelefoneNovoUsuario);
-        editTextCidadeNovoUsuario = findViewById(R.id.editTextCidadeNovoUsuario);
+        editTextCelularNovoUsuario = findViewById(R.id.editTextTelefoneNovoUsuario);
     }
 }
