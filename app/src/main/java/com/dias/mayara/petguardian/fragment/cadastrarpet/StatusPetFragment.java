@@ -85,13 +85,6 @@ public class StatusPetFragment extends Fragment {
         inicializarListaAdocaoComponentes(view);
         inicializarListaProcurandoDonoComponents(view);
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // A permissão ainda não foi concedida
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-        }
-
-
         cadastroPetViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         // Carrega os dados salvos no ViewModel

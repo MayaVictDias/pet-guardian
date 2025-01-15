@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,7 +56,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
     private static final int SELECAO_CAMERA = 100;
     private String[] permissoesNecessarias = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
+            Manifest.permission.ACCESS_FINE_LOCATION
     };
 
     private CadastroPetViewModel cadastroPetViewModel;
@@ -81,12 +82,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
 
         // Validar permissões
         Permissao.validarPermissoes(permissoesNecessarias, getActivity(), 1);
-
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // A permissão ainda não foi concedida
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-        }
 
         inicializarComponentes(view);
 
@@ -118,12 +113,15 @@ public class InformacoesGeraisPetFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (i.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivityForResult(i, SELECAO_CAMERA);
+                    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                    i.setType("image/*");
+                    if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivityForResult(i, SELECAO_CAMERA);
+
                 }
             }
         });
+
 
 
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
@@ -335,24 +333,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
                 }
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            // Verifica se a permissão foi concedida
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permissão concedida
-                Toast.makeText(getContext(), "Permissão concedida", Toast.LENGTH_SHORT).show();
-            } else {
-                // Permissão negada
-                Toast.makeText(getContext(), "Permissão negada", Toast.LENGTH_SHORT).show();
             }
         }
     }
