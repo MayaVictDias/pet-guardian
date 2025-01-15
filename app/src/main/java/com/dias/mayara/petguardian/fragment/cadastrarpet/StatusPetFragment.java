@@ -1,20 +1,28 @@
 package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import android.Manifest;
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.activity.SelecaoEnderecoActivity;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -23,6 +31,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +47,11 @@ public class StatusPetFragment extends Fragment {
     private List<View> procurandoDonoComponents;
 
     private CadastroPetViewModel cadastroPetViewModel;
+    public static final int REQUEST_CODE_SELECAO_ENDERECO = 1001;
+
+    private static final int REQUEST_LOCATION_PERMISSION = 100;
+
+
     private Pet pet;
 
     private Button buttonVoltar, buttonAvancar;
@@ -52,6 +67,7 @@ public class StatusPetFragment extends Fragment {
     private TextInputLayout textInputLayoutPais, textInputLayoutCidade, textInputLayoutComplementoEndereco,
             textInputLayoutCep, textInputLayoutBairro, textInputLayoutEndereco, textInputLayoutEstado,
             textInputLayoutRuaAvenida;
+    private FrameLayout mapFragmentContainer;
 
     private Endereco endereco;
 
@@ -68,6 +84,13 @@ public class StatusPetFragment extends Fragment {
         inicializarListaDesaparecidoComponentes(view);
         inicializarListaAdocaoComponentes(view);
         inicializarListaProcurandoDonoComponents(view);
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // A permissão ainda não foi concedida
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        }
+
 
         cadastroPetViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
@@ -146,8 +169,30 @@ public class StatusPetFragment extends Fragment {
         // Chama a função inicialmente para definir a visibilidade correta
         toggleOptions(radioGroup.getCheckedRadioButtonId());
 
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.mapFragmentContainer, mapFragment)
+                .commit();
+
+        mapFragment.getMapAsync(googleMap -> {
+            // Configure o comportamento do mapa
+            googleMap.setMyLocationEnabled(true); // Mostrar localização atual
+            googleMap.setOnMapClickListener(latLng -> {
+                // Abra a tela para selecionar um endereço
+                abrirTelaSelecaoEndereco(latLng);
+            });
+        });
+
         return view;
+
     }
+
+    private void abrirTelaSelecaoEndereco(LatLng latLngAtual) {
+        Intent intent = new Intent(getContext(), SelecaoEnderecoActivity.class);
+        intent.putExtra("LAT_LNG_ATUAL", latLngAtual);
+        startActivityForResult(intent, REQUEST_CODE_SELECAO_ENDERECO);
+    }
+
 
     private void carregarDadosSalvos() {
         // Observa e atualiza os campos de acordo com o ViewModel
@@ -277,6 +322,8 @@ public class StatusPetFragment extends Fragment {
         textInputLayoutCep = view.findViewById(R.id.textInputLayoutCep);
         textInputLayoutEstado = view.findViewById(R.id.textInputLayoutEstado);
         textInputLayoutEndereco = view.findViewById(R.id.textInputLayoutEndereco);
+
+        mapFragmentContainer = view.findViewById(R.id.mapFragmentContainer);
     }
 
     private void inicializarListaDesaparecidoComponentes(View view) {
@@ -310,6 +357,8 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(textInputLayoutRuaAvenida);
         desaparecidoComponents.add(textInputLayoutEndereco);
         desaparecidoComponents.add(textInputLayoutEstado);
+
+        desaparecidoComponents.add(mapFragmentContainer);
     }
 
     private void inicializarListaAdocaoComponentes(View view) {
@@ -347,6 +396,8 @@ public class StatusPetFragment extends Fragment {
         procurandoDonoComponents.add(textInputLayoutEndereco);
         procurandoDonoComponents.add(textInputLayoutEstado);
         procurandoDonoComponents.add(textInputLayoutRuaAvenida);
+
+        procurandoDonoComponents.add(mapFragmentContainer);
     }
 
     private void toggleViewsVisibility(List<View> views, int visibility) {
@@ -366,8 +417,34 @@ public class StatusPetFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SELECAO_ENDERECO && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Endereco enderecoSelecionado = (Endereco) data.getSerializableExtra("ENDERECO_SELECIONADO");
+                if (enderecoSelecionado != null) {
+                    // Agora você tem o endereço selecionado, faça o que precisar com ele
+                    cadastroPetViewModel.setEndereco(enderecoSelecionado);
+                    // Atualize os campos do formulário com os dados do endereço selecionado
+                    editTextPais.setText(enderecoSelecionado.getPais());
+                    editTextCep.setText(enderecoSelecionado.getCep());
+                    editTextEstado.setText(enderecoSelecionado.getEstado());
+                    editTextCidade.setText(enderecoSelecionado.getCidade());
+                    editTextBairro.setText(enderecoSelecionado.getBairro());
+                    editTextRuaAvenida.setText(enderecoSelecionado.getRuaAvenida());
+                    editTextNumeroEndereco.setText(enderecoSelecionado.getNumero());
+                    editTextComplementoEndereco.setText(enderecoSelecionado.getComplemento());
+                }
+            }
+        }
+    }
+
+
+    @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
     }
+
 }

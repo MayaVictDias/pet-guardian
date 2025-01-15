@@ -26,6 +26,7 @@ import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,6 +59,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     private DatabaseReference petsRef;
     private DatabaseReference usuariosRef;
     private DatabaseReference feedPetsRef;
+    private Usuario usuario;
 
     private AlertDialog dialog;
 
@@ -86,6 +88,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         usuariosRef = firebaseRef.child("usuarios");
         usuarioRef = usuariosRef.child(petSelecionado.getIdTutor());
+        usuario = UsuarioFirebase.getDadosUsuarioLogado();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -203,6 +206,8 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                     todosPetsRef.removeValue();
                     petsRef.removeValue();
                     feedPetsRef.removeValue();
+
+                    usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() - 1);
 
                     dialog.cancel();
 

@@ -3,11 +3,14 @@ package com.dias.mayara.petguardian.fragment.cadastrarpet;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,6 +40,8 @@ import java.io.ByteArrayOutputStream;
 
 public class InformacoesGeraisPetFragment extends Fragment {
 
+
+    private static final int REQUEST_LOCATION_PERMISSION = 100;
     private Button buttonAvancar;
     private FragmentInteractionListener listener;
     private TextInputEditText editTextNomePet, editTextIdadePet, editTextSobreOPet;
@@ -76,6 +81,12 @@ public class InformacoesGeraisPetFragment extends Fragment {
 
         // Validar permissões
         Permissao.validarPermissoes(permissoesNecessarias, getActivity(), 1);
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // A permissão ainda não foi concedida
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        }
 
         inicializarComponentes(view);
 
@@ -130,7 +141,9 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     Toast.makeText(getContext(), "Selecione a espécie do pet", Toast.LENGTH_SHORT).show();
                 } else if (editTextSobreOPet.getText() == null || editTextSobreOPet.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getContext(), "Preencha o campo 'Sobre o pet'", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (escolherImagemPet.getDrawable() == null) {
+                    Toast.makeText(getContext(), "Selecione uma imagem", Toast.LENGTH_SHORT).show();
+                }else {
 
                     // Obter o texto dos campos EditText e salvar no objeto pet
                     if (checkBoxNaoSeiNomePet.isChecked()) {
@@ -322,6 +335,24 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
                 }
+            }
+        }
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            // Verifica se a permissão foi concedida
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissão concedida
+                Toast.makeText(getContext(), "Permissão concedida", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permissão negada
+                Toast.makeText(getContext(), "Permissão negada", Toast.LENGTH_SHORT).show();
             }
         }
     }

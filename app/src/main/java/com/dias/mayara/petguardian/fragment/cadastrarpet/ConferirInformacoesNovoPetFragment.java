@@ -142,6 +142,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
     private void salvarDados() {
         try {
+
             // Cria o objeto Endereco e salva no Firebase
             endereco = new Endereco(
                     textViewCep.getText().toString(),
@@ -240,8 +241,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             });
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            dialog.dismiss(); // Após sucesso ou erro
         }
     }
 
