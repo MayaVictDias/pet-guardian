@@ -307,14 +307,14 @@
             android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutEndereco"
+            android:id="@+id/textInputLayoutNumero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="perdido_group, desaparecido_group"
             android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextNumeroEndereco"
+                android:id="@+id/editTextNumero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background_outline_gray"

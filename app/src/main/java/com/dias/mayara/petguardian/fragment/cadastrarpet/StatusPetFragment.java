@@ -1,6 +1,7 @@
 package com.dias.mayara.petguardian.fragment.cadastrarpet;
 
-import android.app.Activity;
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,7 +32,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -65,7 +65,7 @@ public class StatusPetFragment extends Fragment {
     private TextInputEditText editTextCep, editTextEstado, editTextCidade, editTextBairro,
             editTextRuaAvenida, editTextNumeroEndereco, editTextComplementoEndereco, editTextPais;
     private TextInputLayout textInputLayoutPais, textInputLayoutCidade, textInputLayoutComplementoEndereco,
-            textInputLayoutCep, textInputLayoutBairro, textInputLayoutEndereco, textInputLayoutEstado,
+            textInputLayoutCep, textInputLayoutBairro, textInputLayoutNumero, textInputLayoutEstado,
             textInputLayoutRuaAvenida;
     private FrameLayout mapFragmentContainer;
 
@@ -142,11 +142,6 @@ public class StatusPetFragment extends Fragment {
                         editTextRuaAvenida.getText().toString().trim().isEmpty() && editTextRuaAvenida.getVisibility() == View.VISIBLE ) {
 
                     Toast.makeText(getView().getContext(), "Preencha o campo 'Avenida'", Toast.LENGTH_SHORT).show();
-
-                } else if(editTextNumeroEndereco.getText() == null && editTextNumeroEndereco.getVisibility() == View.VISIBLE ||
-                        editTextNumeroEndereco.getText().toString().trim().isEmpty() && editTextNumeroEndereco.getVisibility() == View.VISIBLE) {
-
-                    Toast.makeText(getView().getContext(), "Preencha o campo 'Número'", Toast.LENGTH_SHORT).show();
 
                 } else {
                     salvarDados();
@@ -308,7 +303,7 @@ public class StatusPetFragment extends Fragment {
         textViewSomenteNomeRuaAvenida = view.findViewById(R.id.textViewSomenteNomeRuaAvenida);
         editTextRuaAvenida = view.findViewById(R.id.editTextRuaAvenida);
         textViewNumeroEndereco = view.findViewById(R.id.textViewNumeroEndereco);
-        editTextNumeroEndereco = view.findViewById(R.id.editTextNumeroEndereco);
+        editTextNumeroEndereco = view.findViewById(R.id.editTextNumero);
         textViewComplementoEndereco = view.findViewById(R.id.textViewComplementoEndereco);
         editTextComplementoEndereco = view.findViewById(R.id.editTextComplementoEndereco);
         textViewSelecioneMapa = view.findViewById(R.id.textViewSelecioneMapa);
@@ -321,7 +316,7 @@ public class StatusPetFragment extends Fragment {
         textInputLayoutRuaAvenida = view.findViewById(R.id.textInputLayoutRuaAvenida);
         textInputLayoutCep = view.findViewById(R.id.textInputLayoutCep);
         textInputLayoutEstado = view.findViewById(R.id.textInputLayoutEstado);
-        textInputLayoutEndereco = view.findViewById(R.id.textInputLayoutEndereco);
+        textInputLayoutNumero = view.findViewById(R.id.textInputLayoutNumero);
 
         mapFragmentContainer = view.findViewById(R.id.mapFragmentContainer);
     }
@@ -355,7 +350,7 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(textInputLayoutCep);
         desaparecidoComponents.add(textInputLayoutBairro);
         desaparecidoComponents.add(textInputLayoutRuaAvenida);
-        desaparecidoComponents.add(textInputLayoutEndereco);
+        desaparecidoComponents.add(textInputLayoutNumero);
         desaparecidoComponents.add(textInputLayoutEstado);
 
         desaparecidoComponents.add(mapFragmentContainer);
@@ -393,7 +388,7 @@ public class StatusPetFragment extends Fragment {
         procurandoDonoComponents.add(textInputLayoutComplementoEndereco);
         procurandoDonoComponents.add(textInputLayoutCep);
         procurandoDonoComponents.add(textInputLayoutBairro);
-        procurandoDonoComponents.add(textInputLayoutEndereco);
+        procurandoDonoComponents.add(textInputLayoutNumero);
         procurandoDonoComponents.add(textInputLayoutEstado);
         procurandoDonoComponents.add(textInputLayoutRuaAvenida);
 
@@ -419,26 +414,26 @@ public class StatusPetFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SELECAO_ENDERECO && resultCode == RESULT_OK) {
+            String enderecoCompleto = data.getStringExtra("ENDERECO_COMPLETO");
+            String cidade = data.getStringExtra("CIDADE");
+            String estado = data.getStringExtra("ESTADO");
+            String cep = data.getStringExtra("CEP");
+            String pais = data.getStringExtra("PAIS");
+            String bairro = data.getStringExtra("BAIRRO");
+            String rua = data.getStringExtra("RUA");
+            String numero = data.getStringExtra("NUMERO");
 
-        if (requestCode == REQUEST_CODE_SELECAO_ENDERECO && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                Endereco enderecoSelecionado = (Endereco) data.getSerializableExtra("ENDERECO_SELECIONADO");
-                if (enderecoSelecionado != null) {
-                    // Agora você tem o endereço selecionado, faça o que precisar com ele
-                    cadastroPetViewModel.setEndereco(enderecoSelecionado);
-                    // Atualize os campos do formulário com os dados do endereço selecionado
-                    editTextPais.setText(enderecoSelecionado.getPais());
-                    editTextCep.setText(enderecoSelecionado.getCep());
-                    editTextEstado.setText(enderecoSelecionado.getEstado());
-                    editTextCidade.setText(enderecoSelecionado.getCidade());
-                    editTextBairro.setText(enderecoSelecionado.getBairro());
-                    editTextRuaAvenida.setText(enderecoSelecionado.getRuaAvenida());
-                    editTextNumeroEndereco.setText(enderecoSelecionado.getNumero());
-                    editTextComplementoEndereco.setText(enderecoSelecionado.getComplemento());
-                }
-            }
+            textInputLayoutCidade.getEditText().setText(cidade);
+            textInputLayoutEstado.getEditText().setText(estado);
+            textInputLayoutCep.getEditText().setText(cep);
+            textInputLayoutNumero.getEditText().setText(numero);
+            textInputLayoutBairro.getEditText().setText(bairro);
+            textInputLayoutRuaAvenida.getEditText().setText(rua);
+            textInputLayoutPais.getEditText().setText(pais);
         }
     }
+
 
 
     @Override
