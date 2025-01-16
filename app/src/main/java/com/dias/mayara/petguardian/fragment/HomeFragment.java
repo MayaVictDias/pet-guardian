@@ -99,18 +99,22 @@ public class HomeFragment extends Fragment {
 
                     listaPetsAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-
-                    Collections.reverse(listaPetsAdocao); // Traz os eventos mais recentes como primeiros do feed
                 }
+
+                // Traz os eventos mais recentes como primeiros do feed
+                Collections.reverse(listaPetsAdocao);
+
                 // Notifica o adapter sobre as mudanças na lista
                 petsAdapterAdocao.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Lida com erros, se necessário
             }
         });
     }
+
 
     private void getPetsDesaparecidos() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
@@ -136,10 +140,13 @@ public class HomeFragment extends Fragment {
 
                     listaPetsDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-
-                    Collections.reverse(listaPetsDesaparecidos); // Traz os eventos mais recentes como primeiros do feed
                 }
-                petsAdapterDesaparecidos.notifyDataSetChanged(); // Notifica o adaptador sobre as mudanças
+
+                // Traz os eventos mais recentes como primeiros do feed
+                Collections.reverse(listaPetsDesaparecidos);
+
+                // Notifica o adaptador sobre as mudanças
+                petsAdapterDesaparecidos.notifyDataSetChanged();
             }
 
             @Override
@@ -148,6 +155,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 
     private void inicializarComponentes(View view) {
         buttonUsarMinhaLocalizacao = view.findViewById(R.id.buttonUsarMinhaLocalizacao);

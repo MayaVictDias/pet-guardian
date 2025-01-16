@@ -276,11 +276,11 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                     if (endereco != null) {
 
                         String enderecoCompleto = endereco.getRuaAvenida() + ", " + endereco.getNumero()
-                                + endereco.getCidade() + ", " + endereco.getEstado() + ", " + endereco.getCep()
+                                + " - " + endereco.getCidade() + ", " + endereco.getEstado() + ", " + endereco.getCep()
                                 + ", " + endereco.getPais();
 
                         textViewEnderecoCompletoDado.setText(enderecoCompleto);
-                        textViewPontoReferenciaDado.setText(endereco.getCidade() + ", " + endereco.getEstado() + ", " + endereco.getCep());
+                        textViewPontoReferenciaDado.setText(textViewPontoReferenciaDado.getText().toString());
 
                     }
                 }

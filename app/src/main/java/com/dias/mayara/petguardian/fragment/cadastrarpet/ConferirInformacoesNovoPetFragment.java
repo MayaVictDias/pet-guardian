@@ -54,7 +54,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             textViewSobreOPet, textViewStatusPet, textViewCep, textViewEstado, textViewCidade,
             textViewRuaAvenida, textViewNumero, textViewComplemento, textViewVistoPelaUltimaVez, textViewPais,
             textViewCepTitulo, textViewBairroTitulo, textViewPaisTitulo, textViewEstadoTitulo, textViewCidadeTitulo,
-            textViewRuaAvenidaTitulo, textViewNumeroTitulo, textViewComplementoTitulo, textViewSelecioneNoMapaTitulo;
+            textViewRuaAvenidaTitulo, textViewNumeroTitulo, textViewComplementoTitulo, textViewPontoReferenciaTitulo,
+            textViewPontoReferencia;
     private ImageView imageViewFotoPet;
 
     private CadastroPetViewModel sharedViewModel;
@@ -152,7 +153,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewRuaAvenida.getText().toString(),
                     textViewNumero.getText().toString(),
                     textViewComplemento.getText().toString(),
-                    textViewPais.getText().toString()
+                    textViewPais.getText().toString(),
+                    textViewPontoReferencia.getText().toString()
             );
             endereco.salvar();
 
@@ -272,6 +274,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewNumero.setText(endereco.getNumero());
                     textViewComplemento.setText(endereco.getComplemento());
                     textViewPais.setText(endereco.getPais());
+                    textViewPontoReferencia.setText(endereco.getPontoReferencia());
                 }
             }
         });
@@ -317,7 +320,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewEstado = view.findViewById(R.id.textViewEstado);
         textViewRuaAvenidaTitulo = view.findViewById(R.id.textViewRuaAvenidaTitulo);
         textViewCidade = view.findViewById(R.id.textViewCidade);
-        textViewSelecioneNoMapaTitulo = view.findViewById(R.id.textViewSelecioneNoMapaTitulo);
+        textViewPontoReferenciaTitulo = view.findViewById(R.id.textViewPontoReferenciaTitulo);
+        textViewPontoReferencia = view.findViewById(R.id.textViewPontoReferencia);
         textViewCidadeTitulo = view.findViewById(R.id.textViewCidadeTitulo);
         textViewBairro = view.findViewById(R.id.textViewBairro);
         textViewRuaAvenida = view.findViewById(R.id.textViewRuaAvenida);
@@ -350,7 +354,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         desaparecidoComponents.add(textViewRuaAvenidaTitulo);
         desaparecidoComponents.add(textViewComplementoTitulo);
         desaparecidoComponents.add(textViewCidade);
-        desaparecidoComponents.add(textViewSelecioneNoMapaTitulo);
+        desaparecidoComponents.add(textViewPontoReferenciaTitulo);
+        desaparecidoComponents.add(textViewPontoReferencia);
         desaparecidoComponents.add(textViewNumeroTitulo);
         desaparecidoComponents.add(textViewBairro);
         desaparecidoComponents.add(textViewRuaAvenida);
@@ -373,7 +378,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         procurandoDonoComponents.add(textViewNumeroTitulo);
         procurandoDonoComponents.add(textViewBairro);
         procurandoDonoComponents.add(textViewVistoPelaUltimaVez);
-        procurandoDonoComponents.add(textViewSelecioneNoMapaTitulo);
+        procurandoDonoComponents.add(textViewPontoReferenciaTitulo);
+        procurandoDonoComponents.add(textViewPontoReferencia);
         procurandoDonoComponents.add(textViewPaisTitulo);
         procurandoDonoComponents.add(textViewCidadeTitulo);
         procurandoDonoComponents.add(textViewRuaAvenida);

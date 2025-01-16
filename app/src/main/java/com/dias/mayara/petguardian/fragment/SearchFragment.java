@@ -43,7 +43,6 @@ public class SearchFragment extends Fragment {
     private PesquisaUsuarioAdapter pesquisaUsuarioAdapter;
     private PetsPesquisaAdapter petsPesquisaAdapter;
     private String idUsuarioLogado;
-    private Button buttonFiltrarPessoas, buttonFiltrarAnimais;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -63,9 +62,6 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        buttonFiltrarAnimais = view.findViewById(R.id.buttonFiltrarAnimais);
-        buttonFiltrarPessoas = view.findViewById(R.id.buttonFiltrarPessoas);
-
         recyclerViewPesquisaPessoas = view.findViewById(R.id.recyclerViewPesquisaPessoas);
         recyclerViewPesquisaPet = view.findViewById(R.id.recyclerViewPesquisaPet);
         searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
@@ -83,6 +79,7 @@ public class SearchFragment extends Fragment {
         // Configuração do RecyclerView pessoas
         recyclerViewPesquisaPessoas.setHasFixedSize(true);
         recyclerViewPesquisaPessoas.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerViewPesquisaPessoas.setAdapter(pesquisaUsuarioAdapter);
 
         // Configuração do RecyclerView pets
         recyclerViewPesquisaPet.setHasFixedSize(true);
@@ -101,6 +98,7 @@ public class SearchFragment extends Fragment {
                         Usuario usuarioSelecionado = listaUsuarios.get(position);
                         Intent i = new Intent(getActivity(), PerfilAmigoActivity.class);
 
+                        i.putExtra("usuarioSelecionado", usuarioSelecionado);
                         startActivity(i);
 
                     }
@@ -172,12 +170,14 @@ public class SearchFragment extends Fragment {
         listaUsuarios.clear();
 
         // Confere se tem algum texto pra ser pesquisado
-        if(textoDigitado.length() > 0) {
-            Query query = usuariosRef.orderByChild("nomeUsuario")
-                    .startAt(textoDigitado).endAt(textoDigitado + "\uf8ff");
-            // OrderByChild: Ordenar por nome que começa com textoDigitado ou termina com ele
+        if (textoDigitado.length() > 0) {
 
-            // @TODO adicionar nó no firebase para salvar os nomes com uppercase, pra fazer o filtro com ele
+            String textoUppercase = textoDigitado.toUpperCase();
+
+            Query query = usuariosRef.orderByChild("nomeUppercaseUsuario")
+                    .startAt(textoUppercase)
+                    .endAt(textoUppercase + "\uf8ff");
+            // OrderByChild: Ordenar por nome que começa com textoDigitado ou termina com ele
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -186,16 +186,17 @@ public class SearchFragment extends Fragment {
                     // Limpa a lista
                     listaUsuarios.clear();
 
-                    for (DataSnapshot ds : snapshot.getChildren()){
+                    for (DataSnapshot ds : snapshot.getChildren()) {
 
-                        // Verifica se é o usuário logado e remove da lista
                         Usuario usuario = ds.getValue(Usuario.class);
 
-                        if(idUsuarioLogado.equals(usuario.getIdUsuario())) {
+                        // Verifica se é o usuário logado e remove da lista
+                        if (idUsuarioLogado.equals(usuario.getIdUsuario())) {
                             continue;
                         }
 
                         listaUsuarios.add(usuario);
+
 
                     }
 

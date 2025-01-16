@@ -334,13 +334,24 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/textViewSelecioneNoMapaTitulo"
+            android:id="@+id/textViewPontoReferenciaTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_bold"
-            android:text="Selecione no mapa"
+            android:text="Ponto de referencia"
             android:textColor="@color/marromEscuro"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewPontoReferencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Complemento"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp"
             android:visibility="gone" />
 
         <LinearLayout

@@ -61,12 +61,12 @@ public class StatusPetFragment extends Fragment {
     private TextView textViewVistoUltimaVez, textViewPais, textViewCep, textViewEstado, textViewCidade,
             textViewBairro, textViewRuaAvenida, textViewSomenteNomeRuaAvenida,
             textViewNumeroEndereco, textViewComplementoEndereco, textViewSelecioneMapa,
-            textViewSelecioneMapaInstrucoes;
+            textViewSelecioneMapaInstrucoes, textViewPontoReferencia;
     private TextInputEditText editTextCep, editTextEstado, editTextCidade, editTextBairro,
-            editTextRuaAvenida, editTextNumeroEndereco, editTextComplementoEndereco, editTextPais;
+            editTextRuaAvenida, editTextNumeroEndereco, editTextPontoReferencia, editTextComplementoEndereco, editTextPais;
     private TextInputLayout textInputLayoutPais, textInputLayoutCidade, textInputLayoutComplementoEndereco,
             textInputLayoutCep, textInputLayoutBairro, textInputLayoutNumero, textInputLayoutEstado,
-            textInputLayoutRuaAvenida;
+            textInputLayoutRuaAvenida, textInputLayoutPontoReferencia;
     private FrameLayout mapFragmentContainer;
 
     private Endereco endereco;
@@ -100,6 +100,9 @@ public class StatusPetFragment extends Fragment {
                 cadastroPetViewModel.setOpcaoSelecionada(checkedId);
             }
         });
+
+        /**************** Por enquanto não será utilizado este recurso ****************/
+        radioButtonProcurandoDono.setVisibility(View.GONE);
 
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,7 +255,8 @@ public class StatusPetFragment extends Fragment {
                 editTextRuaAvenida.getText().toString(),
                 editTextNumeroEndereco.getText().toString(),
                 editTextComplementoEndereco.getText().toString(),
-                editTextPais.getText().toString()
+                editTextPais.getText().toString(),
+                editTextPontoReferencia.getText().toString()
         );
         cadastroPetViewModel.setEndereco(endereco);
     }
@@ -301,11 +305,14 @@ public class StatusPetFragment extends Fragment {
         editTextComplementoEndereco = view.findViewById(R.id.editTextComplementoEndereco);
         textViewSelecioneMapa = view.findViewById(R.id.textViewSelecioneMapa);
         textViewSelecioneMapaInstrucoes = view.findViewById(R.id.textViewSelecioneMapaInstrucoes);
+        textViewPontoReferencia = view.findViewById(R.id.textViewPontoReferencia);
+        editTextPontoReferencia = view.findViewById(R.id.editTextPontoReferencia);
 
         textInputLayoutPais = view.findViewById(R.id.textInputLayoutPais);
         textInputLayoutComplementoEndereco = view.findViewById(R.id.textInputLayoutComplementoEndereco);
         textInputLayoutBairro = view.findViewById(R.id.textInputLayoutBairro);
         textInputLayoutCidade = view.findViewById(R.id.textInputLayoutCidade);
+        textInputLayoutPontoReferencia = view.findViewById(R.id.textInputLayoutPontoReferencia);
         textInputLayoutRuaAvenida = view.findViewById(R.id.textInputLayoutRuaAvenida);
         textInputLayoutCep = view.findViewById(R.id.textInputLayoutCep);
         textInputLayoutEstado = view.findViewById(R.id.textInputLayoutEstado);
@@ -326,6 +333,7 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(textViewCidade);
         desaparecidoComponents.add(editTextCidade);
         desaparecidoComponents.add(textViewBairro);
+        desaparecidoComponents.add(textInputLayoutPontoReferencia);
         desaparecidoComponents.add(editTextBairro);
         desaparecidoComponents.add(textViewRuaAvenida);
         desaparecidoComponents.add(textViewSomenteNomeRuaAvenida);
@@ -336,6 +344,7 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(editTextComplementoEndereco);
         desaparecidoComponents.add(textViewSelecioneMapa);
         desaparecidoComponents.add(textViewSelecioneMapaInstrucoes);
+        desaparecidoComponents.add(textViewPontoReferencia);
 
         desaparecidoComponents.add(textInputLayoutPais);
         desaparecidoComponents.add(textInputLayoutCidade);
@@ -345,6 +354,7 @@ public class StatusPetFragment extends Fragment {
         desaparecidoComponents.add(textInputLayoutRuaAvenida);
         desaparecidoComponents.add(textInputLayoutNumero);
         desaparecidoComponents.add(textInputLayoutEstado);
+        desaparecidoComponents.add(editTextPontoReferencia);
 
         desaparecidoComponents.add(mapFragmentContainer);
     }
@@ -364,8 +374,11 @@ public class StatusPetFragment extends Fragment {
         procurandoDonoComponents.add(editTextEstado);
         procurandoDonoComponents.add(textViewCidade);
         procurandoDonoComponents.add(editTextCidade);
+        procurandoDonoComponents.add(textInputLayoutPontoReferencia);
         procurandoDonoComponents.add(textViewBairro);
         procurandoDonoComponents.add(editTextBairro);
+        procurandoDonoComponents.add(editTextPontoReferencia);
+        procurandoDonoComponents.add(textViewPontoReferencia);
         procurandoDonoComponents.add(textViewRuaAvenida);
         procurandoDonoComponents.add(textViewSomenteNomeRuaAvenida);
         procurandoDonoComponents.add(editTextRuaAvenida);
@@ -375,6 +388,7 @@ public class StatusPetFragment extends Fragment {
         procurandoDonoComponents.add(editTextComplementoEndereco);
         procurandoDonoComponents.add(textViewSelecioneMapa);
         procurandoDonoComponents.add(textViewSelecioneMapaInstrucoes);
+        procurandoDonoComponents.add(editTextPontoReferencia);
 
         procurandoDonoComponents.add(textInputLayoutPais);
         procurandoDonoComponents.add(textInputLayoutCidade);

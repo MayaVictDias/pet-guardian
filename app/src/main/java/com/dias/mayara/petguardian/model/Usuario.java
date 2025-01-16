@@ -3,13 +3,15 @@ package com.dias.mayara.petguardian.model;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Usuario {
+public class Usuario implements Serializable {
 
     private String idUsuario;
     private String nomeUsuario;
+    private String nomeUppercaseUsuario;
     private String emailUsuario;
     private String senhaUsuario;
     private String telefoneUsuario;
@@ -47,6 +49,7 @@ public class Usuario {
         HashMap<String, Object> usuarioMap = new HashMap<>();
         usuarioMap.put("emailUsuario", getEmailUsuario());
         usuarioMap.put("nomeUsuario", getNomeUsuario());
+        usuarioMap.put("nomeUppercaseUsuario", getNomeUsuario());
         usuarioMap.put("telefoneUsuario", getTelefoneUsuario());
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
         usuarioMap.put("estadoUsuario", getCidadeUsuario());
@@ -75,6 +78,14 @@ public class Usuario {
 
     public String getNomeUsuario() {
         return nomeUsuario;
+    }
+
+    public String getNomeUppercaseUsuario() {
+        return nomeUppercaseUsuario;
+    }
+
+    public void setNomeUppercaseUsuario(String nomeUppercaseUsuario) {
+        this.nomeUppercaseUsuario = nomeUppercaseUsuario;
     }
 
     public void setNomeUsuario(String nomeUsuario) {

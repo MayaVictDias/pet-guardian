@@ -15,6 +15,7 @@ public class Endereco {
     private String numero;
     private String complemento;
     private String pais;
+    private String pontoReferencia;
 
     private DatabaseReference firebaseRef;
     private DatabaseReference enderecoRef;
@@ -22,7 +23,7 @@ public class Endereco {
     public Endereco() {
     }
 
-    public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento, String pais) {
+    public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento, String pais, String pontoReferencia) {
 
         // Configuração de um ID único para o pet
         firebaseRef = ConfiguracaoFirebase.getFirebase();
@@ -37,6 +38,7 @@ public class Endereco {
         this.estado = estado;
         this.cep = cep;
         this.pais = pais;
+        this.pontoReferencia = pontoReferencia;
     }
 
     public void salvar() {
@@ -113,6 +115,14 @@ public class Endereco {
 
     public String getNumero() {
         return numero;
+    }
+
+    public String getPontoReferencia() {
+        return pontoReferencia;
+    }
+
+    public void setPontoReferencia(String pontoReferencia) {
+        this.pontoReferencia = pontoReferencia;
     }
 
     public void setNumero(String numero) {

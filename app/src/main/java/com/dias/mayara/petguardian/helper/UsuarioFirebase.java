@@ -76,6 +76,12 @@ public class UsuarioFirebase {
                 .child(firebaseUser.getUid()) // UID do usuário atual
                 .child("celularUsuario"); // Especificamente o campo cidadeUsuario
 
+        // Defina o caminho do celular do usuário no Realtime Database
+        DatabaseReference nomeUppercaseUsuarioRef = FirebaseDatabase.getInstance().getReference()
+                .child("usuarios") // Nó principal dos usuários
+                .child(firebaseUser.getUid()) // UID do usuário atual
+                .child("nomeUppercaseUsuario"); // Especificamente o campo cidadeUsuario
+
         // Defina o caminho da cidade do usuário no Realtime Database
         DatabaseReference cidadeUsuarioRef = FirebaseDatabase.getInstance().getReference()
                 .child("usuarios") // Nó principal dos usuários
