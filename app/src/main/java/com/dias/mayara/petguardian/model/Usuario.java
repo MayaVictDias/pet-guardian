@@ -1,7 +1,8 @@
 package com.dias.mayara.petguardian.model;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -25,19 +26,20 @@ public class Usuario implements Serializable {
 
     // Referencia ao banco de dados Usuario dentro do firebase
     public void salvar() {
-        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
-        DatabaseReference usuariosRef = firebaseRef.child("usuarios").child(getIdUsuario());
-        usuariosRef.setValue(converterParaMap());
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
+        DocumentReference usuariosRef = firebaseRef.collection("usuarios").document(getIdUsuario()); // Referência ao documento do usuário
+        usuariosRef.set(converterParaMap());
     }
 
     // Metodo que atualiza os valores no firebase
     public void atualizar() {
 
-        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
-        DatabaseReference usuariosRef = firebaseRef.child("usuarios").child(getIdUsuario());
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase(); // Instância do Firestore
+        DocumentReference usuariosRef = firebaseRef.collection("usuarios").document(getIdUsuario()); // Referência ao documento do usuário
 
-        Map<String, Object> valoresUsuario = converterParaMap();
-        usuariosRef.updateChildren(valoresUsuario);
+        Map<String, Object> valoresUsuario = converterParaMap(); // Dados a serem atualizados
+
+        usuariosRef.update(valoresUsuario);
 
     }
 
