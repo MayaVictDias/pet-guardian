@@ -37,6 +37,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private NavigationView navigationView;
 
-    private DatabaseReference firebaseRef;
-    private DatabaseReference usuariosRef;
-    private DatabaseReference usuarioLogadoRef;
+    private FirebaseFirestore firebaseRef;
+    private CollectionReference usuariosRef;
+    private DocumentReference usuarioLogadoRef;
     private FirebaseUser usuarioPerfil;
     private ValueEventListener valueEventListenerPerfil;
     private Usuario usuarioLogado;
@@ -72,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Inicializa a instância do Firebase e referências do banco de dados
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        usuariosRef = firebaseRef.child("usuarios");
+        usuariosRef = firebaseRef.collection("usuarios");
 
         // Obtém os dados do usuário logado e configura a referência para o nó do usuário específico
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
-        usuarioLogadoRef = usuariosRef.child(usuarioLogado.getIdUsuario());
+        usuarioLogadoRef = usuariosRef.document(usuarioLogado.getIdUsuario());
 
         // Recuperar dados do usuário
         usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
@@ -171,25 +175,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void recuperarDadosUsuarioLogado() {
-        valueEventListenerPerfil = usuarioLogadoRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Usuario usuario = snapshot.getValue(Usuario.class);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference usuarioRef = db.collection("usuarios").document(usuarioLogado.getIdUsuario()); // Supondo que o ID do usuário seja armazenado em usuarioLogadoId
 
-                if (usuario != null) {
+        usuarioRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    Usuario usuario = document.toObject(Usuario.class);
 
-                    userName.setText(usuario.getNomeUsuario());
-                    userLocation.setText(usuario.getCidadeUsuario() + " - " +
-                        usuario.getEstadoUsuario());
+                    if (usuario != null) {
+                        userName.setText(usuario.getNomeUsuario());
+                        userLocation.setText(usuario.getCidadeUsuario() + " - " +
+                                usuario.getEstadoUsuario());
+                    }
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", error.toException());
+            } else {
+                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", task.getException());
             }
         });
     }
+
 
     private void exibirModalBoasVindas() {
         // Inflar o layout personalizado
