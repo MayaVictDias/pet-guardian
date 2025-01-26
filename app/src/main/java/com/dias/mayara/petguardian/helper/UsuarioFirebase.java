@@ -12,8 +12,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 // Classe que faz as tratativas de um usuário especifico dentro do app
 public class UsuarioFirebase {
@@ -65,36 +63,6 @@ public class UsuarioFirebase {
         usuario.setEmailUsuario(firebaseUser.getEmail());
         usuario.setNomeUsuario(firebaseUser.getDisplayName());
         usuario.setIdUsuario(firebaseUser.getUid());
-
-        // Defina o caminho do celular do usuário no Realtime Database
-        DatabaseReference celularUsuarioRef = FirebaseDatabase.getInstance().getReference()
-                .child("usuarios") // Nó principal dos usuários
-                .child(firebaseUser.getUid()) // UID do usuário atual
-                .child("celularUsuario"); // Especificamente o campo cidadeUsuario
-
-        // Defina o caminho do celular do usuário no Realtime Database
-        DatabaseReference nomeUppercaseUsuarioRef = FirebaseDatabase.getInstance().getReference()
-                .child("usuarios") // Nó principal dos usuários
-                .child(firebaseUser.getUid()) // UID do usuário atual
-                .child("nomeUppercaseUsuario"); // Especificamente o campo cidadeUsuario
-
-        // Defina o caminho da cidade do usuário no Realtime Database
-        DatabaseReference cidadeUsuarioRef = FirebaseDatabase.getInstance().getReference()
-                .child("usuarios") // Nó principal dos usuários
-                .child(firebaseUser.getUid()) // UID do usuário atual
-                .child("cidadeUsuario"); // Especificamente o campo cidadeUsuario
-
-        // Defina o caminho do estado do usuário no Realtime Database
-        DatabaseReference estadoUsuarioRef = FirebaseDatabase.getInstance().getReference()
-                .child("usuarios") // Nó principal dos usuários
-                .child(firebaseUser.getUid()) // UID do usuário atual
-                .child("estadoUsuario"); // Especificamente o campo cidadeUsuario
-
-        // Defina o caminho do estado do usuário no Realtime Database
-        DatabaseReference estadoUsuarioRefqtdPetsCadastrados = FirebaseDatabase.getInstance().getReference()
-                .child("usuarios") // Nó principal dos usuários
-                .child(firebaseUser.getUid()) // UID do usuário atual
-                .child("quantidadePetsCadastrados"); // Especificamente o campo cidadeUsuario
 
         if (firebaseUser.getPhotoUrl() == null) {
             usuario.setCaminhoFotoUsuario("");
