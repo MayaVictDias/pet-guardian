@@ -33,7 +33,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -60,9 +62,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
     private CadastroPetViewModel sharedViewModel;
 
-    private DatabaseReference firebaseRef;
-    private DatabaseReference usuariosRef;
-    private DatabaseReference usuarioLogadoRef;
+    private FirebaseFirestore firebaseRef;
+    private CollectionReference usuariosRef;
+    private DocumentReference usuarioLogadoRef;
     private String idUsuarioLogado;
     private String idPet;
     private AlertDialog dialog;
@@ -92,7 +94,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        usuariosRef = ConfiguracaoFirebase.getFirebase().child("usuarios");
+        usuariosRef = ConfiguracaoFirebase.getFirebase().collection("usuarios");
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
         usuario = UsuarioFirebase.getDadosUsuarioLogado();

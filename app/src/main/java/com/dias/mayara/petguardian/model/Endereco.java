@@ -1,7 +1,8 @@
 package com.dias.mayara.petguardian.model;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Endereco {
 
@@ -17,18 +18,16 @@ public class Endereco {
     private String pais;
     private String pontoReferencia;
 
-    private DatabaseReference firebaseRef;
-    private DatabaseReference enderecoRef;
+    private FirebaseFirestore firebaseRef;
 
     public Endereco() {
     }
 
     public Endereco(String cep, String estado, String cidade, String bairro, String ruaAvenida, String numero, String complemento, String pais, String pontoReferencia) {
 
-        // Configuração de um ID único para o pet
+        // Configuração de um ID único para o endereço
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        String idEndereco = firebaseRef.child("enderecos").push().getKey();
-        this.setIdEndereco(idEndereco);
+        this.idEndereco = firebaseRef.collection("enderecos").document().getId();  // Gera um ID único
 
         this.complemento = complemento;
         this.numero = numero;
@@ -44,18 +43,15 @@ public class Endereco {
     public void salvar() {
         // Verifica se o idEndereco foi configurado
         if (idEndereco != null && !idEndereco.isEmpty()) {
-            // Inicializa a referência ao nó "endereco" do Firebase Database
-            firebaseRef = ConfiguracaoFirebase.getFirebase();
-            enderecoRef = firebaseRef.child("enderecos").child(idEndereco);
+            // Inicializa a referência ao documento de "enderecos"
+            DocumentReference enderecoRef = firebaseRef.collection("enderecos").document(idEndereco);
 
             // Salva o objeto Endereco na referência criada
-            enderecoRef.setValue(this);
+            enderecoRef.set(this);
         } else {
             throw new IllegalStateException("ID do Endereço não foi configurado.");
         }
     }
-
-
 
     public String getIdEndereco() {
         return idEndereco;
@@ -67,14 +63,6 @@ public class Endereco {
 
     public String getCep() {
         return cep;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
     }
 
     public void setCep(String cep) {
@@ -117,14 +105,6 @@ public class Endereco {
         return numero;
     }
 
-    public String getPontoReferencia() {
-        return pontoReferencia;
-    }
-
-    public void setPontoReferencia(String pontoReferencia) {
-        this.pontoReferencia = pontoReferencia;
-    }
-
     public void setNumero(String numero) {
         this.numero = numero;
     }
@@ -135,6 +115,22 @@ public class Endereco {
 
     public void setComplemento(String complemento) {
         this.complemento = complemento;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getPontoReferencia() {
+        return pontoReferencia;
+    }
+
+    public void setPontoReferencia(String pontoReferencia) {
+        this.pontoReferencia = pontoReferencia;
     }
 
     @Override
@@ -150,8 +146,6 @@ public class Endereco {
                 ", numero='" + numero + '\'' +
                 ", complemento='" + complemento + '\'' +
                 ", pais='" + pais + '\'' +
-                ", firebaseRef=" + firebaseRef +
-                ", enderecoRef=" + enderecoRef +
                 '}';
     }
 }
