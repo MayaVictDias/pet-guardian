@@ -21,8 +21,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-
 
 public class SelecaoEnderecoActivity extends AppCompatActivity implements OnMapReadyCallback {
 

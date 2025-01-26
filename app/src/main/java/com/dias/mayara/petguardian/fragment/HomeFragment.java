@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,10 @@ import android.widget.Button;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.adapter.PetsAdapter;
 import com.dias.mayara.petguardian.model.Pet;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,27 +75,28 @@ public class HomeFragment extends Fragment {
     }
 
     private void getPetsAdocao() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference("feedPets").child("adocao");
+        // Referência para a coleção de feedPets e subcoleção adocao
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference petsRef = db.collection("feedPets").document("adocao").collection("pets");
 
-        // Usando addValueEventListener para atualizações em tempo real
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        // Consultando documentos
+        petsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 listaPetsAdocao.clear(); // Limpa a lista antes de adicionar novos dados
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String idPet = snapshot.child("idPet").getValue(String.class);
-                    String idEndereco = snapshot.child("idEndereco").getValue(String.class);
-                    String idTutor = snapshot.child("idTutor").getValue(String.class);
-                    String especiePet = snapshot.child("especiePet").getValue(String.class);
-                    String nomePet = snapshot.child("nomePet").getValue(String.class);
-                    String nomeUppercasePet = snapshot.child("nomeUppercasePet").getValue(String.class);
-                    String generoPet = snapshot.child("generoPet").getValue(String.class);
-                    String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
-                    String idadePet = snapshot.child("idadePet").getValue(String.class);
-                    String sobreOPet = snapshot.child("sobreOPet").getValue(String.class);
-                    String statusPet = snapshot.child("statusPet").getValue(String.class);
-                    long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Obtendo os dados do documento
+                    String idPet = document.getString("idPet");
+                    String idEndereco = document.getString("idEndereco");
+                    String idTutor = document.getString("idTutor");
+                    String especiePet = document.getString("especiePet");
+                    String nomePet = document.getString("nomePet");
+                    String nomeUppercasePet = document.getString("nomeUppercasePet");
+                    String generoPet = document.getString("generoPet");
+                    String imagemUrl = document.getString("imagemUrl");
+                    String idadePet = document.getString("idadePet");
+                    String sobreOPet = document.getString("sobreOPet");
+                    String statusPet = document.getString("statusPet");
+                    long dataCadastro = document.getLong("dataCadastro");
 
                     listaPetsAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
@@ -106,37 +107,38 @@ public class HomeFragment extends Fragment {
 
                 // Notifica o adapter sobre as mudanças na lista
                 petsAdapterAdocao.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            } else {
                 // Lida com erros, se necessário
+                Log.w("Firestore", "Erro ao obter os dados", task.getException());
             }
         });
     }
 
 
-    private void getPetsDesaparecidos() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference("feedPets").child("desaparecido");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+    private void getPetsDesaparecidos() {
+        // Referência para a coleção de feedPets e subcoleção desaparecido
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference petsRef = db.collection("feedPets").document("desaparecido").collection("pets");
+
+        // Consultando documentos
+        petsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
                 listaPetsDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String idPet = snapshot.child("idPet").getValue(String.class);
-                    String idEndereco = snapshot.child("idEndereco").getValue(String.class);
-                    String idTutor = snapshot.child("idTutor").getValue(String.class);
-                    String especiePet = snapshot.child("especiePet").getValue(String.class);
-                    String nomePet = snapshot.child("nomePet").getValue(String.class);
-                    String nomeUppercasePet = snapshot.child("nomeUppercasePet").getValue(String.class);
-                    String generoPet = snapshot.child("generoPet").getValue(String.class);
-                    String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
-                    String idadePet = snapshot.child("idadePet").getValue(String.class);
-                    String sobreOPet = snapshot.child("sobreOPet").getValue(String.class);
-                    String statusPet = snapshot.child("statusPet").getValue(String.class);
-                    long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Obtendo os dados do documento
+                    String idPet = document.getString("idPet");
+                    String idEndereco = document.getString("idEndereco");
+                    String idTutor = document.getString("idTutor");
+                    String especiePet = document.getString("especiePet");
+                    String nomePet = document.getString("nomePet");
+                    String nomeUppercasePet = document.getString("nomeUppercasePet");
+                    String generoPet = document.getString("generoPet");
+                    String imagemUrl = document.getString("imagemUrl");
+                    String idadePet = document.getString("idadePet");
+                    String sobreOPet = document.getString("sobreOPet");
+                    String statusPet = document.getString("statusPet");
+                    long dataCadastro = document.getLong("dataCadastro");
 
                     listaPetsDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
@@ -147,14 +149,13 @@ public class HomeFragment extends Fragment {
 
                 // Notifica o adaptador sobre as mudanças
                 petsAdapterDesaparecidos.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            } else {
                 // Lida com erros, se necessário
+                Log.w("Firestore", "Erro ao obter os dados", task.getException());
             }
         });
     }
+
 
 
     private void inicializarComponentes(View view) {
