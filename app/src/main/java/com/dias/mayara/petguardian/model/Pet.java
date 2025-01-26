@@ -2,8 +2,11 @@ package com.dias.mayara.petguardian.model;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Document;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -28,7 +31,7 @@ public class Pet implements Serializable {
     private String imagemUrl; // Armazenará a URL da imagem
     private long dataCadastro;
 
-    private DatabaseReference firebaseRef;
+    private DocumentReference firebaseRef;
     private String idUsuarioLogado;
 
 
@@ -108,74 +111,60 @@ public class Pet implements Serializable {
     }
 
 
-    // Método para salvar o pet para adoção
+    /// Método para salvar o pet para adoção
     public void salvarAdocao() {
-        DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
-                .child("pets")
-                .child(idUsuarioLogado)
-                .child("adocao")
-                .child(idPet);
+        // Obtém a instância do Firestore
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
 
-        DatabaseReference feedPetsRef = ConfiguracaoFirebase.getFirebase()
-                .child("feedPets")
-                .child("adocao")
-                .child(idPet);
+        // Referência para o documento de adoção do pet do usuário
+        DocumentReference petsRef = firebaseRef.collection("pets")
+                .document(idUsuarioLogado)
+                .collection("adocao")
+                .document(idPet);
 
-        DatabaseReference todosPets = ConfiguracaoFirebase.getFirebase()
-                .child("todosPets")
-                .child(idPet);
-
+        // Criando o mapa de dados do pet
         Map<String, Object> petData = criarMapaPet();
-        petsRef.setValue(petData);
-        feedPetsRef.setValue(petData);
-        todosPets.setValue(petData);
+
+        // Salvando os dados do pet nos três lugares
+        petsRef.set(petData);
     }
+
 
 
     // Método para salvar o pet como desaparecido
     public void salvarDesaparecido() {
-        DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
-                .child("pets")
-                .child(idUsuarioLogado)
-                .child("desaparecido")
-                .child(idPet);
+        // Obtém a instância do Firestore
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
 
-        DatabaseReference feedPetsRef = ConfiguracaoFirebase.getFirebase()
-                .child("feedPets")
-                .child("desaparecido")
-                .child(idPet);
+        // Referência para o documento de adoção do pet do usuário
+        DocumentReference petsRef = firebaseRef.collection("pets")
+                .document(idUsuarioLogado)
+                .collection("desaparecido")
+                .document(idPet);
 
-        DatabaseReference todosPets = ConfiguracaoFirebase.getFirebase()
-                .child("todosPets")
-                .child(idPet);
-
+        // Criando o mapa de dados do pet
         Map<String, Object> petData = criarMapaPet();
-        petsRef.setValue(petData);
-        feedPetsRef.setValue(petData);
-        todosPets.setValue(petData);
+
+        // Salvando os dados do pet nos três lugares
+        petsRef.set(petData);
     }
 
     // Método para salvar o pet procurando dono
     public void salvarProcurandoDono() {
-        DatabaseReference petsRef = ConfiguracaoFirebase.getFirebase()
-                .child("pets")
-                .child(idUsuarioLogado)
-                .child("procurandoDono")
-                .child(idPet);
+        // Obtém a instância do Firestore
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
 
-        DatabaseReference feedPetsRef = ConfiguracaoFirebase.getFirebase()
-                .child("feedPets")
-                .child("desaparecido")
-                .child(idPet);
+        // Referência para o documento de adoção do pet do usuário
+        DocumentReference petsRef = firebaseRef.collection("pets")
+                .document(idUsuarioLogado)
+                .collection("procurandoDono")
+                .document(idPet);
 
-        DatabaseReference todosPets = ConfiguracaoFirebase.getFirebase()
-                .child("todosPets")
-                .child(idPet);
-
+        // Criando o mapa de dados do pet
         Map<String, Object> petData = criarMapaPet();
-        petsRef.setValue(petData);
-        feedPetsRef.setValue(petData);
-        todosPets.setValue(petData);
+
+        // Salvando os dados do pet nos três lugares
+        petsRef.set(petData);
     }
 
 
