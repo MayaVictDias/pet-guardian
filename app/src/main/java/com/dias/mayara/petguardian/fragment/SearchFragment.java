@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.Query;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
 import com.dias.mayara.petguardian.activity.PerfilAmigoActivity;
@@ -27,8 +28,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerViewPesquisaPessoas, recyclerViewPesquisaPet;
     private List<Usuario> listaUsuarios;
     private List<Pet> listaPets;
-    private DatabaseReference usuariosRef, petsRef;
+    private CollectionReference usuariosRef;
+    private CollectionReference petsRef;
     private PesquisaUsuarioAdapter pesquisaUsuarioAdapter;
     private PetsPesquisaAdapter petsPesquisaAdapter;
     private String idUsuarioLogado;
@@ -69,8 +73,8 @@ public class SearchFragment extends Fragment {
         listaUsuarios = new ArrayList<>();
         listaPets = new ArrayList<>();
 
-        petsRef = ConfiguracaoFirebase.getFirebase().child("todosPets");
-        usuariosRef = ConfiguracaoFirebase.getFirebase().child("usuarios");
+        petsRef = ConfiguracaoFirebase.getFirebase().collection("todosPets");
+        usuariosRef = ConfiguracaoFirebase.getFirebase().collection("usuarios");
 
         // Configuração do adapter de pesquisa
         pesquisaUsuarioAdapter = new PesquisaUsuarioAdapter(listaUsuarios);
@@ -165,30 +169,30 @@ public class SearchFragment extends Fragment {
     }
 
     private void pesquisarUsuarios(String textoDigitado) {
-
         // Limpa a lista
         listaUsuarios.clear();
 
-        // Confere se tem algum texto pra ser pesquisado
+        // Confere se tem algum texto para ser pesquisado
         if (textoDigitado.length() > 0) {
-
             String textoUppercase = textoDigitado.toUpperCase();
 
-            Query query = usuariosRef.orderByChild("nomeUppercaseUsuario")
-                    .startAt(textoUppercase)
-                    .endAt(textoUppercase + "\uf8ff");
-            // OrderByChild: Ordenar por nome que começa com textoDigitado ou termina com ele
+            // Instância do Firestore
+            FirebaseFirestore db = ConfiguracaoFirebase.getFirebase();
 
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+            // Criação de um índice auxiliar ou consulta de palavra-chave de pesquisa
+            // Query para pesquisar no Firestore (em qualquer parte do campo "nomeUppercaseUsuario")
+            Query query = db.collection("usuarios")
+                    .whereGreaterThanOrEqualTo("nomeUppercaseUsuario", textoUppercase) // Maior ou igual ao texto digitado
+                    .whereLessThanOrEqualTo("nomeUppercaseUsuario", textoUppercase + "\uf8ff"); // Menor ou igual ao texto digitado com wildcard
 
+            // Realiza a consulta de uma vez só
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
                     // Limpa a lista
                     listaUsuarios.clear();
 
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-
-                        Usuario usuario = ds.getValue(Usuario.class);
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Usuario usuario = document.toObject(Usuario.class);
 
                         // Verifica se é o usuário logado e remove da lista
                         if (idUsuarioLogado.equals(usuario.getIdUsuario())) {
@@ -196,26 +200,21 @@ public class SearchFragment extends Fragment {
                         }
 
                         listaUsuarios.add(usuario);
-
-
                     }
 
                     int totalUsuariosRetornados = listaUsuarios.size();
 
                     // Avisar o adapter que houve uma atualização nos itens retornados
                     pesquisaUsuarioAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
+                } else {
+                    System.err.println("Erro ao realizar a pesquisa: " + task.getException().getMessage());
                 }
             });
         }
     }
 
-    private void pesquisarPets(String textoDigitado) {
 
+    private void pesquisarPets(String textoDigitado) {
         // Limpa a lista
         listaPets.clear();
 
@@ -224,21 +223,22 @@ public class SearchFragment extends Fragment {
             // Converte o texto digitado para uppercase para a busca
             String textoUppercase = textoDigitado.toUpperCase();
 
-            Query query = petsRef.orderByChild("nomeUppercasePet")
-                    .startAt(textoUppercase)
-                    .endAt(textoUppercase + "\uf8ff");
+            // Instância do Firestore
+            FirebaseFirestore db = ConfiguracaoFirebase.getFirebase();
 
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+            // Query para pesquisar pets no Firestore
+            Query query = db.collection("pets")
+                    .whereGreaterThanOrEqualTo("nomeUppercasePet", textoUppercase) // Maior ou igual ao texto digitado
+                    .whereLessThanOrEqualTo("nomeUppercasePet", textoUppercase + "\uf8ff"); // Menor ou igual ao texto digitado com wildcard
 
+            // Realiza a consulta de uma vez só
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
                     // Limpa a lista
                     listaPets.clear();
 
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-
-                        // Obtem o objeto Pet e adiciona à lista
-                        Pet pet = ds.getValue(Pet.class);
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Pet pet = document.toObject(Pet.class);
 
                         if (pet != null) {
                             listaPets.add(pet);
@@ -247,14 +247,10 @@ public class SearchFragment extends Fragment {
 
                     // Avisar o adapter que houve uma atualização nos itens retornados
                     petsPesquisaAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Trate possíveis erros aqui
+                } else {
+                    System.err.println("Erro ao realizar a pesquisa: " + task.getException().getMessage());
                 }
             });
         }
     }
-
 }

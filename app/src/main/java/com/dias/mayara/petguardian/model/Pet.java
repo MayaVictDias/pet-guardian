@@ -129,8 +129,6 @@ public class Pet implements Serializable {
         petsRef.set(petData);
     }
 
-
-
     // Método para salvar o pet como desaparecido
     public void salvarDesaparecido() {
         // Obtém a instância do Firestore
