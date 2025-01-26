@@ -27,11 +27,13 @@ import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +54,13 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private String idUsuarioLogado;
 
-    private DatabaseReference firebaseRef;
-    private DatabaseReference enderecoRef;
-    private DatabaseReference todosPetsRef;
-    private DatabaseReference usuarioRef;
-    private DatabaseReference petsRef;
-    private DatabaseReference usuariosRef;
-    private DatabaseReference feedPetsRef;
+    private FirebaseFirestore firebaseRef;
+    private DocumentReference enderecoRef;
+    private DocumentReference todosPetsRef;
+    private DocumentReference usuarioRef;
+    private DocumentReference petsRef;
+    private CollectionReference usuariosRef;
+    private DocumentReference feedPetsRef;
     private Usuario usuario;
 
     private AlertDialog dialog;
@@ -86,8 +88,8 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         inicializarComponentes();
 
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        usuariosRef = firebaseRef.child("usuarios");
-        usuarioRef = usuariosRef.child(petSelecionado.getIdTutor());
+        usuariosRef = firebaseRef.collection("usuarios");
+        usuarioRef = usuariosRef.document(petSelecionado.getIdTutor());
         usuario = UsuarioFirebase.getDadosUsuarioLogado();
 
         setSupportActionBar(toolbar);
@@ -95,7 +97,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
-        enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos").child(petSelecionado.getIdEndereco());
+        enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos").document(petSelecionado.getIdEndereco());
 
         configurarCampos();
 
@@ -118,25 +120,23 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                 TextView textViewEmailResponsavel = modalView.findViewById(R.id.textViewEmailResponsavel);
                 TextView textViewCelularResponsavel = modalView.findViewById(R.id.textViewCelularResponsavel);
 
-                usuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                usuarioRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String nomeUsuario = snapshot.child("nomeUsuario").getValue(String.class);
-                        String emailUsuario = snapshot.child("emailUsuario").getValue(String.class);
-                        String telefoneUsuario = snapshot.child("telefoneUsuario").getValue(String.class);
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String nomeUsuario = document.getString("nomeUsuario");
+                                String emailUsuario = document.getString("emailUsuario");
+                                String telefoneUsuario = document.getString("telefoneUsuario");
 
-                        textViewNomeResponsavel.setText(nomeUsuario);
-                        textViewEmailResponsavel.setText(emailUsuario);
-                        textViewCelularResponsavel.setText(telefoneUsuario);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                                textViewNomeResponsavel.setText(nomeUsuario);
+                                textViewEmailResponsavel.setText(emailUsuario);
+                                textViewCelularResponsavel.setText(telefoneUsuario);
+                            }
+                        }
                     }
                 });
-                //textViewNomeResponsavel.setText(petSelecionado.getNomeResponsavel());
 
                 Button closeButton = modalView.findViewById(R.id.modalButton);
                 closeButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
@@ -174,7 +174,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
                     String status = "";
 
-                    if(petSelecionado.getStatusPet().equals("Desaparecido")) {
+                    if (petSelecionado.getStatusPet().equals("Desaparecido")) {
                         status = "desaparecido";
                     } else if (petSelecionado.getStatusPet().equals("Adoção")) {
                         status = "adocao";
@@ -184,28 +184,13 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
                     abrirDialogCarregamento("Deletando evento");
 
-                    todosPetsRef = ConfiguracaoFirebase.getFirebase().child("todosPets")
-                            .child(petSelecionado.getIdPet());
-
-                    Log.d("TodosPetsRef", todosPetsRef.toString());
-
-                    petsRef = ConfiguracaoFirebase.getFirebase().child("pets")
-                            .child(idUsuarioLogado)
-                            .child(status)
-                            .child(petSelecionado.getIdPet());
-
-                    Log.d("PetsRef", petsRef.toString());
-
-                    feedPetsRef = ConfiguracaoFirebase.getFirebase().child("feedPets")
-                            .child(status)
-                            .child(petSelecionado.getIdPet());
-
-                    Log.d("FeedPetsRef", feedPetsRef.toString());
+                    petsRef = ConfiguracaoFirebase.getFirebase().collection("pets")
+                            .document(idUsuarioLogado)
+                            .collection(status)
+                            .document(petSelecionado.getIdPet());
 
                     // Código para excluir o item
-                    todosPetsRef.removeValue();
-                    petsRef.removeValue();
-                    feedPetsRef.removeValue();
+                    petsRef.delete();
 
                     usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() - 1);
 
@@ -252,7 +237,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewId.setText(petSelecionado.getIdPet());
         textViewEspecie.setText(petSelecionado.getEspeciePet());
 
-        if(petSelecionado.getStatusPet().equals("Adoção")) {
+        if (petSelecionado.getStatusPet().equals("Adoção")) {
             textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
             textViewStatusPet.setText("ADOÇÃO");
         } else if (petSelecionado.getStatusPet().equals("Desaparecido")) {
@@ -264,33 +249,27 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         }
 
         // Configurar campos de endereço
-        enderecoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        enderecoRef.get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Endereco endereco = documentSnapshot.toObject(Endereco.class);
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    Endereco endereco = snapshot.getValue(Endereco.class);
+                        Log.d("Endereço to string", endereco != null ? endereco.toString() : "Endereço nulo");
 
-                    Log.d("Endereço to string", endereco.toString());
+                        if (endereco != null) {
+                            String enderecoCompleto = endereco.getRuaAvenida() + ", " + endereco.getNumero()
+                                    + " - " + endereco.getCidade() + ", " + endereco.getEstado() + ", " + endereco.getCep()
+                                    + ", " + endereco.getPais();
 
-                    if (endereco != null) {
-
-                        String enderecoCompleto = endereco.getRuaAvenida() + ", " + endereco.getNumero()
-                                + " - " + endereco.getCidade() + ", " + endereco.getEstado() + ", " + endereco.getCep()
-                                + ", " + endereco.getPais();
-
-                        textViewEnderecoCompletoDado.setText(enderecoCompleto);
-                        textViewPontoReferenciaDado.setText(textViewPontoReferenciaDado.getText().toString());
-
+                            textViewEnderecoCompletoDado.setText(enderecoCompleto);
+                            textViewPontoReferenciaDado.setText(textViewPontoReferenciaDado.getText().toString());
+                        }
                     }
-                }
-            }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Erro ao acessar o endereço: ", e);
+                });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     public void updateTimeSincePost(long postTimestamp) {
