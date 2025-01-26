@@ -135,7 +135,6 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
                     });
                 }
             });
-);
 
             // Atualiza o texto do tempo desde a postagem
             holder.updateTimeSincePost(pet.getDataCadastro());

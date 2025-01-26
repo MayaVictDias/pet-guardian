@@ -20,10 +20,10 @@ import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,13 +61,13 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                 nomeBancoDadosStatus = "procurandoDono";
             }
 
-            DatabaseReference petRef = ConfiguracaoFirebase.getFirebase().child("pets")
-                    .child(pet.getIdTutor())
-                    .child(nomeBancoDadosStatus)
-                    .child(pet.getIdPet());
+            DocumentReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets") // Coleção de pets
+                    .document(pet.getIdTutor()) // ID do tutor
+                    .collection(nomeBancoDadosStatus) // Subcoleção do status
+                    .document(pet.getIdPet());
 
-            DatabaseReference enderecoRef = ConfiguracaoFirebase.getFirebase().child("enderecos")
-                            .child(pet.getIdEndereco());
+            DocumentReference enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos") // Coleção de pets
+                    .document(pet.getIdEndereco());
 
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
@@ -87,20 +87,20 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                     .error(R.drawable.no_image_found) // Imagem em caso de erro
                     .into(holder.imageViewFotoPet);
 
-            enderecoRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Endereco endereco = snapshot.getValue(Endereco.class);
-                    if (endereco != null && !pet.getStatusPet().equals("Adoção")) {
-                        holder.textViewCidadePet.setText(endereco.getCidade() + " - " + endereco.getEstado());
-                    } else {
-                        holder.textViewCidadePet.setVisibility(View.GONE);
+            enderecoRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot.exists()) {
+                        Endereco endereco = snapshot.toObject(Endereco.class);
+                        if (endereco != null && !pet.getStatusPet().equals("Adoção")) {
+                            holder.textViewCidadePet.setText(endereco.getCidade() + " - " + endereco.getEstado());
+                        } else {
+                            holder.textViewCidadePet.setVisibility(View.GONE);
+                        }
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("PetsAdapter", "Erro ao buscar endereço: " + error.getMessage());
+                } else {
+                    // Tratar erro, se necessário
+                    System.err.println("Erro ao recuperar o endereço: " + task.getException().getMessage());
                 }
             });
 
@@ -109,23 +109,27 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                 @Override
                 public void onClick(View view) {
 
-                    petRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    // Referência ao documento do pet no Firestore
+                    DocumentReference petRef = ConfiguracaoFirebase.getFirebase()
+                            .collection("pets")
+                            .document(pet.getIdPet());
 
-                            Pet petSelecionado = snapshot.getValue(Pet.class);
+                    // Recuperando os dados do pet
+                    petRef.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot snapshot = task.getResult();
+                            if (snapshot.exists()) {
+                                Pet petSelecionado = snapshot.toObject(Pet.class);
 
-                            if (petSelecionado != null) {
-                                Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
-                                i.putExtra("petSelecionado", petSelecionado);
-                                holder.itemView.getContext().startActivity(i);
-
+                                if (petSelecionado != null) {
+                                    Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
+                                    i.putExtra("petSelecionado", petSelecionado);
+                                    holder.itemView.getContext().startActivity(i);
+                                }
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
+                        } else {
+                            // Tratar erro, se necessário
+                            System.err.println("Erro ao recuperar o pet: " + task.getException().getMessage());
                         }
                     });
                 }
