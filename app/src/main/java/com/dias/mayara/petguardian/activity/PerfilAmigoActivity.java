@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,11 +19,12 @@ import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;  // Importa ListenerRegistration
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,18 +43,20 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
     private FirebaseUser usuarioPerfil;
 
-    private DatabaseReference firebaseRef;
-    private DatabaseReference usuariosRef;
-    private DatabaseReference usuarioLogadoRef;
-    private DatabaseReference usuarioAmigoRef;
-    private ValueEventListener valueEventListenerPerfil;
-    private ValueEventListener valueEventListenerPerfilAmigo;
+    private FirebaseFirestore firebaseRef;
+    private CollectionReference usuariosRef;
+    private DocumentReference usuarioLogadoRef;
+    private DocumentReference usuarioAmigoRef;
+    private ListenerRegistration listenerRegistrationPerfilAmigo;  // Listener para o perfil do amigo
+    private ListenerRegistration listenerRegistrationPetsAdocao;    // Listener para pets para adoção
+    private ListenerRegistration listenerRegistrationPetsDesaparecidos;  // Listener para pets desaparecidos
+
     private String idUsuarioLogado;
 
     private List<Pet> petListAdocao = new ArrayList<>();
-    private List<Pet> petListDesaparecidos = new ArrayList<>(); // Lista para pets desaparecidos
+    private List<Pet> petListDesaparecidos = new ArrayList<>();
     private PetsAdapter petsAdapterAdocao;
-    private PetsAdapter petsAdapterDesaparecidos; // Adaptador para pets desaparecidos
+    private PetsAdapter petsAdapterDesaparecidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +65,12 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
         // Inicializa a instância do Firebase e referências do banco de dados
         firebaseRef = ConfiguracaoFirebase.getFirebase();
-        usuariosRef = firebaseRef.child("usuarios");
+        usuariosRef = firebaseRef.collection("usuarios");
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
 
         // Obtém os dados do usuário logado e configura a referência para o nó do usuário específico
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
-        usuarioLogadoRef = usuariosRef.child(usuarioLogado.getIdUsuario());
+        usuarioLogadoRef = usuariosRef.document(usuarioLogado.getIdUsuario());
 
         // Recuperar dados do usuário
         usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
@@ -82,17 +83,16 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
         // Recuperar usuário selecionado
         Bundle bundle = getIntent().getExtras();
-
-        if( bundle != null ){
+        if (bundle != null) {
             usuarioSelecionado = (Usuario) bundle.getSerializable("usuarioSelecionado");
 
             // Recuperar foto do usuário
             String caminhoFoto = usuarioSelecionado.getCaminhoFotoUsuario();
-            if( caminhoFoto != null && !caminhoFoto.isEmpty() ){
-                Uri url = Uri.parse( caminhoFoto );
+            if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
+                Uri url = Uri.parse(caminhoFoto);
                 Glide.with(PerfilAmigoActivity.this)
-                        .load( url )
-                        .into( imagemPerfilUsuario );
+                        .load(url)
+                        .into(imagemPerfilUsuario);
             }
         }
 
@@ -112,144 +112,126 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         LinearLayoutManager layoutManagerDesaparecidos = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPetsDesaparecidos.setLayoutManager(layoutManagerDesaparecidos);
 
-        buttonFiltrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FiltroActivity.class));
-            }
-        });
+        buttonFiltrar.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FiltroActivity.class)));
     }
 
-
     private void getPetsAdocao() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference("pets").child(usuarioSelecionado.getIdUsuario()).child("adocao");
+        // Referência à coleção "adocao" de um usuário específico
+        CollectionReference databaseReference = FirebaseFirestore.getInstance()
+                .collection("pets")
+                .document(usuarioSelecionado.getIdUsuario())
+                .collection("adocao");
 
-        // Usando addValueEventListener para atualizações em tempo real
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                petListAdocao.clear(); // Limpa a lista antes de adicionar novos dados
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String idPet = snapshot.child("idPet").getValue(String.class);
-                    String idEndereco = snapshot.child("idEndereco").getValue(String.class);
-                    String idTutor = snapshot.child("idTutor").getValue(String.class);
-                    String especiePet = snapshot.child("especiePet").getValue(String.class);
-                    String nomePet = snapshot.child("nomePet").getValue(String.class);
-                    String nomeUppercasePet = snapshot.child("nomeUppercasePet").getValue(String.class);
-                    String generoPet = snapshot.child("generoPet").getValue(String.class);
-                    String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
-                    String idadePet = snapshot.child("idadePet").getValue(String.class);
-                    String sobreOPet = snapshot.child("sobreOPet").getValue(String.class);
-                    String statusPet = snapshot.child("statusPet").getValue(String.class);
-                    long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
-
-                    petListAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
-                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-                }
-                // Notifica o adapter sobre as mudanças na lista
-                petsAdapterAdocao.notifyDataSetChanged();
+        listenerRegistrationPetsAdocao = databaseReference.addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.e("Firestore", "Erro ao carregar os pets para adoção", e);
+                return;
             }
+            petListAdocao.clear();
+            for (QueryDocumentSnapshot snapshot : snapshots) {
+                String idPet = snapshot.getString("idPet");
+                String idEndereco = snapshot.getString("idEndereco");
+                String idTutor = snapshot.getString("idTutor");
+                String especiePet = snapshot.getString("especiePet");
+                String nomePet = snapshot.getString("nomePet");
+                String nomeUppercasePet = snapshot.getString("nomeUppercasePet");
+                String generoPet = snapshot.getString("generoPet");
+                String imagemUrl = snapshot.getString("imagemUrl");
+                String idadePet = snapshot.getString("idadePet");
+                String sobreOPet = snapshot.getString("sobreOPet");
+                String statusPet = snapshot.getString("statusPet");
+                Long dataCadastro = snapshot.getLong("dataCadastro");
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Lida com erros, se necessário
+                petListAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                        statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
             }
+            petsAdapterAdocao.notifyDataSetChanged();
         });
     }
 
     private void getPetsDesaparecidos() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference("pets").child(usuarioSelecionado.getIdUsuario()).child("desaparecido");
+        CollectionReference databaseReference = FirebaseFirestore.getInstance()
+                .collection("pets").document(usuarioSelecionado.getIdUsuario()).collection("desaparecido");
 
-        // Usando addValueEventListener para atualizações em tempo real
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                petListDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String idPet = snapshot.child("idPet").getValue(String.class);
-                    String idEndereco = snapshot.child("idEndereco").getValue(String.class);
-                    String idTutor = snapshot.child("idTutor").getValue(String.class);
-                    String especiePet = snapshot.child("especiePet").getValue(String.class);
-                    String nomePet = snapshot.child("nomePet").getValue(String.class);
-                    String nomeUppercasePet = snapshot.child("nomeUppercasePet").getValue(String.class);
-                    String generoPet = snapshot.child("generoPet").getValue(String.class);
-                    String imagemUrl = snapshot.child("imagemUrl").getValue(String.class);
-                    String idadePet = snapshot.child("idadePet").getValue(String.class);
-                    String sobreOPet = snapshot.child("sobreOPet").getValue(String.class);
-                    String statusPet = snapshot.child("statusPet").getValue(String.class);
-                    long dataCadastro = snapshot.child("dataCadastro").getValue(Long.class);
-
-                    petListDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
-                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-                }
-                // Notifica o adapter sobre as mudanças na lista
-                petsAdapterDesaparecidos.notifyDataSetChanged();
+        listenerRegistrationPetsDesaparecidos = databaseReference.addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.e("Firestore", "Erro ao carregar os pets desaparecidos", e);
+                return;
             }
+            petListDesaparecidos.clear();
+            for (QueryDocumentSnapshot snapshot : snapshots) {
+                String idPet = snapshot.getString("idPet");
+                String idEndereco = snapshot.getString("idEndereco");
+                String idTutor = snapshot.getString("idTutor");
+                String especiePet = snapshot.getString("especiePet");
+                String nomePet = snapshot.getString("nomePet");
+                String nomeUppercasePet = snapshot.getString("nomeUppercasePet");
+                String generoPet = snapshot.getString("generoPet");
+                String imagemUrl = snapshot.getString("imagemUrl");
+                String idadePet = snapshot.getString("idadePet");
+                String sobreOPet = snapshot.getString("sobreOPet");
+                String statusPet = snapshot.getString("statusPet");
+                Long dataCadastro = snapshot.getLong("dataCadastro");
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Lida com erros, se necessário
+                petListDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                        statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
             }
+            petsAdapterDesaparecidos.notifyDataSetChanged();
         });
     }
-    // Metodo responsavel por recuperar os dados do usuario que está sendo pesquisado
+
     private void recuperarDadosPerfilAmigo() {
+        DocumentReference usuarioAmigoRef = FirebaseFirestore.getInstance()
+                .collection("usuarios")
+                .document(usuarioSelecionado.getIdUsuario());
 
-        usuarioAmigoRef = usuariosRef.child(usuarioSelecionado.getIdUsuario());
+        listenerRegistrationPerfilAmigo = usuarioAmigoRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.e("Firestore", "Erro ao recuperar dados do perfil do amigo", e);
+                return;
+            }
 
-        valueEventListenerPerfilAmigo = usuarioAmigoRef.addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        Usuario usuario = snapshot.getValue(Usuario.class);
-
-                        String nomeUsuario = usuario.getNomeUsuario();
-
-                        // Configura valores recuperados
-                        textViewNomeUsuario.setText(nomeUsuario);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
+            if (snapshot != null && snapshot.exists()) {
+                Usuario usuario = snapshot.toObject(Usuario.class);
+                if (usuario != null) {
+                    String nomeUsuario = usuario.getNomeUsuario();
+                    textViewNomeUsuario.setText(nomeUsuario);
                 }
-        );
+            } else {
+                Log.d("Firestore", "Documento não encontrado!");
+            }
+        });
     }
 
     private void recuperarDadosUsuarioLogado() {
-        valueEventListenerPerfil = usuarioLogadoRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Usuario usuario = snapshot.getValue(Usuario.class);
+        DocumentReference usuarioLogadoRef = FirebaseFirestore.getInstance()
+                .collection("usuarios")
+                .document(idUsuarioLogado);
 
-                if (usuario != null) {
-                    textViewNomeUsuario.setText(usuario.getNomeUsuario());
-                    textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() +
-                            " - " + usuario.getEstadoUsuario());
+        usuarioLogadoRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot snapshot = task.getResult();
+                if (snapshot.exists()) {
+                    Usuario usuario = snapshot.toObject(Usuario.class);
+                    if (usuario != null) {
+                        textViewNomeUsuario.setText(usuario.getNomeUsuario());
+                        textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() +
+                                " - " + usuario.getEstadoUsuario());
+                    }
+                } else {
+                    Log.d("Firestore", "Documento do usuário não encontrado!");
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", error.toException());
+            } else {
+                Log.e("Firestore", "Erro ao recuperar dados do usuário", task.getException());
             }
         });
     }
 
-
-    // Metodo que é chamado logo após o CreateView
     @Override
     protected void onStart() {
         super.onStart();
         recuperarDadosPerfilAmigo();
-
         recuperarDadosUsuarioLogado();
-
         petListAdocao.clear();
         petListDesaparecidos.clear();
         getPetsAdocao();
@@ -259,9 +241,16 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
-        // Remove o listener que está recuperando dados de um amigo especifico
-        usuarioAmigoRef.removeEventListener(valueEventListenerPerfilAmigo);
+        // Cancela os listeners para evitar vazamentos de memória
+        if (listenerRegistrationPerfilAmigo != null) {
+            listenerRegistrationPerfilAmigo.remove();
+        }
+        if (listenerRegistrationPetsAdocao != null) {
+            listenerRegistrationPetsAdocao.remove();
+        }
+        if (listenerRegistrationPetsDesaparecidos != null) {
+            listenerRegistrationPetsDesaparecidos.remove();
+        }
     }
 
     private void inicializarComponentes() {
