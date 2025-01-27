@@ -158,7 +158,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewPais.getText().toString(),
                     textViewPontoReferencia.getText().toString()
             );
-            endereco.salvar();
 
             // Cria o objeto Pet com os dados necessários, mas sem a URL da imagem ainda
             pet = new Pet(
@@ -173,6 +172,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     endereco.getIdEndereco(),
                     idUsuarioLogado
             );
+            pet.salvar();
 
             usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() + 1);
             usuario.atualizar();
@@ -217,18 +217,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                                             pet.setImagemUrl(urlImagemPet.toString());
 
                                             Log.d("URL Imagem Pet", String.valueOf(urlImagemPet));
-
-                                            if (textViewStatusPet.getText().equals("Adoção")) {
-                                                // Após definir a URL da imagem, salva o objeto Pet no Firebase
-                                                pet.salvarAdocao(); // Certifique-se que este método inclui o timestamp
-
-                                            } else if (textViewStatusPet.getText().equals("Desaparecido")) {
-                                                pet.salvarDesaparecido();
-
-                                            } else if (textViewStatusPet.getText().equals("Procurando dono")) {
-
-                                                pet.salvarProcurandoDono();
-                                            }
 
                                             // Exibe uma mensagem de sucesso
                                             Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();

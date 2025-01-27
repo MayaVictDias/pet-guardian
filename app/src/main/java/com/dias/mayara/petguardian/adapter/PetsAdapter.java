@@ -22,6 +22,7 @@ import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -53,18 +54,9 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
             String nomeBancoDadosStatus = "";
 
-            if(pet.getStatusPet().equals("Adoção")) {
-                nomeBancoDadosStatus = "adocao";
-            } else if (pet.getStatusPet().equals("Desaparecido")) {
-                nomeBancoDadosStatus = "desaparecido";
-            } else if (pet.getStatusPet().equals("Procurando dono")) {
-                nomeBancoDadosStatus = "procurandoDono";
-            }
-
-            DocumentReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets") // Coleção de pets
-                    .document(pet.getIdTutor()) // ID do tutor
-                    .collection(nomeBancoDadosStatus) // Subcoleção do status
-                    .document(pet.getIdPet());
+            CollectionReference petRef = ConfiguracaoFirebase.getFirebase().collection(pet.getIdTutor()) // ID do tutor
+                    .document("petsUsuario") // Subcoleção do status
+                    .collection(pet.getIdPet());
 
             DocumentReference enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos") // Coleção de pets
                     .document(pet.getIdEndereco());

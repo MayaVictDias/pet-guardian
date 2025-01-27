@@ -138,7 +138,7 @@ public class FiltroActivity extends AppCompatActivity {
                 "Creme", "Dourado", "Marrom", "Preto", "Tigrado"};
 
 
-                // Configurando o adaptador
+        // Configurando o adaptador
         ArrayAdapter<String> corPredominantedapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,

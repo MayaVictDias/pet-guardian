@@ -3,8 +3,10 @@ package com.dias.mayara.petguardian.model;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirestoreRegistrar;
 
 import org.w3c.dom.Document;
 
@@ -108,6 +110,23 @@ public class Pet implements Serializable {
             id.append(CHARACTERS.charAt(index));
         }
         return id.toString();
+    }
+
+    public void salvar() {
+        // Obtém a instância do Firestore
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
+
+        // Referência para o documento de adoção do pet do usuário
+        DocumentReference petsRef = firebaseRef.collection("pets")
+                .document(idUsuarioLogado)
+                .collection("petsUsuario")
+                .document(idPet);
+
+        // Criando o mapa de dados do pet
+        Map<String, Object> petData = criarMapaPet();
+
+        // Salvando os dados do pet nos três lugares
+        petsRef.set(petData);
     }
 
 
