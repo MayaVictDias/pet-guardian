@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -162,7 +163,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             // Cria o objeto Pet com os dados necessários, mas sem a URL da imagem ainda
             pet = new Pet(
                     textViewNomePet.getText().toString(),
-                    textViewNomePet.getText().toString().toUpperCase(),
                     textViewIdadePet.getText().toString(),
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),
@@ -170,9 +170,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewStatusPet.getText().toString(),
                     urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
                     endereco.getIdEndereco(),
-                    idUsuarioLogado
+                    idUsuarioLogado,
+                    Timestamp.now()
             );
-            pet.salvar();
 
             usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() + 1);
             usuario.atualizar();
@@ -203,7 +203,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Erro ao fazer upload da imagem. Erro: " + e, Toast.LENGTH_SHORT).show();
+                                Log.d("Upload imagem", "Erro ao fazer upload da imagem. Erro: " + e);
                             }
                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -215,8 +215,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                                             urlImagemPet = task.getResult();
 
                                             pet.setImagemUrl(urlImagemPet.toString());
+                                            pet.salvar();
 
-                                            Log.d("URL Imagem Pet", String.valueOf(urlImagemPet));
+                                            Log.d("Upload imagem", String.valueOf(urlImagemPet));
 
                                             // Exibe uma mensagem de sucesso
                                             Toast.makeText(getView().getContext(), "Pet cadastrado com sucesso!", Toast.LENGTH_SHORT).show();

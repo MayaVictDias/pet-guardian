@@ -25,6 +25,7 @@ import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -52,7 +53,6 @@ public class PerfilFragment extends Fragment {
     private FirebaseFirestore firebaseRef;
     private CollectionReference usuariosRef;
     private DocumentReference usuarioLogadoRef;
-    private ValueEventListener valueEventListenerPerfil;
     private String idUsuarioLogado;
 
     private List<Pet> petListAdocao = new ArrayList<>();
@@ -153,15 +153,14 @@ public class PerfilFragment extends Fragment {
                     String idTutor = document.getString("idTutor");
                     String especiePet = document.getString("especiePet");
                     String nomePet = document.getString("nomePet");
-                    String nomeUppercasePet = document.getString("nomeUppercasePet");
                     String generoPet = document.getString("generoPet");
                     String imagemUrl = document.getString("imagemUrl");
                     String idadePet = document.getString("idadePet");
                     String sobreOPet = document.getString("sobreOPet");
                     String statusPet = document.getString("statusPet");
-                    long dataCadastro = document.getLong("dataCadastro");
+                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    petListAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                    petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
                 // Notifica o adapter sobre as mudanças na lista
@@ -189,15 +188,14 @@ public class PerfilFragment extends Fragment {
                     String idTutor = document.getString("idTutor");
                     String especiePet = document.getString("especiePet");
                     String nomePet = document.getString("nomePet");
-                    String nomeUppercasePet = document.getString("nomeUppercasePet");
                     String generoPet = document.getString("generoPet");
                     String imagemUrl = document.getString("imagemUrl");
                     String idadePet = document.getString("idadePet");
                     String sobreOPet = document.getString("sobreOPet");
                     String statusPet = document.getString("statusPet");
-                    long dataCadastro = document.getLong("dataCadastro");
+                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    petListDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                    petListDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
                 // Notifica o adapter sobre as mudanças na lista

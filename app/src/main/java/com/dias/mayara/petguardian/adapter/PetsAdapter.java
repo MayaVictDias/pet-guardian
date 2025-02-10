@@ -20,6 +20,7 @@ import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -54,9 +55,10 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
             String nomeBancoDadosStatus = "";
 
-            CollectionReference petRef = ConfiguracaoFirebase.getFirebase().collection(pet.getIdTutor()) // ID do tutor
-                    .document("petsUsuario") // Subcoleção do status
-                    .collection(pet.getIdPet());
+            DocumentReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets")
+                    .document(pet.getIdTutor())
+                    .collection("petsUsuario")
+                    .document(pet.getIdPet());
 
             DocumentReference enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos") // Coleção de pets
                     .document(pet.getIdEndereco());
@@ -158,7 +160,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             cardView = itemView.findViewById(R.id.cardView);
         }
 
-        public void updateTimeSincePost(long postTimestamp) {
+        public void updateTimeSincePost(Timestamp postTimestamp) {
             if (updateRunnable != null) {
                 handler.removeCallbacks(updateRunnable);
             }
@@ -173,11 +175,11 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             handler.post(updateRunnable);
         }
 
-        public String calculateTimeSincePost(long postTimestamp) {
+        public String calculateTimeSincePost(Timestamp postTimestamp) {
             long currentTime = System.currentTimeMillis();
-            long timeDifference = currentTime - postTimestamp;
+            long postTime = postTimestamp.toDate().getTime(); // Converte Timestamp para milissegundos
+            long timeDifference = currentTime - postTime;
 
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference);
             long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference);
             long hours = TimeUnit.MILLISECONDS.toHours(timeDifference);
             long days = TimeUnit.MILLISECONDS.toDays(timeDifference);

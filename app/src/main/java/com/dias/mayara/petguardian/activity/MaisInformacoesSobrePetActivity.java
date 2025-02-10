@@ -30,6 +30,7 @@ import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -71,7 +72,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     private List<View> adocaoComponents;
     private List<View> desaparecidoComponents;
     private List<View> procurandoDonoComponents;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,20 +158,16 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         } else if (!petSelecionado.getIdTutor().equals(idUsuarioLogado)) {
             buttonMenu.setVisibility(View.GONE);
         }
-
     }
 
     private void showPopupMenu(View view) {
-
         PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.menu_pet, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_delete) {
-
                     String status = "";
 
                     if (petSelecionado.getStatusPet().equals("Desaparecido")) {
@@ -212,7 +208,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     }
 
     private void abrirDialogCarregamento(String titulo) {
-
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle(titulo);
         alert.setCancelable(false); // Impede que o usuário cancele a tela de carregamento
@@ -223,7 +218,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     }
 
     private void configurarCampos() {
-
         Glide.with(imageViewFotoPet.getContext())
                 .load(petSelecionado.getImagemUrl()) // Aqui você insere a URL da imagem
                 .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
@@ -269,10 +263,9 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Erro ao acessar o endereço: ", e);
                 });
-
     }
 
-    public void updateTimeSincePost(long postTimestamp) {
+    public void updateTimeSincePost(Timestamp postTimestamp) {
         if (updateRunnable != null) {
             handler.removeCallbacks(updateRunnable);
         }
@@ -287,9 +280,10 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         handler.post(updateRunnable);
     }
 
-    public String calculateTimeSincePost(long postTimestamp) {
+    public String calculateTimeSincePost(Timestamp postTimestamp) {
         long currentTime = System.currentTimeMillis();
-        long timeDifference = currentTime - postTimestamp;
+        long postTime = postTimestamp.toDate().getTime(); // Converte Timestamp para milissegundos
+        long timeDifference = currentTime - postTime;
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference);
@@ -304,7 +298,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             return days + " dia(s) atrás";
         }
     }
-
 
     private void inicializarComponentes() {
         toolbar = findViewById(R.id.toolbar);

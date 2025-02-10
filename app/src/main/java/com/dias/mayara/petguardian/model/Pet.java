@@ -2,13 +2,9 @@ package com.dias.mayara.petguardian.model;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirestoreRegistrar;
-
-import org.w3c.dom.Document;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -21,7 +17,6 @@ public class Pet implements Serializable {
     private static final int ID_LENGTH = 6;
 
     private String idPet;
-    private String nomeUppercasePet;
     private String idTutor;
     private String nomePet;
     private String idadePet;
@@ -31,21 +26,19 @@ public class Pet implements Serializable {
     private String statusPet;
     private String idEndereco;
     private String imagemUrl; // Armazenará a URL da imagem
-    private long dataCadastro;
+    private Timestamp dataCadastro; // Usando Timestamp do Firestore
 
     private DocumentReference firebaseRef;
     private String idUsuarioLogado;
 
-
     public Pet() {
-
+        // Construtor vazio necessário para o Firestore
     }
 
-    public Pet(String nomePet, String nomeUppercasePet, String idadePet, String generoPet, String especiePet,
+    public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
-               String idTutor, long dataCadastro) { // Construtor com data de cadastro
+               String idTutor, Timestamp dataCadastro) { // Construtor com data de cadastro
         this.nomePet = nomePet;
-        this.nomeUppercasePet = nomeUppercasePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
@@ -62,12 +55,11 @@ public class Pet implements Serializable {
         this.idTutor = idUsuarioLogado;
     }
 
-    public Pet(String idPet, String nomePet, String nomeUppercasePet, String idadePet, String generoPet, String especiePet,
+    public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
-               String idTutor, long dataCadastro) { // Construtor com ID do pet, quando ele for puxado direto do banco de dados
+               String idTutor, Timestamp dataCadastro) { // Construtor com ID do pet, quando ele for puxado direto do banco de dados
         this.idPet = idPet;
         this.nomePet = nomePet;
-        this.nomeUppercasePet = nomeUppercasePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
@@ -77,14 +69,12 @@ public class Pet implements Serializable {
         this.idEndereco = idEndereco;
         this.idTutor = idTutor;
         this.dataCadastro = dataCadastro;
-
     }
 
-    public Pet(String nomePet, String nomeUppercasePet, String idadePet, String generoPet, String especiePet,
+    public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
                String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
                String idTutor) { // Construtor sem data de cadastro
         this.nomePet = nomePet;
-        this.nomeUppercasePet = nomeUppercasePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
@@ -99,7 +89,6 @@ public class Pet implements Serializable {
         this.idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
         this.idTutor = idUsuarioLogado;
     }
-
 
     // Gerador de ID único de 6 caracteres
     private String generateUniqueId() {
@@ -113,77 +102,21 @@ public class Pet implements Serializable {
     }
 
     public void salvar() {
-        // Obtém a instância do Firestore
         FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
+        DocumentReference petsRef = firebaseRef.collection("pets").document(idPet);
 
-        // Referência para o documento de adoção do pet do usuário
-        DocumentReference petsRef = firebaseRef.collection("pets")
-                .document(idUsuarioLogado)
-                .collection("petsUsuario")
-                .document(idPet);
-
-        // Criando o mapa de dados do pet
-        Map<String, Object> petData = criarMapaPet();
-
-        // Salvando os dados do pet nos três lugares
-        petsRef.set(petData);
+        // Salva os dados do pet
+        petsRef.set(criarMapaPet()).addOnSuccessListener(aVoid -> {
+            // Atualiza a quantidade de pets cadastrados no documento do tutor
+            DocumentReference tutorRef = firebaseRef.collection("usuarios").document(idTutor);
+            tutorRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists() && documentSnapshot.contains("quantidadePetsCadastrados")) {
+                    int quantidadeAtual = documentSnapshot.getLong("quantidadePetsCadastrados").intValue();
+                    tutorRef.update("quantidadePetsCadastrados", quantidadeAtual + 1);
+                }
+            });
+        });
     }
-
-
-    /// Método para salvar o pet para adoção
-    public void salvarAdocao() {
-        // Obtém a instância do Firestore
-        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
-
-        // Referência para o documento de adoção do pet do usuário
-        DocumentReference petsRef = firebaseRef.collection("pets")
-                .document(idUsuarioLogado)
-                .collection("adocao")
-                .document(idPet);
-
-        // Criando o mapa de dados do pet
-        Map<String, Object> petData = criarMapaPet();
-
-        // Salvando os dados do pet nos três lugares
-        petsRef.set(petData);
-    }
-
-    // Método para salvar o pet como desaparecido
-    public void salvarDesaparecido() {
-        // Obtém a instância do Firestore
-        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
-
-        // Referência para o documento de adoção do pet do usuário
-        DocumentReference petsRef = firebaseRef.collection("pets")
-                .document(idUsuarioLogado)
-                .collection("desaparecido")
-                .document(idPet);
-
-        // Criando o mapa de dados do pet
-        Map<String, Object> petData = criarMapaPet();
-
-        // Salvando os dados do pet nos três lugares
-        petsRef.set(petData);
-    }
-
-    // Método para salvar o pet procurando dono
-    public void salvarProcurandoDono() {
-        // Obtém a instância do Firestore
-        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
-
-        // Referência para o documento de adoção do pet do usuário
-        DocumentReference petsRef = firebaseRef.collection("pets")
-                .document(idUsuarioLogado)
-                .collection("procurandoDono")
-                .document(idPet);
-
-        // Criando o mapa de dados do pet
-        Map<String, Object> petData = criarMapaPet();
-
-        // Salvando os dados do pet nos três lugares
-        petsRef.set(petData);
-    }
-
 
 
     // Método para criar o mapa de dados do pet
@@ -192,14 +125,13 @@ public class Pet implements Serializable {
         petData.put("idPet", idPet);
         petData.put("idTutor", idTutor);
         petData.put("nomePet", nomePet);
-        petData.put("nomeUppercasePet", nomeUppercasePet);
         petData.put("idadePet", idadePet);
         petData.put("generoPet", generoPet);
         petData.put("especiePet", especiePet);
         petData.put("sobreOPet", sobreOPet);
         petData.put("statusPet", statusPet);
         petData.put("imagemUrl", imagemUrl);
-        petData.put("dataCadastro", ServerValue.TIMESTAMP);
+        petData.put("dataCadastro", dataCadastro); // Usando Timestamp diretamente
 
         if (idEndereco != null) {
             petData.put("idEndereco", idEndereco);
@@ -207,24 +139,17 @@ public class Pet implements Serializable {
         return petData;
     }
 
-    public long getDataCadastro() {
+    // Getters e Setters
+    public Timestamp getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(long dataCadastro) {
+    public void setDataCadastro(Timestamp dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
     public String getImagemUrl() {
         return imagemUrl;
-    }
-
-    public String getNomeUppercasePet() {
-        return nomeUppercasePet;
-    }
-
-    public void setNomeUppercasePet(String nomeUppercasePet) {
-        this.nomeUppercasePet = nomeUppercasePet;
     }
 
     public void setImagemUrl(String imagemUrl) {
@@ -259,16 +184,16 @@ public class Pet implements Serializable {
         return generoPet;
     }
 
+    public void setGeneroPet(String generoPet) {
+        this.generoPet = generoPet;
+    }
+
     public String getIdTutor() {
         return idTutor;
     }
 
     public void setIdTutor(String idTutor) {
         this.idTutor = idTutor;
-    }
-
-    public void setGeneroPet(String generoPet) {
-        this.generoPet = generoPet;
     }
 
     public String getEspeciePet() {
@@ -299,26 +224,7 @@ public class Pet implements Serializable {
         return idEndereco;
     }
 
-    public void setEndereco(String id) {
-        this.idEndereco = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "idPet='" + idPet + '\'' +
-                ", idTutor='" + idTutor + '\'' +
-                ", nomePet='" + nomePet + '\'' +
-                ", idadePet='" + idadePet + '\'' +
-                ", generoPet='" + generoPet + '\'' +
-                ", especiePet='" + especiePet + '\'' +
-                ", sobreOPet='" + sobreOPet + '\'' +
-                ", statusPet='" + statusPet + '\'' +
-                ", idEndereco='" + idEndereco + '\'' +
-                ", imagemUrl='" + imagemUrl + '\'' +
-                ", dataCadastro=" + dataCadastro +
-                ", firebaseRef=" + firebaseRef +
-                ", idUsuarioLogado='" + idUsuarioLogado + '\'' +
-                '}';
+    public void setIdEndereco(String idEndereco) {
+        this.idEndereco = idEndereco;
     }
 }

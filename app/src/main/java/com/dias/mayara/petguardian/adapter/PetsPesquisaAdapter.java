@@ -20,6 +20,7 @@ import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -167,7 +168,7 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
             cardView = itemView.findViewById(R.id.cardView);
         }
 
-        public void updateTimeSincePost(long postTimestamp) {
+        public void updateTimeSincePost(Timestamp postTimestamp) {
             if (updateRunnable != null) {
                 handler.removeCallbacks(updateRunnable);
             }
@@ -182,11 +183,11 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
             handler.post(updateRunnable);
         }
 
-        public String calculateTimeSincePost(long postTimestamp) {
+        public String calculateTimeSincePost(Timestamp postTimestamp) {
             long currentTime = System.currentTimeMillis();
-            long timeDifference = currentTime - postTimestamp;
+            long postTime = postTimestamp.toDate().getTime(); // Converte Timestamp para milissegundos
+            long timeDifference = currentTime - postTime;
 
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference);
             long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference);
             long hours = TimeUnit.MILLISECONDS.toHours(timeDifference);
             long days = TimeUnit.MILLISECONDS.toDays(timeDifference);
@@ -199,6 +200,7 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
                 return days + " dia(s) atrás";
             }
         }
+
 
         @Override
         protected void finalize() throws Throwable {

@@ -18,6 +18,7 @@ import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,7 +37,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private Usuario usuarioSelecionado;
     private Usuario usuarioLogado;
 
-    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewPetsDesaparecidos;
+    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
     private RecyclerView recyclerViewPetsDesaparecidos, recyclerViewPetsParaAdocao;
@@ -134,15 +135,14 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 String idTutor = snapshot.getString("idTutor");
                 String especiePet = snapshot.getString("especiePet");
                 String nomePet = snapshot.getString("nomePet");
-                String nomeUppercasePet = snapshot.getString("nomeUppercasePet");
                 String generoPet = snapshot.getString("generoPet");
                 String imagemUrl = snapshot.getString("imagemUrl");
                 String idadePet = snapshot.getString("idadePet");
                 String sobreOPet = snapshot.getString("sobreOPet");
                 String statusPet = snapshot.getString("statusPet");
-                Long dataCadastro = snapshot.getLong("dataCadastro");
+                Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                petListAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                         statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
             }
             petsAdapterAdocao.notifyDataSetChanged();
@@ -165,15 +165,14 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 String idTutor = snapshot.getString("idTutor");
                 String especiePet = snapshot.getString("especiePet");
                 String nomePet = snapshot.getString("nomePet");
-                String nomeUppercasePet = snapshot.getString("nomeUppercasePet");
                 String generoPet = snapshot.getString("generoPet");
                 String imagemUrl = snapshot.getString("imagemUrl");
                 String idadePet = snapshot.getString("idadePet");
                 String sobreOPet = snapshot.getString("sobreOPet");
                 String statusPet = snapshot.getString("statusPet");
-                Long dataCadastro = snapshot.getLong("dataCadastro");
+                Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                petListDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                petListDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                         statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
             }
             petsAdapterDesaparecidos.notifyDataSetChanged();

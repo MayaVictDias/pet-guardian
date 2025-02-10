@@ -12,7 +12,6 @@ public class Usuario implements Serializable {
 
     private String idUsuario;
     private String nomeUsuario;
-    private String nomeUppercaseUsuario;
     private String emailUsuario;
     private String senhaUsuario;
     private String telefoneUsuario;
@@ -51,7 +50,6 @@ public class Usuario implements Serializable {
         HashMap<String, Object> usuarioMap = new HashMap<>();
         usuarioMap.put("emailUsuario", getEmailUsuario());
         usuarioMap.put("nomeUsuario", getNomeUsuario());
-        usuarioMap.put("nomeUppercaseUsuario", getNomeUsuario());
         usuarioMap.put("telefoneUsuario", getTelefoneUsuario());
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
         usuarioMap.put("estadoUsuario", getCidadeUsuario());
@@ -80,14 +78,6 @@ public class Usuario implements Serializable {
 
     public String getNomeUsuario() {
         return nomeUsuario;
-    }
-
-    public String getNomeUppercaseUsuario() {
-        return nomeUppercaseUsuario;
-    }
-
-    public void setNomeUppercaseUsuario(String nomeUppercaseUsuario) {
-        this.nomeUppercaseUsuario = nomeUppercaseUsuario;
     }
 
     public void setNomeUsuario(String nomeUsuario) {

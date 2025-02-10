@@ -15,12 +15,15 @@ import android.widget.Button;
 
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.adapter.PetsAdapter;
+import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Pet;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -90,15 +93,14 @@ public class HomeFragment extends Fragment {
                     String idTutor = document.getString("idTutor");
                     String especiePet = document.getString("especiePet");
                     String nomePet = document.getString("nomePet");
-                    String nomeUppercasePet = document.getString("nomeUppercasePet");
                     String generoPet = document.getString("generoPet");
                     String imagemUrl = document.getString("imagemUrl");
                     String idadePet = document.getString("idadePet");
                     String sobreOPet = document.getString("sobreOPet");
                     String statusPet = document.getString("statusPet");
-                    long dataCadastro = document.getLong("dataCadastro");
+                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    listaPetsAdocao.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
 
@@ -118,8 +120,8 @@ public class HomeFragment extends Fragment {
 
     private void getPetsDesaparecidos() {
         // Referência para a coleção de feedPets e subcoleção desaparecido
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference petsRef = db.collection("feedPets").document("desaparecido").collection("pets");
+        CollectionReference petsRef = ConfiguracaoFirebase.getFirebase().collection("pets").
+                document().collection("pets");
 
         // Consultando documentos
         petsRef.get().addOnCompleteListener(task -> {
@@ -132,15 +134,14 @@ public class HomeFragment extends Fragment {
                     String idTutor = document.getString("idTutor");
                     String especiePet = document.getString("especiePet");
                     String nomePet = document.getString("nomePet");
-                    String nomeUppercasePet = document.getString("nomeUppercasePet");
                     String generoPet = document.getString("generoPet");
                     String imagemUrl = document.getString("imagemUrl");
                     String idadePet = document.getString("idadePet");
                     String sobreOPet = document.getString("sobreOPet");
                     String statusPet = document.getString("statusPet");
-                    long dataCadastro = document.getLong("dataCadastro");
+                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    listaPetsDesaparecidos.add(new Pet(idPet, nomePet, nomeUppercasePet, idadePet, generoPet, especiePet, sobreOPet,
+                    listaPetsDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
 
