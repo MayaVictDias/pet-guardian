@@ -22,6 +22,7 @@ public class Pet implements Serializable {
     private String idadePet;
     private String generoPet;
     private String especiePet;
+    private String nomeLowerCasePet;
     private String sobreOPet;
     private String statusPet;
     private String idEndereco;
@@ -122,19 +123,20 @@ public class Pet implements Serializable {
     // Método para criar o mapa de dados do pet
     private Map<String, Object> criarMapaPet() {
         Map<String, Object> petData = new HashMap<>();
-        petData.put("idPet", idPet);
-        petData.put("idTutor", idTutor);
-        petData.put("nomePet", nomePet);
-        petData.put("idadePet", idadePet);
-        petData.put("generoPet", generoPet);
-        petData.put("especiePet", especiePet);
-        petData.put("sobreOPet", sobreOPet);
-        petData.put("statusPet", statusPet);
-        petData.put("imagemUrl", imagemUrl);
-        petData.put("dataCadastro", dataCadastro); // Usando Timestamp diretamente
+        petData.put("idPet", getIdPet());
+        petData.put("idTutor", getIdTutor());
+        petData.put("nomePet", getNomePet());
+        petData.put("nomeLowerCasePet", getNomeLowerCasePet());
+        petData.put("idadePet", getIdadePet());
+        petData.put("generoPet", getGeneroPet());
+        petData.put("especiePet", getEspeciePet());
+        petData.put("sobreOPet", getSobreOPet());
+        petData.put("statusPet", getStatusPet());
+        petData.put("imagemUrl", getImagemUrl());
+        petData.put("dataCadastro", getDataCadastro()); // Usando Timestamp diretamente
 
         if (idEndereco != null) {
-            petData.put("idEndereco", idEndereco);
+            petData.put("idEndereco", getIdEndereco());
         }
         return petData;
     }
@@ -226,5 +228,14 @@ public class Pet implements Serializable {
 
     public void setIdEndereco(String idEndereco) {
         this.idEndereco = idEndereco;
+    }
+
+    public String getNomeLowerCasePet() {
+
+        return nomePet != null ? nomePet.toLowerCase() : null;
+    }
+
+    public void setNomeLowerCasePet(String nomeLowerCasePet) {
+        this.nomeLowerCasePet = nomeLowerCasePet.toLowerCase();
     }
 }

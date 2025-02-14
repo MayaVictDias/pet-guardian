@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.nav_notificacoes) {
                     // Handle Notificações click
                 } else if (id == R.id.nav_meus_pets) {
-                    // Handle Meus pets click
+                    startActivity(new Intent(MainActivity.this, MeusPets.class));
                 } else if (id == R.id.nav_configuracoes) {
                     startActivity(new Intent(MainActivity.this, ConfiguracoesActivity.class));
                 }
