@@ -220,15 +220,15 @@ public class SearchFragment extends Fragment {
         // Confere se tem algum texto pra ser pesquisado
         if (textoDigitado.length() > 0) {
             // Converte o texto digitado para uppercase para a busca
-            String textoUppercase = textoDigitado.toUpperCase();
+            String textoLowercase = textoDigitado.toLowerCase();
 
             // Instância do Firestore
             FirebaseFirestore db = ConfiguracaoFirebase.getFirebase();
 
             // Query para pesquisar pets no Firestore
             Query query = db.collection("pets")
-                    .whereGreaterThanOrEqualTo("nomeUppercasePet", textoUppercase) // Maior ou igual ao texto digitado
-                    .whereLessThanOrEqualTo("nomeUppercasePet", textoUppercase + "\uf8ff"); // Menor ou igual ao texto digitado com wildcard
+                    .whereGreaterThanOrEqualTo("nomeLowerCasePet", textoLowercase) // Maior ou igual ao texto digitado
+                    .whereLessThanOrEqualTo("nomeLowerCasePet", textoLowercase + "\uf8ff"); // Menor ou igual ao texto digitado com wildcard
 
             // Realiza a consulta de uma vez só
             query.get().addOnCompleteListener(task -> {
