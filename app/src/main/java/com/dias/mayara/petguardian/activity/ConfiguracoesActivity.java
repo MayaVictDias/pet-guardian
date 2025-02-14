@@ -84,8 +84,6 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         buttonConta = findViewById(R.id.buttonConta);
-        buttonPoliticaPrivacidade = findViewById(R.id.buttonPoliticaPrivacidade);
-        buttonTermosUso = findViewById(R.id.buttonTermosUso);
         buttonCentralAjuda = findViewById(R.id.buttonCentralAjuda);
         buttonSair = findViewById(R.id.buttonSair);
     }

@@ -34,7 +34,6 @@ public class InserirSenhaActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private EditText editTextNovoUsuarioInserirSenha, editTextNovoUsuarioConfirmarSenha;
     private ProgressBar progressBar;
-    private CheckBox checkBoxPoliticaPrivacidadeTermosUso;
     ;
     private Button buttonCadastrarNovoUsuario;
 
@@ -78,30 +77,19 @@ public class InserirSenhaActivity extends AppCompatActivity {
 
                 if (!textoInserirSenha.isEmpty()) {
                     if (!textoConfirmarSenha.isEmpty()) {
-                        if (!checkBoxPoliticaPrivacidadeTermosUso.isChecked()) {
 
-                            Toast.makeText(InserirSenhaActivity.this,
-                                    "Você precisa concordar com a política de privacidade e termos de uso!",
-                                    Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                            return;
+                        usuario = new Usuario();
 
-                        } else {
+                        usuario.setEmailUsuario(emailUsuario);
+                        usuario.setNomeUsuario(nomeUsuario);
+                        usuario.setTelefoneUsuario(celularUsuario);
+                        usuario.setCidadeUsuario(cidadeUsuario);
+                        usuario.setEstadoUsuario(estadoUsuario);
+                        usuario.setSenhaUsuario(textoConfirmarSenha);
 
-                            usuario = new Usuario();
+                        abrirDialogCarregamento("Cadastrando usuário");
 
-                            usuario.setEmailUsuario(emailUsuario);
-                            usuario.setNomeUsuario(nomeUsuario);
-                            usuario.setTelefoneUsuario(celularUsuario);
-                            usuario.setCidadeUsuario(cidadeUsuario);
-                            usuario.setEstadoUsuario(estadoUsuario);
-                            usuario.setSenhaUsuario(textoConfirmarSenha);
-
-                            abrirDialogCarregamento("Cadastrando usuário");
-
-                            cadastrar(usuario);
-
-                        }
+                        cadastrar(usuario);
 
                     } else {
                         Toast.makeText(InserirSenhaActivity.this,
@@ -217,6 +205,5 @@ public class InserirSenhaActivity extends AppCompatActivity {
         editTextNovoUsuarioConfirmarSenha = findViewById(R.id.editTextNovoUsuarioConfirmarSenha);
         progressBar = findViewById(R.id.progressBar2);
         buttonCadastrarNovoUsuario = findViewById(R.id.buttonCadastrarNovoUsuario);
-        checkBoxPoliticaPrivacidadeTermosUso = findViewById(R.id.checkBoxPoliticaPrivacidadeTermosUso);
     }
 }

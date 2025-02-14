@@ -43,30 +43,24 @@
             android:id="@+id/buttonConta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_background_outline_gray_with_background"
             android:text="Conta" />
-
-        <Button
-            android:id="@+id/buttonPoliticaPrivacidade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Política de privacidade" />
-
-        <Button
-            android:id="@+id/buttonTermosUso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Termos de uso" />
 
         <Button
             android:id="@+id/buttonCentralAjuda"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_background_outline_gray_with_background"
             android:text="Central de ajuda" />
 
         <Button
             android:id="@+id/buttonSair"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_background_outline_gray_with_background"
             android:text="Sair" />
     </LinearLayout>
 

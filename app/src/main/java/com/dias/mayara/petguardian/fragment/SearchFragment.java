@@ -100,6 +100,7 @@ public class SearchFragment extends Fragment {
                     public void onItemClick(View view, int position) {
 
                         Usuario usuarioSelecionado = listaUsuarios.get(position);
+
                         Intent i = new Intent(getActivity(), PerfilAmigoActivity.class);
 
                         i.putExtra("usuarioID", usuarioSelecionado.getIdUsuario());

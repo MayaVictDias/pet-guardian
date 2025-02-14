@@ -43,10 +43,10 @@ public class PerfilFragment extends Fragment {
 
     private Usuario usuarioLogado;
 
-    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewPetsDesaparecidos;
+    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
-    private RecyclerView recyclerViewPetsDesaparecidos, recyclerViewPetsParaAdocao;
+    private RecyclerView recyclerViewPetsParaAdocao;
 
     private FirebaseUser usuarioPerfil;
 
@@ -56,9 +56,7 @@ public class PerfilFragment extends Fragment {
     private String idUsuarioLogado;
 
     private List<Pet> petListAdocao = new ArrayList<>();
-    private List<Pet> petListDesaparecidos = new ArrayList<>(); // Lista para pets desaparecidos
     private PetsAdapter petsAdapterAdocao;
-    private PetsAdapter petsAdapterDesaparecidos; // Adaptador para pets desaparecidos
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -181,6 +179,8 @@ public class PerfilFragment extends Fragment {
                         // Atualizando a interface com os dados do usuário
                         textViewNomeUsuario.setText(usuario.getNomeUsuario());
                         textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
+                        textViewQuantidadePetsCadastrados.setText(usuario.getQuantidadePetsCadastrados() +
+                                " pet(s) cadastrado(s)");
                     }
                 }
             } else {
@@ -193,6 +193,7 @@ public class PerfilFragment extends Fragment {
         textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = view.findViewById(R.id.escolherImagemPet);
+        textViewQuantidadePetsCadastrados = view.findViewById(R.id.textViewQuantidadePetsCadastrados);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
     }

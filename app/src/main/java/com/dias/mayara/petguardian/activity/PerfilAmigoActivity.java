@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +20,6 @@ import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,21 +38,17 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private Usuario usuarioSelecionado;
     private Usuario usuarioLogado;
 
-    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario;
+    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
+    private Toolbar toolbar;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
     private RecyclerView recyclerViewPetsParaAdocao;
-    private RecyclerView recyclerViewPetsDesaparecidos;
-
-    private FirebaseUser usuarioPerfil;
 
     private FirebaseFirestore firebaseRef;
     private CollectionReference usuariosRef;
-    private DocumentReference usuarioLogadoRef;
     private DocumentReference usuarioAmigoRef;
     private ListenerRegistration listenerRegistrationPerfilAmigo;
     private ListenerRegistration listenerRegistrationPetsAdocao;
-    private ListenerRegistration listenerRegistrationPetsDesaparecidos;
 
     private String idUsuarioLogado;
     private String usuarioID;
@@ -60,7 +56,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private List<Pet> petListAdocao = new ArrayList<>();
     private List<Pet> petListDesaparecidos = new ArrayList<>();
     private PetsAdapter petsAdapterAdocao;
-    private PetsAdapter petsAdapterDesaparecidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +69,13 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
         // Obtém os dados do usuário logado e configura a referência para o nó do usuário específico
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
-        usuarioLogadoRef = usuariosRef.document(usuarioLogado.getIdUsuario());
-
-        // Recuperar dados do usuário
-        usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
 
         // Inicializa os componentes de interface
         inicializarComponentes();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Recupera os dados do usuário logado
         recuperarDadosUsuarioLogado();
@@ -99,17 +94,11 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         petListAdocao = new ArrayList<>();
         petListDesaparecidos = new ArrayList<>();
         petsAdapterAdocao = new PetsAdapter(petListAdocao);
-        petsAdapterDesaparecidos = new PetsAdapter(petListDesaparecidos);
 
         // Configura o adapter e layout manager para pets para adoção
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
-
-        // Configura o adapter e layout manager para pets desaparecidos
-        recyclerViewPetsDesaparecidos.setAdapter(petsAdapterDesaparecidos);
-        LinearLayoutManager layoutManagerDesaparecidos = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewPetsDesaparecidos.setLayoutManager(layoutManagerDesaparecidos);
 
         buttonFiltrar.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FiltroActivity.class)));
     }
@@ -200,6 +189,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                         textViewNomeUsuario.setText(usuario.getNomeUsuario());
                         textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() +
                                 " - " + usuario.getEstadoUsuario());
+                        textViewQuantidadePetsCadastrados.setText(usuario.getQuantidadePetsCadastrados() +
+                                " pet(s) cadastrado(s)");
                     }
                 } else {
                     Log.d("Firestore", "Documento do usuário não encontrado!");
@@ -241,6 +232,15 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = findViewById(R.id.escolherImagemPet);
         recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
+        textViewQuantidadePetsCadastrados = findViewById(R.id.textViewQuantidadePetsCadastrados);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);
+        toolbar = findViewById(R.id.toolbar);
+    }
+
+    // Método para lidar com o clique no botão de voltar
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();  // Volta para a tela anterior
+        return true;
     }
 }

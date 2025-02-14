@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
 
 // Classe que faz as tratativas de um usuário especifico dentro do app
 public class UsuarioFirebase {
@@ -37,6 +38,11 @@ public class UsuarioFirebase {
                     Builder().
                     setDisplayName( nome ) .
                     build();
+
+            DocumentReference usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios").
+                    document(getUsuarioAtual().getUid());
+
+            usuarioRef.update("nomeUsuario", nome);
 
             user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

@@ -63,6 +63,8 @@ public class HomeFragment extends Fragment {
 
         getPetsAdocao(); // Carregar pets para adoção
 
+        inicializarComponentes(view);
+
         // Configurando o layout manager para os RecyclerViews
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCarrosselAdocao.setLayoutManager(layoutManagerAdocao);
@@ -97,9 +99,6 @@ public class HomeFragment extends Fragment {
                             statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
                 }
 
-                // Traz os eventos mais recentes como primeiros do feed
-                Collections.reverse(listaPetsAdocao);
-
                 // Notifica o adapter sobre as mudanças na lista
                 petsAdapterAdocao.notifyDataSetChanged();
             } else {
@@ -109,49 +108,6 @@ public class HomeFragment extends Fragment {
         });
 
     }
-
-
-
-    private void getPetsDesaparecidos() {
-        // Referência para a coleção de feedPets e subcoleção desaparecido
-        CollectionReference petsRef = ConfiguracaoFirebase.getFirebase().collection("pets").
-                document().collection("pets");
-
-        // Consultando documentos
-        petsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                listaPetsDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    // Obtendo os dados do documento
-                    String idPet = document.getString("idPet");
-                    String idEndereco = document.getString("idEndereco");
-                    String idTutor = document.getString("idTutor");
-                    String especiePet = document.getString("especiePet");
-                    String nomePet = document.getString("nomePet");
-                    String generoPet = document.getString("generoPet");
-                    String imagemUrl = document.getString("imagemUrl");
-                    String idadePet = document.getString("idadePet");
-                    String sobreOPet = document.getString("sobreOPet");
-                    String statusPet = document.getString("statusPet");
-                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
-
-                    listaPetsDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-                }
-
-                // Traz os eventos mais recentes como primeiros do feed
-                Collections.reverse(listaPetsDesaparecidos);
-
-                // Notifica o adaptador sobre as mudanças
-                petsAdapterDesaparecidos.notifyDataSetChanged();
-            } else {
-                // Lida com erros, se necessário
-                Log.w("Firestore", "Erro ao obter os dados", task.getException());
-            }
-        });
-    }
-
-
 
     private void inicializarComponentes(View view) {
         buttonUsarMinhaLocalizacao = view.findViewById(R.id.buttonUsarMinhaLocalizacao);
