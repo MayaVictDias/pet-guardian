@@ -24,7 +24,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenerRegistration;  // Importa ListenerRegistration
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -37,10 +38,11 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private Usuario usuarioSelecionado;
     private Usuario usuarioLogado;
 
-    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
+    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
-    private RecyclerView recyclerViewPetsDesaparecidos, recyclerViewPetsParaAdocao;
+    private RecyclerView recyclerViewPetsParaAdocao;
+    private RecyclerView recyclerViewPetsDesaparecidos;
 
     private FirebaseUser usuarioPerfil;
 
@@ -48,11 +50,12 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private CollectionReference usuariosRef;
     private DocumentReference usuarioLogadoRef;
     private DocumentReference usuarioAmigoRef;
-    private ListenerRegistration listenerRegistrationPerfilAmigo;  // Listener para o perfil do amigo
-    private ListenerRegistration listenerRegistrationPetsAdocao;    // Listener para pets para adoção
-    private ListenerRegistration listenerRegistrationPetsDesaparecidos;  // Listener para pets desaparecidos
+    private ListenerRegistration listenerRegistrationPerfilAmigo;
+    private ListenerRegistration listenerRegistrationPetsAdocao;
+    private ListenerRegistration listenerRegistrationPetsDesaparecidos;
 
     private String idUsuarioLogado;
+    private String usuarioID;
 
     private List<Pet> petListAdocao = new ArrayList<>();
     private List<Pet> petListDesaparecidos = new ArrayList<>();
@@ -85,15 +88,10 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         // Recuperar usuário selecionado
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            usuarioSelecionado = (Usuario) bundle.getSerializable("usuarioSelecionado");
-
-            // Recuperar foto do usuário
-            String caminhoFoto = usuarioSelecionado.getCaminhoFotoUsuario();
-            if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
-                Uri url = Uri.parse(caminhoFoto);
-                Glide.with(PerfilAmigoActivity.this)
-                        .load(url)
-                        .into(imagemPerfilUsuario);
+            usuarioID = bundle.getString("usuarioID");
+            if (usuarioID != null) {
+                usuarioAmigoRef = usuariosRef.document(usuarioID);
+                recuperarDadosPerfilAmigo();
             }
         }
 
@@ -117,13 +115,18 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     }
 
     private void getPetsAdocao() {
-        // Referência à coleção "adocao" de um usuário específico
-        CollectionReference databaseReference = FirebaseFirestore.getInstance()
-                .collection("pets")
-                .document(usuarioSelecionado.getIdUsuario())
-                .collection("adocao");
+        if (usuarioSelecionado == null) return;
 
-        listenerRegistrationPetsAdocao = databaseReference.addSnapshotListener((snapshots, e) -> {
+        // Referência à coleção "pets" filtrando apenas os disponíveis para adoção
+        CollectionReference databaseReference = FirebaseFirestore.getInstance()
+                .collection("pets");
+
+        Query query = databaseReference
+                .whereEqualTo("statusPet", "Adoção")
+                .whereEqualTo("idTutor", usuarioID);
+
+
+        listenerRegistrationPetsAdocao = query.addSnapshotListener((snapshots, e) -> {
             if (e != null) {
                 Log.e("Firestore", "Erro ao carregar os pets para adoção", e);
                 return;
@@ -149,40 +152,9 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         });
     }
 
-    private void getPetsDesaparecidos() {
-        CollectionReference databaseReference = FirebaseFirestore.getInstance()
-                .collection("pets").document(usuarioSelecionado.getIdUsuario()).collection("desaparecido");
-
-        listenerRegistrationPetsDesaparecidos = databaseReference.addSnapshotListener((snapshots, e) -> {
-            if (e != null) {
-                Log.e("Firestore", "Erro ao carregar os pets desaparecidos", e);
-                return;
-            }
-            petListDesaparecidos.clear();
-            for (QueryDocumentSnapshot snapshot : snapshots) {
-                String idPet = snapshot.getString("idPet");
-                String idEndereco = snapshot.getString("idEndereco");
-                String idTutor = snapshot.getString("idTutor");
-                String especiePet = snapshot.getString("especiePet");
-                String nomePet = snapshot.getString("nomePet");
-                String generoPet = snapshot.getString("generoPet");
-                String imagemUrl = snapshot.getString("imagemUrl");
-                String idadePet = snapshot.getString("idadePet");
-                String sobreOPet = snapshot.getString("sobreOPet");
-                String statusPet = snapshot.getString("statusPet");
-                Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
-
-                petListDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                        statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-            }
-            petsAdapterDesaparecidos.notifyDataSetChanged();
-        });
-    }
 
     private void recuperarDadosPerfilAmigo() {
-        DocumentReference usuarioAmigoRef = FirebaseFirestore.getInstance()
-                .collection("usuarios")
-                .document(usuarioSelecionado.getIdUsuario());
+        if (usuarioAmigoRef == null) return;
 
         listenerRegistrationPerfilAmigo = usuarioAmigoRef.addSnapshotListener((snapshot, e) -> {
             if (e != null) {
@@ -191,10 +163,22 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             }
 
             if (snapshot != null && snapshot.exists()) {
-                Usuario usuario = snapshot.toObject(Usuario.class);
-                if (usuario != null) {
-                    String nomeUsuario = usuario.getNomeUsuario();
+                usuarioSelecionado = snapshot.toObject(Usuario.class);
+                if (usuarioSelecionado != null) {
+                    String nomeUsuario = usuarioSelecionado.getNomeUsuario();
                     textViewNomeUsuario.setText(nomeUsuario);
+
+                    // Recuperar foto do usuário
+                    String caminhoFoto = usuarioSelecionado.getCaminhoFotoUsuario();
+                    if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
+                        Uri url = Uri.parse(caminhoFoto);
+                        Glide.with(PerfilAmigoActivity.this)
+                                .load(url)
+                                .into(imagemPerfilUsuario);
+                    }
+
+                    // Carregar os pets do usuário selecionado
+                    getPetsAdocao();
                 }
             } else {
                 Log.d("Firestore", "Documento não encontrado!");
@@ -229,12 +213,15 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (listenerRegistrationPerfilAmigo != null) {
+            listenerRegistrationPerfilAmigo.remove();
+        }
+
         recuperarDadosPerfilAmigo();
         recuperarDadosUsuarioLogado();
         petListAdocao.clear();
-        petListDesaparecidos.clear();
         getPetsAdocao();
-        getPetsDesaparecidos();
     }
 
     @Override
@@ -246,9 +233,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         }
         if (listenerRegistrationPetsAdocao != null) {
             listenerRegistrationPetsAdocao.remove();
-        }
-        if (listenerRegistrationPetsDesaparecidos != null) {
-            listenerRegistrationPetsDesaparecidos.remove();
         }
     }
 

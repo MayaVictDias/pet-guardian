@@ -57,11 +57,9 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private FirebaseFirestore firebaseRef;
     private DocumentReference enderecoRef;
-    private DocumentReference todosPetsRef;
     private DocumentReference usuarioRef;
     private DocumentReference petsRef;
     private CollectionReference usuariosRef;
-    private DocumentReference feedPetsRef;
     private Usuario usuario;
     private String petId;
 

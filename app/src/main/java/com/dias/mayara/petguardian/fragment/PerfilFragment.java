@@ -164,43 +164,6 @@ public class PerfilFragment extends Fragment {
         });
     }
 
-    /*
-    private void getPetsDesaparecidos() {
-        // Referência para a coleção pets do usuário logado e a subcoleção desaparecido
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference petsRef = db.collection("pets").document(idUsuarioLogado).collection("desaparecido");
-
-        // Consultando os documentos
-        petsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                petListDesaparecidos.clear(); // Limpa a lista antes de adicionar novos dados
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    // Obtendo os dados do documento
-                    String idPet = document.getString("idPet");
-                    String idEndereco = document.getString("idEndereco");
-                    String idTutor = document.getString("idTutor");
-                    String especiePet = document.getString("especiePet");
-                    String nomePet = document.getString("nomePet");
-                    String generoPet = document.getString("generoPet");
-                    String imagemUrl = document.getString("imagemUrl");
-                    String idadePet = document.getString("idadePet");
-                    String sobreOPet = document.getString("sobreOPet");
-                    String statusPet = document.getString("statusPet");
-                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
-
-                    petListDesaparecidos.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
-                }
-                // Notifica o adapter sobre as mudanças na lista
-                petsAdapterDesaparecidos.notifyDataSetChanged();
-            } else {
-                // Lida com erros, se necessário
-                Log.w("Firestore", "Erro ao obter os dados", task.getException());
-            }
-        });
-    }
-     */
-
     private void recuperarDadosUsuarioLogado() {
         // Referência para o documento do usuário logado
         FirebaseFirestore db = FirebaseFirestore.getInstance();

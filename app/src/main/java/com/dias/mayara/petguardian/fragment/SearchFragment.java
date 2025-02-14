@@ -102,7 +102,7 @@ public class SearchFragment extends Fragment {
                         Usuario usuarioSelecionado = listaUsuarios.get(position);
                         Intent i = new Intent(getActivity(), PerfilAmigoActivity.class);
 
-                        i.putExtra("usuarioSelecionado", usuarioSelecionado);
+                        i.putExtra("usuarioID", usuarioSelecionado.getIdUsuario());
                         startActivity(i);
 
                     }
@@ -128,9 +128,10 @@ public class SearchFragment extends Fragment {
                     public void onItemClick(View view, int position) {
 
                         Pet petSelecionado = listaPets.get(position);
+                        String idPetSelecionado = petSelecionado.getIdPet();
                         Intent i = new Intent(getActivity(), MaisInformacoesSobrePetActivity.class);
 
-                        i.putExtra("petSelecionado", petSelecionado);
+                        i.putExtra("petId", idPetSelecionado);
                         startActivity(i);
 
                     }
@@ -200,8 +201,6 @@ public class SearchFragment extends Fragment {
 
                         listaUsuarios.add(usuario);
                     }
-
-                    int totalUsuariosRetornados = listaUsuarios.size();
 
                     // Avisar o adapter que houve uma atualização nos itens retornados
                     pesquisaUsuarioAdapter.notifyDataSetChanged();
