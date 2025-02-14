@@ -99,23 +99,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textViewPetsDesaparecidos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/nunito_bold"
-                android:text="Pets desaparecidos"
-                android:textColor="@color/coralSuave"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPetsDesaparecidos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
                 android:id="@+id/textViewPetsParaAdocao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,24 +113,6 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewPetsParaAdocao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/textViewPetsProcurandoDono"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/nunito_bold"
-                android:text="Pets procurando dono"
-                android:textColor="@color/coralSuave"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPetsProcurandoDono"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -110,22 +110,14 @@ public class PerfilFragment extends Fragment {
 
         // Inicializando as listas e os adapters antes de carregar os dados do Firebase
         petListAdocao = new ArrayList<>();
-        petListDesaparecidos = new ArrayList<>();
         petsAdapterAdocao = new PetsAdapter(petListAdocao);
-        petsAdapterDesaparecidos = new PetsAdapter(petListDesaparecidos);
 
         // Configura o adapter e layout manager para pets para adoção
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
 
-        // Configura o adapter e layout manager para pets desaparecidos
-        recyclerViewPetsDesaparecidos.setAdapter(petsAdapterDesaparecidos);
-        LinearLayoutManager layoutManagerDesaparecidos = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewPetsDesaparecidos.setLayoutManager(layoutManagerDesaparecidos);
-
         getPetsAdocao();
-        getPetsDesaparecidos(); // Carregar pets desaparecidos
 
         buttonFiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,10 +132,10 @@ public class PerfilFragment extends Fragment {
     private void getPetsAdocao() {
         // Referência para a coleção pets do usuário logado e a subcoleção adocao
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference petsRef = db.collection("pets").document(idUsuarioLogado).collection("adocao");
+        CollectionReference petsRef = db.collection("pets");
 
         // Consultando os documentos
-        petsRef.get().addOnCompleteListener(task -> {
+        petsRef.whereEqualTo("statusPet", "Adoção").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 petListAdocao.clear(); // Limpa a lista antes de adicionar novos dados
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -172,6 +164,7 @@ public class PerfilFragment extends Fragment {
         });
     }
 
+    /*
     private void getPetsDesaparecidos() {
         // Referência para a coleção pets do usuário logado e a subcoleção desaparecido
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -206,6 +199,7 @@ public class PerfilFragment extends Fragment {
             }
         });
     }
+     */
 
     private void recuperarDadosUsuarioLogado() {
         // Referência para o documento do usuário logado
@@ -236,8 +230,6 @@ public class PerfilFragment extends Fragment {
         textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = view.findViewById(R.id.escolherImagemPet);
-        textViewPetsDesaparecidos = view.findViewById(R.id.textViewPetsDesaparecidos);
-        recyclerViewPetsDesaparecidos = view.findViewById(R.id.recyclerViewPetsDesaparecidos);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
     }

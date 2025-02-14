@@ -31,7 +31,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private Button buttonUsarMinhaLocalizacao;
-    private RecyclerView recyclerViewCarrosselDesaparecidos, recyclerViewCarrosselAdocao;
+    private RecyclerView recyclerViewCarrosselAdocao;
     private PetsAdapter petsAdapterAdocao;
     private PetsAdapter petsAdapterDesaparecidos;
     private List<Pet> listaPetsAdocao = new ArrayList<>(); // Inicializando a lista de pets
@@ -55,7 +55,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerViewCarrosselDesaparecidos = view.findViewById(R.id.recyclerViewCarrosselDesaparecidos);
         recyclerViewCarrosselAdocao = view.findViewById(R.id.recyclerViewCarrosselAdocao);
 
         // Inicializando a lista e os adaptadores
@@ -77,7 +76,7 @@ public class HomeFragment extends Fragment {
         CollectionReference petsRef = db.collection("pets");
 
         // Consultando documentos
-        petsRef.get().addOnCompleteListener(task -> {
+        petsRef.whereEqualTo("statusPet", "Adoção").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 listaPetsAdocao.clear(); // Limpa a lista antes de adicionar novos dados
                 for (QueryDocumentSnapshot document : task.getResult()) {
@@ -108,6 +107,7 @@ public class HomeFragment extends Fragment {
                 Log.w("Firestore", "Erro ao obter os dados", task.getException());
             }
         });
+
     }
 
 

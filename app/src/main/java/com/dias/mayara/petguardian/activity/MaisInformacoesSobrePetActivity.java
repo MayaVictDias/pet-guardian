@@ -219,8 +219,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                     abrirDialogCarregamento("Deletando evento");
 
                     petsRef = ConfiguracaoFirebase.getFirebase().collection("pets")
-                            .document(idUsuarioLogado)
-                            .collection(status)
                             .document(petSelecionado.getIdPet());
 
                     // Código para excluir o item

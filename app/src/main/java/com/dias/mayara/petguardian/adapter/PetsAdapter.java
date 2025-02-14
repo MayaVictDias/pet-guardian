@@ -53,13 +53,6 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
         if (position >= 0 && position < petList.size()) {
             Pet pet = petList.get(position);
 
-            String nomeBancoDadosStatus = "";
-
-            CollectionReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets");
-
-            DocumentReference enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos") // Coleção de pets
-                    .document(pet.getIdEndereco());
-
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
             holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
@@ -77,24 +70,6 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
                     .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
                     .error(R.drawable.no_image_found) // Imagem em caso de erro
                     .into(holder.imageViewFotoPet);
-
-            enderecoRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot snapshot = task.getResult();
-                    if (snapshot.exists()) {
-                        Endereco endereco = snapshot.toObject(Endereco.class);
-                        if (endereco != null && !pet.getStatusPet().equals("Adoção")) {
-                            holder.textViewCidadePet.setText(endereco.getCidade() + " - " + endereco.getEstado());
-                        } else {
-                            holder.textViewCidadePet.setVisibility(View.GONE);
-                        }
-                    }
-                } else {
-                    // Tratar erro, se necessário
-                    System.err.println("Erro ao recuperar o endereço: " + task.getException().getMessage());
-                }
-            });
-
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

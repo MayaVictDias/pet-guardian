@@ -256,7 +256,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         textViewNomeUsuario = findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = findViewById(R.id.escolherImagemPet);
-        recyclerViewPetsDesaparecidos = findViewById(R.id.recyclerViewPetsDesaparecidos);
         recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);
     }
