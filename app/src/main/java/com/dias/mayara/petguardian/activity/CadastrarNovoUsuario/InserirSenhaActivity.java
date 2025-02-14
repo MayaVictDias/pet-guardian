@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -82,7 +81,7 @@ public class InserirSenhaActivity extends AppCompatActivity {
 
                         usuario.setEmailUsuario(emailUsuario);
                         usuario.setNomeUsuario(nomeUsuario);
-                        usuario.setTelefoneUsuario(celularUsuario);
+                        usuario.setCelularUsuario(celularUsuario);
                         usuario.setCidadeUsuario(cidadeUsuario);
                         usuario.setEstadoUsuario(estadoUsuario);
                         usuario.setSenhaUsuario(textoConfirmarSenha);

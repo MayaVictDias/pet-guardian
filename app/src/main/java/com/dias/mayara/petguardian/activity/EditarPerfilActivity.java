@@ -42,7 +42,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Button buttonAlterarFoto, buttonSalvarAlteracoes;
-    private EditText editTextNomeUsuario, editTextEmail;
+    private EditText editTextNomeUsuario, editTextEmail, editTextCelular;
     private ImageView imageViewFotoPerfilUsuario;
     private Usuario usuarioLogado;
 
@@ -80,16 +80,19 @@ public class EditarPerfilActivity extends AppCompatActivity {
         if (usuarioLogado != null) {
             editTextNomeUsuario.setText(usuarioLogado.getNomeUsuario());
             editTextEmail.setText(usuarioLogado.getEmailUsuario());
+            editTextCelular.setText(usuarioLogado.getCelularUsuario());
         } else {
             Toast.makeText(this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
         }
 
 
         Uri url = Uri.parse(usuarioLogado.getCaminhoFotoUsuario());
-        if(url != null) {
+
+        if(url != null && !url.equals("")) {
 
             Glide.with(EditarPerfilActivity.this).load(url).into(imageViewFotoPerfilUsuario);
         } else {
+
             imageViewFotoPerfilUsuario.setImageResource(R.drawable.profile_image);
         }
 
@@ -266,6 +269,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         imageViewFotoPerfilUsuario = findViewById(R.id.ImageViewFotoPerfilUsuario);
         buttonSalvarAlteracoes = findViewById(R.id.buttonSalvarAlteracoes);
+        editTextCelular = findViewById(R.id.editTextCelular);
     }
 
     // Método para lidar com o clique no botão de voltar

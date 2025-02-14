@@ -1,7 +1,6 @@
 package com.dias.mayara.petguardian.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;

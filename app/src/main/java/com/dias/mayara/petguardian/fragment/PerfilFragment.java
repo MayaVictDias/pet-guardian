@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
-import com.dias.mayara.petguardian.activity.EditarPerfilActivity;
 import com.dias.mayara.petguardian.activity.FiltroActivity;
 import com.dias.mayara.petguardian.adapter.PetsAdapter;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
@@ -27,7 +25,6 @@ import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

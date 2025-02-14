@@ -15,7 +15,7 @@ public class Usuario implements Serializable {
     private String nomeLowercaseUsuario;
     private String emailUsuario;
     private String senhaUsuario;
-    private String telefoneUsuario;
+    private String celularUsuario;
     private String caminhoFotoUsuario;
     private String cidadeUsuario;
     private String estadoUsuario;
@@ -52,7 +52,7 @@ public class Usuario implements Serializable {
         usuarioMap.put("emailUsuario", getEmailUsuario());
         usuarioMap.put("nomeLowercaseUsuario", getNomeLowercaseUsuario());
         usuarioMap.put("nomeUsuario", getNomeUsuario());
-        usuarioMap.put("telefoneUsuario", getTelefoneUsuario());
+        usuarioMap.put("celularUsuario", getCelularUsuario());
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
         usuarioMap.put("estadoUsuario", getCidadeUsuario());
         usuarioMap.put("idUsuario", getIdUsuario());
@@ -90,12 +90,12 @@ public class Usuario implements Serializable {
         return emailUsuario;
     }
 
-    public String getTelefoneUsuario() {
-        return telefoneUsuario;
+    public String getCelularUsuario() {
+        return celularUsuario;
     }
 
-    public void setTelefoneUsuario(String telefoneUsuario) {
-        this.telefoneUsuario = telefoneUsuario;
+    public void setCelularUsuario(String celularUsuario) {
+        this.celularUsuario = celularUsuario;
     }
 
     public void setEmailUsuario(String emailUsuario) {

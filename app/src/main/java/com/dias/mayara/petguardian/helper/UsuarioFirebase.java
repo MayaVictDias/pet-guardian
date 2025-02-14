@@ -2,7 +2,6 @@ package com.dias.mayara.petguardian.helper;
 
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 // Classe que faz as tratativas de um usuário especifico dentro do app
 public class UsuarioFirebase {
@@ -60,7 +60,6 @@ public class UsuarioFirebase {
         }
     }
 
-    // Metodo que recupera dados do usuário
     public static Usuario getDadosUsuarioLogado() {
 
         FirebaseUser firebaseUser = getUsuarioAtual();
@@ -70,11 +69,37 @@ public class UsuarioFirebase {
         usuario.setNomeUsuario(firebaseUser.getDisplayName());
         usuario.setIdUsuario(firebaseUser.getUid());
 
+        DocumentReference usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios")
+                .document(usuario.getIdUsuario());
+
         if (firebaseUser.getPhotoUrl() == null) {
             usuario.setCaminhoFotoUsuario("");
         } else {
             usuario.setCaminhoFotoUsuario(firebaseUser.getPhotoUrl().toString());
         }
+
+        // Recupera os dados adicionais
+            usuarioRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String celularUsuario = document.getString("celularUsuario");
+                    String estadoUsuario = document.getString("estadoUsuario");
+                    String cidadeUsuario = document.getString("cidadeUsuario");
+                    String caminhoFoto = document.getString("caminhoFoto");
+
+                    usuario.setCelularUsuario(celularUsuario);
+                    usuario.setEstadoUsuario(estadoUsuario);
+                    usuario.setCidadeUsuario(cidadeUsuario);
+                    usuario.setCaminhoFotoUsuario(caminhoFoto);
+
+                } else {
+                    Log.d("Firestore", "Documento não encontrado!");
+                }
+            } else {
+                Log.d("Firestore", "Erro ao recuperar dados do usuário: ", task.getException());
+            }
+        });
 
         return usuario;
     }
