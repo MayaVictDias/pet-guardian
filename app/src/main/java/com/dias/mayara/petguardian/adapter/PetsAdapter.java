@@ -55,10 +55,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
             String nomeBancoDadosStatus = "";
 
-            DocumentReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets")
-                    .document(pet.getIdTutor())
-                    .collection("petsUsuario")
-                    .document(pet.getIdPet());
+            CollectionReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets");
 
             DocumentReference enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos") // Coleção de pets
                     .document(pet.getIdEndereco());
@@ -102,30 +99,10 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    // Referência ao documento do pet no Firestore
-                    DocumentReference petRef = ConfiguracaoFirebase.getFirebase()
-                            .collection("pets")
-                            .document(pet.getIdPet());
-
-                    // Recuperando os dados do pet
-                    petRef.get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot snapshot = task.getResult();
-                            if (snapshot.exists()) {
-                                Pet petSelecionado = snapshot.toObject(Pet.class);
-
-                                if (petSelecionado != null) {
-                                    Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
-                                    i.putExtra("petSelecionado", petSelecionado);
-                                    holder.itemView.getContext().startActivity(i);
-                                }
-                            }
-                        } else {
-                            // Tratar erro, se necessário
-                            System.err.println("Erro ao recuperar o pet: " + task.getException().getMessage());
-                        }
-                    });
+                    // Passa apenas o ID do pet para a próxima atividade
+                    Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
+                    i.putExtra("petId", pet.getIdPet()); // Passa o ID do pet
+                    holder.itemView.getContext().startActivity(i);
                 }
             });
 

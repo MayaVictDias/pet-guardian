@@ -61,18 +61,12 @@ public class HomeFragment extends Fragment {
         // Inicializando a lista e os adaptadores
         petsAdapterAdocao = new PetsAdapter(listaPetsAdocao);
         recyclerViewCarrosselAdocao.setAdapter(petsAdapterAdocao);
-        petsAdapterDesaparecidos = new PetsAdapter(listaPetsDesaparecidos);
-        recyclerViewCarrosselDesaparecidos.setAdapter(petsAdapterDesaparecidos);
 
         getPetsAdocao(); // Carregar pets para adoção
-        getPetsDesaparecidos(); // Carregar pets desaparecidos
 
         // Configurando o layout manager para os RecyclerViews
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewCarrosselAdocao.setLayoutManager(layoutManagerAdocao);
-
-        LinearLayoutManager layoutManagerDesaparecidos = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewCarrosselDesaparecidos.setLayoutManager(layoutManagerDesaparecidos);
 
         return view;
     }
@@ -80,7 +74,7 @@ public class HomeFragment extends Fragment {
     private void getPetsAdocao() {
         // Referência para a coleção de feedPets e subcoleção adocao
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference petsRef = db.collection("feedPets").document("adocao").collection("pets");
+        CollectionReference petsRef = db.collection("pets");
 
         // Consultando documentos
         petsRef.get().addOnCompleteListener(task -> {

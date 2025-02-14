@@ -63,6 +63,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     private CollectionReference usuariosRef;
     private DocumentReference feedPetsRef;
     private Usuario usuario;
+    private String petId;
 
     private AlertDialog dialog;
 
@@ -78,15 +79,51 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_informacoes_pet_activity);
 
-        // Recuperar pet selecionado
-        Bundle bundle = getIntent().getExtras();
-
-        if (bundle != null) {
-            petSelecionado = (Pet) bundle.getSerializable("petSelecionado");
-        }
-
+        // Inicializa os componentes
         inicializarComponentes();
 
+        // Recuperar pet selecionado
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            petId = getIntent().getStringExtra("petId");
+        }
+
+        if (petId != null) {
+            buscarDadosDoPet(petId); // Busca os dados do pet
+        } else {
+            // Tratar caso o ID do pet não seja recebido
+            finish();
+        }
+    }
+
+    private void buscarDadosDoPet(String petId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference petRef = db.collection("pets").document(petId);
+
+        petRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot snapshot = task.getResult();
+                if (snapshot.exists()) {
+                    petSelecionado = snapshot.toObject(Pet.class);
+
+                    if (petSelecionado != null) {
+                        // Configura a atividade com os dados do pet
+                        configurarAtividadeComPet();
+                    }
+                } else {
+                    // Tratar caso o pet não seja encontrado
+                    finish();
+                }
+            } else {
+                // Tratar erro na busca
+                System.err.println("Erro ao buscar o pet: " + task.getException().getMessage());
+                finish();
+            }
+        });
+    }
+
+    private void configurarAtividadeComPet() {
+        // Mova todo o código que depende de petSelecionado para cá
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         usuariosRef = firebaseRef.collection("usuarios");
         usuarioRef = usuariosRef.document(petSelecionado.getIdTutor());
@@ -98,8 +135,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
         enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos").document(petSelecionado.getIdEndereco());
-
-        configurarCampos();
 
         if (petSelecionado.getStatusPet().equals("Adoção")) {
             toggleViewsVisibility(adocaoComponents, View.VISIBLE);
@@ -158,6 +193,9 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         } else if (!petSelecionado.getIdTutor().equals(idUsuarioLogado)) {
             buttonMenu.setVisibility(View.GONE);
         }
+
+        // Configura os campos do pet
+        configurarCampos(petSelecionado);
     }
 
     private void showPopupMenu(View view) {
@@ -217,7 +255,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void configurarCampos() {
+    private void configurarCampos(Pet petSelecionado) {
         Glide.with(imageViewFotoPet.getContext())
                 .load(petSelecionado.getImagemUrl()) // Aqui você insere a URL da imagem
                 .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
