@@ -23,6 +23,15 @@
         <item name="android:fontFamily">@font/nunito_bold</item> <!-- Fonte da letra -->
     </style>
 
+    <!-- Estilo personalizado para botões amarelos -->
+    <style name="CustomButtonStyleNoColorOutline" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/begeClaro</item> <!-- Cor de fundo -->
+        <item name="android:textColor">@color/marromEscuro</item> <!-- Cor do texto -->
+        <item name="cornerRadius">10dp</item> <!-- Raiz de borda se necessário -->
+        <item name="android:padding">12dp</item> <!-- Preenchimento -->
+        <item name="android:fontFamily">@font/nunito_bold</item> <!-- Fonte da letra -->
+    </style>
+
     <!-- Estilo personalizado para o botão azul -->
     <style name="CustomButtonStyleBlue" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/azulCeuClaro</item> <!-- Cor de fundo -->

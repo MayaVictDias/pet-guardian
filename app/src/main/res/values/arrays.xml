@@ -1,0 +1,33 @@
+<resources>
+    <string-array name="vacinacao_array">
+        <item>Selecione</item>
+        <item>Vacinado</item>
+        <item>Não vacinado</item>
+        <item>Parcialmente vacinado</item>
+        <item>Desconhecido</item>
+    </string-array>
+
+    <string-array name="vermifugacao_array">
+        <item>Selecione</item>
+        <item>Vermifugado recentemente</item>
+        <item>Vermifugado há mais de 6 meses</item>
+        <item>Não vermifugado</item>
+        <item>Desconhecido</item>
+    </string-array>
+
+    <string-array name="castracao_array">
+        <item>Selecione</item>
+        <item>Castrado</item>
+        <item>Não castrado</item>
+        <item>Castração agendada</item>
+        <item>Desconhecido</item>
+    </string-array>
+
+    <string-array name="doencas_tratamentos_array">
+        <item>Selecione</item>
+        <item>Sem histórico de doenças</item>
+        <item>Em tratamento</item>
+        <item>Histórico de doenças tratadas</item>
+        <item>Desconhecido</item>
+    </string-array>
+</resources>

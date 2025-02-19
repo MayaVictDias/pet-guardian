@@ -361,7 +361,7 @@
 
             <Button
                 android:id="@+id/buttonVoltar"
-                style="@style/CustomButtonStyleYellowOutline"
+                style="@style/CustomButtonStyleNoColorOutline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"

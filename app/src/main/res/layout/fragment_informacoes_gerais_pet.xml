@@ -252,7 +252,7 @@
 
             <Button
                 android:id="@+id/button3"
-                style="@style/CustomButtonStyleYellowOutline"
+                style="@style/CustomButtonStyleNoColorOutline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="6dp"

@@ -183,7 +183,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     cadastroPetViewModel.setPet(pet);
 
                     // Substituir o fragmento atual pelo próximo
-                    listener.replaceFragment(StatusPetFragment.class);
+                    listener.replaceFragment(SaudeCuidadosNovoPetFragment.class);
 
                 }
             }
