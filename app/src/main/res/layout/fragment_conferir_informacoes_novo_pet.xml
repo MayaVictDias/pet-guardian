@@ -136,223 +136,186 @@
             android:layout_marginBottom="24dp"
             android:src="@drawable/border_dashed" />
 
-        <TextView
-            android:id="@+id/textView40"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Status do pet"
-            android:textColor="@color/coralSuave"
-            android:textSize="17sp" />
+
 
         <TextView
-            android:id="@+id/textViewStatusPet"
+            android:id="@+id/textViewStatusVacinacaoTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
             android:fontFamily="@font/nunito_bold"
-            android:text="Status"
+            android:text="Status da vacinação"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewStatusVacinacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Status da vacinação"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewVacinasTomadasTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Vacinas tomadas"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewVacinasTomadas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Vacinas tomadas"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewVermifugadoTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Pet foi vermifugado?"
             android:textColor="@color/marromEscuro" />
 
         <TextView
-            android:id="@+id/textViewVistoPelaUltimaVez"
+            android:id="@+id/textViewVermifugado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Pet foi vermifugado?"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewDataVermifugacaoTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Data da última vermifugação"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewDataUltimaVermifugacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Data da última vermifugação"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewPetCastradoTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Pet é castrado?"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewPetCastrado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Pet é castrado?"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewHistoricoDoencasTratamentosTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Histórico de doenças e tratamentos"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewHistoricoDoencasTratamentos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Histórico de doenças e tratamentos"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewNecessidadesEspeciaisTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Necessidades especiais"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewNecessidadesEspeciais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Necessidades especiais"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewNivelEnergiaTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Nível de energia"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewNivelEnergia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Nível de energia"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewSociabilidadeTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Sociabilidade"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewSociabilidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:fontFamily="@font/nunito_medium"
+            android:text="Sociabilidade"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewPetAdestradoTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Pet é adestrado?"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewPetAdestrado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Visto pela última vez"
-            android:textColor="@color/coralSuave"
-            android:textSize="17sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewPaisTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="País"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewPais"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_medium"
-            android:text="País"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewCepTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="CEP"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-        <TextView
-            android:id="@+id/textViewCep"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="CEP"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewEstadoTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Estado"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewEstado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Estado"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewCidadeTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Cidade"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewCidade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Cidade"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewBairroTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Bairro"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewBairro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Bairro"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewRuaAvenidaTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Rua/Avenida"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewRuaAvenida"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Rua/Avenida"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewNumeroTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Número"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewNumero"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Número"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewComplementoTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Complemento"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewComplemento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Complemento"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewPontoReferenciaTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Ponto de referencia"
-            android:textColor="@color/marromEscuro"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewPontoReferencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Complemento"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp"
-            android:visibility="gone" />
+            android:text="Pet é adestrado?"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

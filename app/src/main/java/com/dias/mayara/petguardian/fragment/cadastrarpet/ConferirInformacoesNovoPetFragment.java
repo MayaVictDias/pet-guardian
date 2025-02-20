@@ -53,12 +53,11 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
     private Button buttonVoltar, buttonPublicar;
     private FragmentInteractionListener listener;
-    private TextView textViewNomePet, textViewIdadePet, textViewBairro, textViewGeneroPet, textViewEspecie,
-            textViewSobreOPet, textViewStatusPet, textViewCep, textViewEstado, textViewCidade,
-            textViewRuaAvenida, textViewNumero, textViewComplemento, textViewVistoPelaUltimaVez, textViewPais,
-            textViewCepTitulo, textViewBairroTitulo, textViewPaisTitulo, textViewEstadoTitulo, textViewCidadeTitulo,
-            textViewRuaAvenidaTitulo, textViewNumeroTitulo, textViewComplementoTitulo, textViewPontoReferenciaTitulo,
-            textViewPontoReferencia;
+    private TextView textViewNomePet, textViewIdadePet, textViewGeneroPet, textViewEspecie,
+            textViewSobreOPet, textViewStatusPet, textViewStatusVacinacaoTitulo, textViewStatusVacinacao, textViewVacinasTomadasTitulo,
+            textViewVacinasTomadas, textViewVermifugadoTitulo, textViewVermifugado, textViewDataUltimaVermifugacao,
+            textViewPetCastrado, textViewHistoricoDoencasTratamentos, textViewNecessidadesEspeciais,
+            textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado;
     private ImageView imageViewFotoPet;
 
     private CadastroPetViewModel sharedViewModel;
@@ -147,31 +146,30 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private void salvarDados() {
         try {
 
-            // Cria o objeto Endereco e salva no Firebase
-            endereco = new Endereco(
-                    textViewCep.getText().toString(),
-                    textViewEstado.getText().toString(),
-                    textViewCidade.getText().toString(),
-                    textViewBairro.getText().toString(),
-                    textViewRuaAvenida.getText().toString(),
-                    textViewNumero.getText().toString(),
-                    textViewComplemento.getText().toString(),
-                    textViewPais.getText().toString(),
-                    textViewPontoReferencia.getText().toString()
-            );
+            boolean isAdestrado = "Adestrado".equalsIgnoreCase(textViewPetAdestrado.getText().toString().trim());
 
             // Cria o objeto Pet com os dados necessários, mas sem a URL da imagem ainda
             pet = new Pet(
+                    usuarioLogadoRef.getId(),
                     textViewNomePet.getText().toString(),
                     textViewIdadePet.getText().toString(),
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),
                     textViewSobreOPet.getText().toString(),
                     textViewStatusPet.getText().toString(),
+                    textViewPetCastrado.getText().toString(),
                     urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
-                    endereco.getIdEndereco(),
-                    idUsuarioLogado,
+                    textViewStatusVacinacao.getText().toString(),
+                    textViewVacinasTomadas.getText().toString(),
+                    textViewVermifugado.getText().toString(),
+                    textViewDataUltimaVermifugacao.getText().toString(),
+                    textViewNecessidadesEspeciais.getText().toString(),
+                    textViewHistoricoDoencasTratamentos.getText().toString(),
+                    textViewNivelEnergia.getText().toString(),
+                    textViewSociabilidade.getText().toString(),
+                    isAdestrado,
                     Timestamp.now()
+
             );
 
             usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() + 1);
@@ -237,7 +235,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         }
     }
 
-    // Adicione este método no seu fragment
     private void configurarImagemPet() {
         sharedViewModel.getImagemPet().observe(getViewLifecycleOwner(), new Observer<byte[]>() {
             @Override
@@ -253,22 +250,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
 
     private void carregarDados() {
-        sharedViewModel.getEndereco().observe(getViewLifecycleOwner(), new Observer<Endereco>() {
-            @Override
-            public void onChanged(Endereco endereco) {
-                if (endereco != null) {
-                    textViewCep.setText(endereco.getCep());
-                    textViewEstado.setText(endereco.getEstado());
-                    textViewCidade.setText(endereco.getCidade());
-                    textViewBairro.setText(endereco.getBairro());
-                    textViewRuaAvenida.setText(endereco.getRuaAvenida());
-                    textViewNumero.setText(endereco.getNumero());
-                    textViewComplemento.setText(endereco.getComplemento());
-                    textViewPais.setText(endereco.getPais());
-                    textViewPontoReferencia.setText(endereco.getPontoReferencia());
-                }
-            }
-        });
 
         sharedViewModel.getPet().observe(getViewLifecycleOwner(), new Observer<Pet>() {
             @Override
@@ -280,15 +261,24 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewEspecie.setText(pet.getEspeciePet());
                     textViewSobreOPet.setText(pet.getSobreOPet());
                     textViewStatusPet.setText(pet.getStatusPet());
+                    textViewStatusVacinacao.setText(pet.getStatusVacinacao());
+                    textViewVermifugado.setText(pet.getVermifugado());
+                    textViewDataUltimaVermifugacao.setText(pet.getDataVermifugacao());
+                    textViewHistoricoDoencasTratamentos.setText(pet.getDoencasTratamentos());
+                    textViewNecessidadesEspeciais.setText(pet.getNecessidadesEspeciais());
+                    textViewNivelEnergia.setText(pet.getNivelEnergia());
+                    textViewSociabilidade.setText(pet.getSociabilidade());
 
-                    // Verifica o status e chama toggleOptions com o ID apropriado
-                    if ("Procurando dono".equals(pet.getStatusPet())) {
-                        toggleOptions(R.id.radioButtonProcurandoDono);
-                    } else if ("Desaparecido".equals(pet.getStatusPet())) {
-                        toggleOptions(R.id.radioButtonDesaparecido);
-                    } else if ("Adoção".equals(pet.getStatusPet())) {
-                        toggleOptions(R.id.radioButtonAdocao);
+                    if(pet.isAdestrado()) {
+                        textViewPetAdestrado.setText("Adestrado");
+                    } else {
+                        textViewPetAdestrado.setText("Não adestrado");
                     }
+
+                    textViewVacinasTomadas.setText(pet.getVacinasTomadas());
+                    textViewPetCastrado.setText(pet.getStatusCastracao());
+
+
                 }
             }
         });
@@ -302,103 +292,30 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
         imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);
-        textViewCepTitulo = view.findViewById(R.id.textViewCepTitulo);
-        textViewBairroTitulo = view.findViewById(R.id.textViewBairroTitulo);
         textViewSobreOPet = view.findViewById(R.id.textViewSobreOPet);
-        textViewEstadoTitulo = view.findViewById(R.id.textViewEstadoTitulo);
         textViewStatusPet = view.findViewById(R.id.textViewStatusPet);
-        textViewCep = view.findViewById(R.id.textViewCep);
-        textViewEstado = view.findViewById(R.id.textViewEstado);
-        textViewRuaAvenidaTitulo = view.findViewById(R.id.textViewRuaAvenidaTitulo);
-        textViewCidade = view.findViewById(R.id.textViewCidade);
-        textViewPontoReferenciaTitulo = view.findViewById(R.id.textViewPontoReferenciaTitulo);
-        textViewPontoReferencia = view.findViewById(R.id.textViewPontoReferencia);
-        textViewCidadeTitulo = view.findViewById(R.id.textViewCidadeTitulo);
-        textViewBairro = view.findViewById(R.id.textViewBairro);
-        textViewRuaAvenida = view.findViewById(R.id.textViewRuaAvenida);
-        textViewNumero = view.findViewById(R.id.textViewNumero);
-        textViewPais = view.findViewById(R.id.textViewPais);
-        textViewNumeroTitulo = view.findViewById(R.id.textViewNumeroTitulo);
-        textViewComplementoTitulo = view.findViewById(R.id.textViewComplementoTitulo);
-        textViewPaisTitulo = view.findViewById(R.id.textViewPaisTitulo);
-        textViewComplemento = view.findViewById(R.id.textViewComplemento);
-        textViewVistoPelaUltimaVez = view.findViewById(R.id.textViewVistoPelaUltimaVez);
         buttonPublicar = view.findViewById(R.id.buttonPublicar);
+        textViewStatusVacinacao = view.findViewById(R.id.textViewStatusVacinacao);
+        textViewVermifugado = view.findViewById(R.id.textViewVermifugado);
+        textViewDataUltimaVermifugacao = view.findViewById(R.id.textViewDataUltimaVermifugacao);
+        textViewHistoricoDoencasTratamentos = view.findViewById(R.id.textViewHistoricoDoencasTratamentos);
+        textViewNecessidadesEspeciais = view.findViewById(R.id.textViewNecessidadesEspeciais);
+        textViewNivelEnergia = view.findViewById(R.id.textViewNivelEnergia);
+        textViewSociabilidade = view.findViewById(R.id.textViewSociabilidade);
+        textViewPetAdestrado = view.findViewById(R.id.textViewPetAdestrado);
+        textViewStatusVacinacaoTitulo = view.findViewById(R.id.textViewStatusVacinacaoTitulo);
+        textViewStatusVacinacao = view.findViewById(R.id.textViewStatusVacinacao);
+        textViewVacinasTomadasTitulo = view.findViewById(R.id.textViewVacinasTomadasTitulo);
+        textViewVacinasTomadas = view.findViewById(R.id.textViewVacinasTomadas);
+        textViewVermifugado = view.findViewById(R.id.textViewVermifugado);
+        textViewDataUltimaVermifugacao = view.findViewById(R.id.textViewDataUltimaVermifugacao);
+        textViewPetCastrado = view.findViewById(R.id.textViewPetCastrado);
+        textViewHistoricoDoencasTratamentos = view.findViewById(R.id.textViewHistoricoDoencasTratamentos);
+        textViewNecessidadesEspeciais = view.findViewById(R.id.textViewNecessidadesEspeciais);
+        textViewNivelEnergia = view.findViewById(R.id.textViewNivelEnergia);
+        textViewSociabilidade = view.findViewById(R.id.textViewSociabilidade);
+        textViewPetAdestrado = view.findViewById(R.id.textViewPetAdestrado);
 
-        // Inicializa as listas de componentes
-        inicializarListaDesaparecidoComponentes(view);
-        inicializarListaAdocaoComponentes(view);
-        inicializarListaProcurandoDonoComponents(view);
-    }
-
-    private void inicializarListaDesaparecidoComponentes(View view) {
-        desaparecidoComponents = new ArrayList<>();
-        desaparecidoComponents.add(textViewCep);
-        desaparecidoComponents.add(textViewVistoPelaUltimaVez);
-        desaparecidoComponents.add(textViewPaisTitulo);
-        desaparecidoComponents.add(textViewPais);
-        desaparecidoComponents.add(textViewEstado);
-        desaparecidoComponents.add(textViewCepTitulo);
-        desaparecidoComponents.add(textViewEstadoTitulo);
-        desaparecidoComponents.add(textViewCidadeTitulo);
-        desaparecidoComponents.add(textViewBairroTitulo);
-        desaparecidoComponents.add(textViewRuaAvenidaTitulo);
-        desaparecidoComponents.add(textViewComplementoTitulo);
-        desaparecidoComponents.add(textViewCidade);
-        desaparecidoComponents.add(textViewPontoReferenciaTitulo);
-        desaparecidoComponents.add(textViewPontoReferencia);
-        desaparecidoComponents.add(textViewNumeroTitulo);
-        desaparecidoComponents.add(textViewBairro);
-        desaparecidoComponents.add(textViewRuaAvenida);
-        desaparecidoComponents.add(textViewNumero);
-        desaparecidoComponents.add(textViewComplemento);
-    }
-
-    private void inicializarListaAdocaoComponentes(View view) {
-        adocaoComponents = new ArrayList<>();
-    }
-
-    private void inicializarListaProcurandoDonoComponents(View view) {
-        procurandoDonoComponents = new ArrayList<>();
-        procurandoDonoComponents.add(textViewCep);
-        procurandoDonoComponents.add(textViewEstado);
-        procurandoDonoComponents.add(textViewPais);
-        procurandoDonoComponents.add(textViewCidade);
-        procurandoDonoComponents.add(textViewCepTitulo);
-        procurandoDonoComponents.add(textViewEstadoTitulo);
-        procurandoDonoComponents.add(textViewNumeroTitulo);
-        procurandoDonoComponents.add(textViewBairro);
-        procurandoDonoComponents.add(textViewVistoPelaUltimaVez);
-        procurandoDonoComponents.add(textViewPontoReferenciaTitulo);
-        procurandoDonoComponents.add(textViewPontoReferencia);
-        procurandoDonoComponents.add(textViewPaisTitulo);
-        procurandoDonoComponents.add(textViewCidadeTitulo);
-        procurandoDonoComponents.add(textViewRuaAvenida);
-        procurandoDonoComponents.add(textViewNumero);
-        procurandoDonoComponents.add(textViewBairroTitulo);
-        procurandoDonoComponents.add(textViewComplementoTitulo);
-        procurandoDonoComponents.add(textViewRuaAvenidaTitulo);
-        procurandoDonoComponents.add(textViewComplemento);
-    }
-
-    private void toggleOptions(int checkedId) {
-        toggleViewsVisibility(adocaoComponents, View.GONE);
-        toggleViewsVisibility(desaparecidoComponents, View.GONE);
-        toggleViewsVisibility(procurandoDonoComponents, View.GONE);
-
-        if (checkedId == R.id.radioButtonAdocao) {
-            toggleViewsVisibility(adocaoComponents, View.VISIBLE);
-        } else if (checkedId == R.id.radioButtonDesaparecido) {
-            toggleViewsVisibility(desaparecidoComponents, View.VISIBLE);
-        } else if (checkedId == R.id.radioButtonProcurandoDono) {
-            toggleViewsVisibility(procurandoDonoComponents, View.VISIBLE);
-        }
-    }
-
-    private void toggleViewsVisibility(List<View> views, int visibility) {
-        for (View view : views) {
-            view.setVisibility(visibility);
-        }
     }
 
     @Override

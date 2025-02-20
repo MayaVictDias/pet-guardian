@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,16 @@ public class Pet implements Serializable {
     private String statusPet;
     private String idEndereco;
     private String imagemUrl; // Armazenará a URL da imagem
+    private String statusVacinacao;
+    private String vacinasTomadas;
+    private String vermifugado;
+    private String dataVermifugacao;
+    private String necessidadesEspeciais;
+    private String doencasTratamentos;
+    private String nivelEnergia;
+    private String sociabilidade;
+    private String statusCastracao;
+    private boolean isAdestrado;
     private Timestamp dataCadastro; // Usando Timestamp do Firestore
 
     private DocumentReference firebaseRef;
@@ -36,18 +47,30 @@ public class Pet implements Serializable {
         // Construtor vazio necessário para o Firestore
     }
 
-    public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
-               String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
-               String idTutor, Timestamp dataCadastro) { // Construtor com data de cadastro
+    public Pet(String idTutor, String nomePet, String idadePet, String generoPet,
+               String especiePet, String sobreOPet, String statusPet, String statusCastracao,
+               String imagemUrl, String statusVacinacao, String vacinasTomadas,
+               String vermifugado, String dataVermifugacao, String necessidadesEspeciais, String doencasTratamentos,
+               String nivelEnergia, String sociabilidade, boolean isAdestrado, Timestamp dataCadastro) {
+
+        this.idTutor = idTutor;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.sobreOPet = sobreOPet;
         this.statusPet = statusPet;
+        this.statusCastracao = statusCastracao;
         this.imagemUrl = imagemUrl;
-        this.idEndereco = idEndereco;
-        this.idTutor = idTutor;
+        this.statusVacinacao = statusVacinacao;
+        this.vacinasTomadas = vacinasTomadas;
+        this.vermifugado = vermifugado;
+        this.dataVermifugacao = dataVermifugacao;
+        this.necessidadesEspeciais = necessidadesEspeciais;
+        this.doencasTratamentos = doencasTratamentos;
+        this.nivelEnergia = nivelEnergia;
+        this.sociabilidade = sociabilidade;
+        this.isAdestrado = isAdestrado;
         this.dataCadastro = dataCadastro;
 
         // Gera o ID único de 6 caracteres
@@ -132,12 +155,19 @@ public class Pet implements Serializable {
         petData.put("especiePet", getEspeciePet());
         petData.put("sobreOPet", getSobreOPet());
         petData.put("statusPet", getStatusPet());
+        petData.put("statusCastracao", getStatusCastracao());
         petData.put("imagemUrl", getImagemUrl());
         petData.put("dataCadastro", getDataCadastro()); // Usando Timestamp diretamente
+        petData.put("statusVacinacao", getStatusVacinacao());
+        petData.put("vacinasTomadas", getVacinasTomadas());
+        petData.put("vermifugado", getVermifugado());
+        petData.put("dataVermifugacao", getDataVermifugacao());
+        petData.put("necessidadesEspeciais", getNecessidadesEspeciais());
+        petData.put("doencasTratamentos", getDoencasTratamentos());
+        petData.put("nivelEnergia", getNivelEnergia());
+        petData.put("sociabilidade", getSociabilidade());
+        petData.put("isAdestrado", isAdestrado());
 
-        if (idEndereco != null) {
-            petData.put("idEndereco", getIdEndereco());
-        }
         return petData;
     }
 
@@ -237,5 +267,85 @@ public class Pet implements Serializable {
 
     public void setNomeLowerCasePet(String nomeLowerCasePet) {
         this.nomeLowerCasePet = nomeLowerCasePet.toLowerCase();
+    }
+
+    public String getStatusVacinacao() {
+        return statusVacinacao;
+    }
+
+    public void setStatusVacinacao(String statusVacinacao) {
+        this.statusVacinacao = statusVacinacao;
+    }
+
+    public String getVacinasTomadas() {
+        return vacinasTomadas;
+    }
+
+    public void setVacinasTomadas(String vacinasTomadas) {
+        this.vacinasTomadas = vacinasTomadas;
+    }
+
+    public String getVermifugado() {
+        return vermifugado;
+    }
+
+    public void setVermifugado(String vermifugado) {
+        this.vermifugado = vermifugado;
+    }
+
+    public String getDataVermifugacao() {
+        return dataVermifugacao;
+    }
+
+    public void setDataVermifugacao(String dataVermifugacao) {
+        this.dataVermifugacao = dataVermifugacao;
+    }
+
+    public String getNecessidadesEspeciais() {
+        return necessidadesEspeciais;
+    }
+
+    public void setNecessidadesEspeciais(String necessidadesEspeciais) {
+        this.necessidadesEspeciais = necessidadesEspeciais;
+    }
+
+    public String getNivelEnergia() {
+        return nivelEnergia;
+    }
+
+    public void setNivelEnergia(String nivelEnergia) {
+        this.nivelEnergia = nivelEnergia;
+    }
+
+    public String getSociabilidade() {
+        return sociabilidade;
+    }
+
+    public void setSociabilidade(String sociabilidade) {
+        this.sociabilidade = sociabilidade;
+    }
+
+    public boolean isAdestrado() {
+        return isAdestrado;
+    }
+
+    public String getStatusCastracao() {
+        return statusCastracao;
+    }
+
+    public void setStatusCastracao(String statusCastracao) {
+        this.statusCastracao = statusCastracao;
+    }
+
+    public void setAdestrado(boolean adestrado) {
+        isAdestrado = adestrado;
+    }
+
+    public String getDoencasTratamentos() {
+        return doencasTratamentos;
+    }
+
+    public void setDoencasTratamentos(String doencasTratamentos) {
+        this.doencasTratamentos = doencasTratamentos;
     }
 }

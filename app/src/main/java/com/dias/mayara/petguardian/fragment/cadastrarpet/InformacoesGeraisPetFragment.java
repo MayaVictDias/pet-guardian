@@ -118,8 +118,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
             }
         });
 
-
-
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

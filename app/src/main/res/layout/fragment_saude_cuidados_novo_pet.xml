@@ -45,6 +45,14 @@
             android:text="Quais vacinas o pet já tomou?"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Ex: Vacina contra raiva, Vacina V8..."
+            android:textSize="13sp" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -55,7 +63,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
                 android:background="@drawable/button_background_outline_gray"
-                android:hint="Ex: Vacina contra raiva, Vacina V8..."
                 android:inputType="textMultiLine" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -79,13 +86,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:text="Última data da vermifugação"
+            android:text="Data da última vermifugação"
             android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Insira no formato de data dd/MM/yyyy"
+            android:textSize="13sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Data (dd/MM/yyyy)">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDataVermifugacao"
@@ -127,7 +141,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/spinnerDoencasTratamentos"
+                android:id="@+id/editTextDoencasTratamentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
@@ -142,6 +156,13 @@
             android:text="Necessidades especiais"
             android:textSize="16sp"/>
 
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Problemas de saúde, dieta específica, etc"
+            android:textSize="13sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -152,8 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/button_background_outline_gray"
-                android:hint="Problemas de saúde, dieta específica, etc" />
+                android:background="@drawable/button_background_outline_gray" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,7 +186,7 @@
                 android:id="@+id/buttonVoltar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="3dp"
+                android:layout_marginLeft="3dp"
                 android:layout_weight="1"
                 style="@style/CustomButtonStyleNoColorOutline"
                 android:fontFamily="@font/nunito_medium"

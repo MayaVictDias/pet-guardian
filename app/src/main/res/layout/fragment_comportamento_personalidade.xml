@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="24dp"
+    tools:context=".fragment.cadastrarpet.SaudeCuidadosNovoPetFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView29"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Comportamento e personalidade"
+            android:textColor="@color/coralSuave"
+            android:textSize="17sp" />
+
+        <!-- Spinner para Status da Vacinação -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Nível de energia"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinnerNivelEnergia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_background_outline_gray"
+            android:padding="12dp" />
+
+        <!-- Campo para o usuário preencher as vacinas -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Sociabilidade"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Se dá bem com animais, crianças, estranhos..."
+            android:textSize="13sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextSociabilidade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/button_background_outline_gray"
+                android:inputType="textMultiLine" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Adestrado?"
+            android:textSize="16sp" />
+
+
+        <Spinner
+            android:id="@+id/spinnerAdestrado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_background_outline_gray"
+            android:padding="12dp" />
+
+        <!-- Spinner para Castração -->
+
+        <!-- Spinner para Histórico de Doençãs ou Tratamentos -->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonVoltar"
+                style="@style/CustomButtonStyleNoColorOutline"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Voltar"
+                android:textColor="@color/marromEscuro" />
+
+            <Button
+                android:id="@+id/buttonAvancar"
+                style="@style/CustomButtonStyleYellowBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_weight="1"
+                android:text="Avançar" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

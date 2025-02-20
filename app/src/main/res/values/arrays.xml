@@ -30,4 +30,16 @@
         <item>Histórico de doenças tratadas</item>
         <item>Desconhecido</item>
     </string-array>
+
+    <string-array name="nivel_energia_array">
+        <item>Selecione</item>
+        <item>Calmo</item>
+        <item>Moderado</item>
+        <item>Ativo</item>
+    </string-array>
+
+    <string-array name="sim_nao_array">
+        <item>Sim</item>
+        <item>Não</item>
+    </string-array>
 </resources>
