@@ -175,7 +175,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     Log.d("PetInfo", "Genero: " + pet.getGeneroPet());
                     Log.d("PetInfo", "Especie: " + pet.getEspeciePet());
                     Log.d("PetInfo", "Sobre: " + pet.getSobreOPet());
-                    Log.d("PetInfo", "Status: " + pet.getStatusPet());
 
                     // Salvar o objeto Pet no SharedViewModel
                     cadastroPetViewModel.setPet(pet);

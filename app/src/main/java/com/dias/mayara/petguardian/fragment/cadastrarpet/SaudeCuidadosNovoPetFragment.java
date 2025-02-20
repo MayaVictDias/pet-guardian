@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
-import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -60,7 +59,7 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
 
         pet = new Pet();
 
-        configurarCampos();
+        carregarDados();
 
         // Configuração dos Spinners
         setupSpinners(view);
@@ -106,7 +105,7 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
         return view;
     }
 
-    private void configurarCampos() {
+    private void carregarDados() {
 
         sharedViewModel.getPet().observe(getViewLifecycleOwner(), new Observer<Pet>() {
             @Override
@@ -148,7 +147,8 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
         }
 
         petAtual.setStatusCastracao(spinnerCastracao.getSelectedItem().toString());
-        petAtual.setVacinasTomadas(spinnerVacinacao.getSelectedItem().toString());
+        petAtual.setStatusVacinacao(spinnerVacinacao.getSelectedItem().toString());
+        petAtual.setVacinasTomadas(editTextVacinas.getText().toString());
         petAtual.setDoencasTratamentos(editTextDoencasTratamentos.getText().toString());
         petAtual.setDataVermifugacao(editTextDataVermifugacao.getText().toString());
         petAtual.setVermifugado(spinnerVermifugacao.getSelectedItem().toString());

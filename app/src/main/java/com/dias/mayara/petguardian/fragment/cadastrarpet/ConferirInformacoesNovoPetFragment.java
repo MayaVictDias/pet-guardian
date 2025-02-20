@@ -26,7 +26,6 @@ import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
-import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,17 +46,20 @@ import java.util.List;
 
 public class ConferirInformacoesNovoPetFragment extends Fragment {
 
-    private List<View> adocaoComponents;
-    private List<View> desaparecidoComponents;
-    private List<View> procurandoDonoComponents;
-
     private Button buttonVoltar, buttonPublicar;
     private FragmentInteractionListener listener;
     private TextView textViewNomePet, textViewIdadePet, textViewGeneroPet, textViewEspecie,
-            textViewSobreOPet, textViewStatusPet, textViewStatusVacinacaoTitulo, textViewStatusVacinacao, textViewVacinasTomadasTitulo,
-            textViewVacinasTomadas, textViewVermifugadoTitulo, textViewVermifugado, textViewDataUltimaVermifugacao,
+            textViewSobreOPet, textViewStatusPet, textViewStatusVacinacao,
+            textViewVacinasTomadas, textViewVermifugado, textViewDataUltimaVermifugacao,
             textViewPetCastrado, textViewHistoricoDoencasTratamentos, textViewNecessidadesEspeciais,
             textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado;
+
+    // TextViews para os títulos
+    private TextView textViewStatusVacinacaoTitulo, textViewVacinasTomadasTitulo,
+            textViewVermifugadoTitulo, textViewDataVermifugacaoTitulo, textViewPetCastradoTitulo,
+            textViewHistoricoDoencasTratamentosTitulo, textViewNecessidadesEspeciaisTitulo,
+            textViewNivelEnergiaTitulo, textViewSociabilidadeTitulo, textViewPetAdestradoTitulo;
+
     private ImageView imageViewFotoPet;
 
     private CadastroPetViewModel sharedViewModel;
@@ -71,7 +73,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private Usuario usuario;
 
     private Pet pet;
-    private Endereco endereco;
 
     private Uri urlImagemPet;
 
@@ -91,6 +92,8 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_conferir_informacoes_novo_pet, container, false);
 
+        inicializarComponentes(view);
+
         sharedViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         firebaseRef = ConfiguracaoFirebase.getFirebase();
@@ -98,8 +101,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
         usuario = UsuarioFirebase.getDadosUsuarioLogado();
-
-        inicializarComponentes(view);
 
         carregarDados();
 
@@ -122,11 +123,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             public void onClick(View view) {
 
                 abrirDialogCarregamento("Salvando pet");
-
                 salvarDados();
             }
         });
-
 
         return view;
     }
@@ -156,7 +155,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),
                     textViewSobreOPet.getText().toString(),
-                    textViewStatusPet.getText().toString(),
                     textViewPetCastrado.getText().toString(),
                     urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
                     textViewStatusVacinacao.getText().toString(),
@@ -260,12 +258,13 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewGeneroPet.setText(pet.getGeneroPet());
                     textViewEspecie.setText(pet.getEspeciePet());
                     textViewSobreOPet.setText(pet.getSobreOPet());
-                    textViewStatusPet.setText(pet.getStatusPet());
+
                     textViewStatusVacinacao.setText(pet.getStatusVacinacao());
                     textViewVermifugado.setText(pet.getVermifugado());
                     textViewDataUltimaVermifugacao.setText(pet.getDataVermifugacao());
                     textViewHistoricoDoencasTratamentos.setText(pet.getDoencasTratamentos());
                     textViewNecessidadesEspeciais.setText(pet.getNecessidadesEspeciais());
+
                     textViewNivelEnergia.setText(pet.getNivelEnergia());
                     textViewSociabilidade.setText(pet.getSociabilidade());
 
@@ -285,37 +284,52 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     }
 
     private void inicializarComponentes(View view) {
-
+        // Botões
         buttonVoltar = view.findViewById(R.id.buttonVoltar);
+        buttonPublicar = view.findViewById(R.id.buttonPublicar);
+
+        // TextViews (informações gerais)
         textViewNomePet = view.findViewById(R.id.textViewNomePet);
         textViewIdadePet = view.findViewById(R.id.textViewIdadePet);
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
-        imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);
         textViewSobreOPet = view.findViewById(R.id.textViewSobreOPet);
         textViewStatusPet = view.findViewById(R.id.textViewStatusPet);
-        buttonPublicar = view.findViewById(R.id.buttonPublicar);
+
+        // ImageView (foto do pet)
+        imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);
+
+        // TextViews (vacinação)
         textViewStatusVacinacao = view.findViewById(R.id.textViewStatusVacinacao);
-        textViewVermifugado = view.findViewById(R.id.textViewVermifugado);
-        textViewDataUltimaVermifugacao = view.findViewById(R.id.textViewDataUltimaVermifugacao);
-        textViewHistoricoDoencasTratamentos = view.findViewById(R.id.textViewHistoricoDoencasTratamentos);
-        textViewNecessidadesEspeciais = view.findViewById(R.id.textViewNecessidadesEspeciais);
-        textViewNivelEnergia = view.findViewById(R.id.textViewNivelEnergia);
-        textViewSociabilidade = view.findViewById(R.id.textViewSociabilidade);
-        textViewPetAdestrado = view.findViewById(R.id.textViewPetAdestrado);
-        textViewStatusVacinacaoTitulo = view.findViewById(R.id.textViewStatusVacinacaoTitulo);
-        textViewStatusVacinacao = view.findViewById(R.id.textViewStatusVacinacao);
-        textViewVacinasTomadasTitulo = view.findViewById(R.id.textViewVacinasTomadasTitulo);
         textViewVacinasTomadas = view.findViewById(R.id.textViewVacinasTomadas);
+
+        // TextViews (vermifugação)
         textViewVermifugado = view.findViewById(R.id.textViewVermifugado);
         textViewDataUltimaVermifugacao = view.findViewById(R.id.textViewDataUltimaVermifugacao);
+
+        // TextViews (castração)
         textViewPetCastrado = view.findViewById(R.id.textViewPetCastrado);
+
+        // TextViews (histórico de saúde)
         textViewHistoricoDoencasTratamentos = view.findViewById(R.id.textViewHistoricoDoencasTratamentos);
         textViewNecessidadesEspeciais = view.findViewById(R.id.textViewNecessidadesEspeciais);
+
+        // TextViews (comportamento)
         textViewNivelEnergia = view.findViewById(R.id.textViewNivelEnergia);
         textViewSociabilidade = view.findViewById(R.id.textViewSociabilidade);
         textViewPetAdestrado = view.findViewById(R.id.textViewPetAdestrado);
 
+        // TextViews (títulos)
+        textViewStatusVacinacaoTitulo = view.findViewById(R.id.textViewStatusVacinacaoTitulo);
+        textViewVacinasTomadasTitulo = view.findViewById(R.id.textViewVacinasTomadasTitulo);
+        textViewVermifugadoTitulo = view.findViewById(R.id.textViewVermifugadoTitulo);
+        textViewDataVermifugacaoTitulo = view.findViewById(R.id.textViewDataVermifugacaoTitulo);
+        textViewPetCastradoTitulo = view.findViewById(R.id.textViewPetCastradoTitulo);
+        textViewHistoricoDoencasTratamentosTitulo = view.findViewById(R.id.textViewHistoricoDoencasTratamentosTitulo);
+        textViewNecessidadesEspeciaisTitulo = view.findViewById(R.id.textViewNecessidadesEspeciaisTitulo);
+        textViewNivelEnergiaTitulo = view.findViewById(R.id.textViewNivelEnergiaTitulo);
+        textViewSociabilidadeTitulo = view.findViewById(R.id.textViewSociabilidadeTitulo);
+        textViewPetAdestradoTitulo = view.findViewById(R.id.textViewPetAdestradoTitulo);
     }
 
     @Override

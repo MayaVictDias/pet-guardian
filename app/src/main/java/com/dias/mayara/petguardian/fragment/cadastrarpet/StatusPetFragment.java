@@ -238,7 +238,7 @@ public class StatusPetFragment extends Fragment {
         }
 
         // Atualiza apenas o campo de status no objeto Pet existente
-        petAtual.setStatusPet(status);
+        //petAtual.setStatusPet(status);
 
         // Salva o objeto Pet atualizado no ViewModel
         cadastroPetViewModel.setPet(petAtual);

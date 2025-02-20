@@ -116,53 +116,6 @@
                     android:textColor="@color/marromEscuro" />
 
                 <TextView
-                    android:id="@+id/textViewVistoPorUltimoTitulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="Visto por último"
-                    android:textColor="@color/coralSuave"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/textViewEnderecoTitulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="Endereço"
-                    android:textColor="@color/marromEscuro"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/textViewEnderecoCompletoDado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="@font/nunito_medium"
-                    android:text="Endereço completo"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/textViewPontoReferenciaTitulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="Ponto de referência"
-                    android:textColor="@color/marromEscuro"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/textViewPontoReferenciaDado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/nunito_medium"
-                    android:text="Ponto de referência"
-                    android:visibility="gone" />
-
-                <TextView
                     android:id="@+id/textViewInformacoesGeraisTitulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

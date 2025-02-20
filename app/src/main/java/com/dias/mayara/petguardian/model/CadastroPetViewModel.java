@@ -1,6 +1,7 @@
 package com.dias.mayara.petguardian.model;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -48,6 +49,15 @@ public class CadastroPetViewModel extends ViewModel {
     // Método para obter a imagem do pet como LiveData
     public LiveData<byte[]> getImagemPet() {
         return imagemPet;
+    }
+
+    public void logPetData() {
+        Pet currentPet = pet.getValue();
+        if (currentPet != null) {
+            Log.d("PetData", currentPet.toString());
+        } else {
+            Log.d("PetData", "Nenhum pet cadastrado.");
+        }
     }
 
 }

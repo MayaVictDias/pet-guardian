@@ -123,7 +123,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             petListAdocao.clear();
             for (QueryDocumentSnapshot snapshot : snapshots) {
                 String idPet = snapshot.getString("idPet");
-                String idEndereco = snapshot.getString("idEndereco");
                 String idTutor = snapshot.getString("idTutor");
                 String especiePet = snapshot.getString("especiePet");
                 String nomePet = snapshot.getString("nomePet");
@@ -131,11 +130,10 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 String imagemUrl = snapshot.getString("imagemUrl");
                 String idadePet = snapshot.getString("idadePet");
                 String sobreOPet = snapshot.getString("sobreOPet");
-                String statusPet = snapshot.getString("statusPet");
                 Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
                 petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                        statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
+                        imagemUrl, idTutor, dataCadastro));
             }
             petsAdapterAdocao.notifyDataSetChanged();
         });

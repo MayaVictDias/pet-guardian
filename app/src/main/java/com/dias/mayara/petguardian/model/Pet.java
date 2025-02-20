@@ -23,10 +23,8 @@ public class Pet implements Serializable {
     private String idadePet;
     private String generoPet;
     private String especiePet;
-    private String nomeLowerCasePet;
     private String sobreOPet;
-    private String statusPet;
-    private String idEndereco;
+    private String nomeLowerCase;
     private String imagemUrl; // Armazenará a URL da imagem
     private String statusVacinacao;
     private String vacinasTomadas;
@@ -38,7 +36,7 @@ public class Pet implements Serializable {
     private String sociabilidade;
     private String statusCastracao;
     private boolean isAdestrado;
-    private Timestamp dataCadastro; // Usando Timestamp do Firestore
+    private Timestamp dataCadastro;
 
     private DocumentReference firebaseRef;
     private String idUsuarioLogado;
@@ -47,11 +45,11 @@ public class Pet implements Serializable {
         // Construtor vazio necessário para o Firestore
     }
 
-    public Pet(String idTutor, String nomePet, String idadePet, String generoPet,
-               String especiePet, String sobreOPet, String statusPet, String statusCastracao,
-               String imagemUrl, String statusVacinacao, String vacinasTomadas,
-               String vermifugado, String dataVermifugacao, String necessidadesEspeciais, String doencasTratamentos,
-               String nivelEnergia, String sociabilidade, boolean isAdestrado, Timestamp dataCadastro) {
+    public Pet(String idTutor, String nomePet, String idadePet, String generoPet, String especiePet,
+               String sobreOPet, String statusCastracao, String imagemUrl, String statusVacinacao,
+               String vacinasTomadas, String vermifugado, String dataVermifugacao, String necessidadesEspeciais,
+               String doencasTratamentos, String nivelEnergia, String sociabilidade, boolean isAdestrado,
+               Timestamp dataCadastro) {
 
         this.idTutor = idTutor;
         this.nomePet = nomePet;
@@ -59,7 +57,6 @@ public class Pet implements Serializable {
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.sobreOPet = sobreOPet;
-        this.statusPet = statusPet;
         this.statusCastracao = statusCastracao;
         this.imagemUrl = imagemUrl;
         this.statusVacinacao = statusVacinacao;
@@ -80,32 +77,28 @@ public class Pet implements Serializable {
     }
 
     public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
-               String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
-               String idTutor, Timestamp dataCadastro) { // Construtor com ID do pet, quando ele for puxado direto do banco de dados
+               String sobreOPet, String imagemUrl, String idTutor, Timestamp dataCadastro) {
+        // Construtor com ID do pet, quando ele for puxado direto do banco de dados
         this.idPet = idPet;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.sobreOPet = sobreOPet;
-        this.statusPet = statusPet;
         this.imagemUrl = imagemUrl;
-        this.idEndereco = idEndereco;
         this.idTutor = idTutor;
         this.dataCadastro = dataCadastro;
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
-               String sobreOPet, String statusPet, String imagemUrl, String idEndereco,
+               String sobreOPet, String imagemUrl,
                String idTutor) { // Construtor sem data de cadastro
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.sobreOPet = sobreOPet;
-        this.statusPet = statusPet;
         this.imagemUrl = imagemUrl;
-        this.idEndereco = idEndereco;
         this.idTutor = idTutor;
 
         // Gera o ID único de 6 caracteres
@@ -149,12 +142,11 @@ public class Pet implements Serializable {
         petData.put("idPet", getIdPet());
         petData.put("idTutor", getIdTutor());
         petData.put("nomePet", getNomePet());
-        petData.put("nomeLowerCasePet", getNomeLowerCasePet());
+        petData.put("nomeLowerCasePet", getNomeLowerCase());
         petData.put("idadePet", getIdadePet());
         petData.put("generoPet", getGeneroPet());
         petData.put("especiePet", getEspeciePet());
         petData.put("sobreOPet", getSobreOPet());
-        petData.put("statusPet", getStatusPet());
         petData.put("statusCastracao", getStatusCastracao());
         petData.put("imagemUrl", getImagemUrl());
         petData.put("dataCadastro", getDataCadastro()); // Usando Timestamp diretamente
@@ -244,30 +236,6 @@ public class Pet implements Serializable {
         this.sobreOPet = sobreOPet;
     }
 
-    public String getStatusPet() {
-        return statusPet;
-    }
-
-    public void setStatusPet(String statusPet) {
-        this.statusPet = statusPet;
-    }
-
-    public String getIdEndereco() {
-        return idEndereco;
-    }
-
-    public void setIdEndereco(String idEndereco) {
-        this.idEndereco = idEndereco;
-    }
-
-    public String getNomeLowerCasePet() {
-
-        return nomePet != null ? nomePet.toLowerCase() : null;
-    }
-
-    public void setNomeLowerCasePet(String nomeLowerCasePet) {
-        this.nomeLowerCasePet = nomeLowerCasePet.toLowerCase();
-    }
 
     public String getStatusVacinacao() {
         return statusVacinacao;
@@ -347,5 +315,38 @@ public class Pet implements Serializable {
 
     public void setDoencasTratamentos(String doencasTratamentos) {
         this.doencasTratamentos = doencasTratamentos;
+    }
+
+    public String getNomeLowerCase() {
+        return nomePet != null ? nomePet.toLowerCase() : null;
+    }
+
+    public void setNomeLowerCase() {
+        this.nomeLowerCase = nomePet.toLowerCase();
+    }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "idPet='" + idPet + '\'' +
+                ", idTutor='" + idTutor + '\'' +
+                ", nomePet='" + nomePet + '\'' +
+                ", idadePet='" + idadePet + '\'' +
+                ", generoPet='" + generoPet + '\'' +
+                ", especiePet='" + especiePet + '\'' +
+                ", sobreOPet='" + sobreOPet + '\'' +
+                ", imagemUrl='" + imagemUrl + '\'' +
+                ", statusVacinacao='" + statusVacinacao + '\'' +
+                ", vacinasTomadas='" + vacinasTomadas + '\'' +
+                ", vermifugado='" + vermifugado + '\'' +
+                ", dataVermifugacao='" + dataVermifugacao + '\'' +
+                ", necessidadesEspeciais='" + necessidadesEspeciais + '\'' +
+                ", doencasTratamentos='" + doencasTratamentos + '\'' +
+                ", nivelEnergia='" + nivelEnergia + '\'' +
+                ", sociabilidade='" + sociabilidade + '\'' +
+                ", statusCastracao='" + statusCastracao + '\'' +
+                ", isAdestrado=" + isAdestrado +
+                ", dataCadastro=" + dataCadastro +
+                '}';
     }
 }

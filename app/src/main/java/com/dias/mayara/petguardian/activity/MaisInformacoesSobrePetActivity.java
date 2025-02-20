@@ -43,11 +43,8 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ImageView imageViewFotoPet;
-    private TextView textViewDesaparecidoHaTempo, textViewNomeTitulo, textViewIdadeGenero, textViewId,
-            textViewVistoPorUltimoTitulo, textViewEnderecoTitulo, textViewEnderecoCompletoDado,
-            textViewPontoReferenciaTitulo, textViewPontoReferenciaDado, textViewRaca,
-            textViewInformacoesGeraisTituloDado, textViewEspecie, textViewCorOlhos, textViewPorte,
-            textViewCorPredominante, textViewStatusPet;
+    private TextView textViewDesaparecidoHaTempo, textViewNomeTitulo, textViewIdadeGenero,
+            textViewId, textViewEspecie, textViewStatusPet;
     private Pet petSelecionado;
     private Button buttonEntrarEmContato;
     private ImageButton buttonMenu;
@@ -55,7 +52,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     private String idUsuarioLogado;
 
     private FirebaseFirestore firebaseRef;
-    private DocumentReference enderecoRef;
     private DocumentReference usuarioRef;
     private DocumentReference petsRef;
     private CollectionReference usuariosRef;
@@ -66,10 +62,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private Handler handler = new Handler();
     private Runnable updateRunnable;
-
-    private List<View> adocaoComponents;
-    private List<View> desaparecidoComponents;
-    private List<View> procurandoDonoComponents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,15 +123,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
-        enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos").document(petSelecionado.getIdEndereco());
-
-        if (petSelecionado.getStatusPet().equals("Adoção")) {
-            toggleViewsVisibility(adocaoComponents, View.VISIBLE);
-        } else if (petSelecionado.getStatusPet().equals("Desaparecido")) {
-            toggleViewsVisibility(desaparecidoComponents, View.VISIBLE);
-        } else if (petSelecionado.getStatusPet().equals("Procurando dono")) {
-            toggleViewsVisibility(procurandoDonoComponents, View.VISIBLE);
-        }
 
         buttonEntrarEmContato.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,15 +186,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_delete) {
-                    String status = "";
-
-                    if (petSelecionado.getStatusPet().equals("Desaparecido")) {
-                        status = "desaparecido";
-                    } else if (petSelecionado.getStatusPet().equals("Adoção")) {
-                        status = "adocao";
-                    } else if (petSelecionado.getStatusPet().equals("Procurando dono")) {
-                        status = "procurandoDono";
-                    }
 
                     abrirDialogCarregamento("Deletando evento");
 
@@ -264,38 +238,9 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewId.setText(petSelecionado.getIdPet());
         textViewEspecie.setText(petSelecionado.getEspeciePet());
 
-        if (petSelecionado.getStatusPet().equals("Adoção")) {
-            textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
-            textViewStatusPet.setText("ADOÇÃO");
-        } else if (petSelecionado.getStatusPet().equals("Desaparecido")) {
-            textViewStatusPet.setBackgroundColor(Color.parseColor("#FF0000"));
-            textViewStatusPet.setText("DESAPARECIDO");
-        } else if (petSelecionado.getStatusPet().equals("Procurando dono")) {
-            textViewStatusPet.setBackgroundColor(Color.parseColor("#0047FF"));
-            textViewStatusPet.setText("PROCURANDO DONO");
-        }
+        textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
+        textViewStatusPet.setText("ADOÇÃO");
 
-        // Configurar campos de endereço
-        enderecoRef.get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Endereco endereco = documentSnapshot.toObject(Endereco.class);
-
-                        Log.d("Endereço to string", endereco != null ? endereco.toString() : "Endereço nulo");
-
-                        if (endereco != null) {
-                            String enderecoCompleto = endereco.getRuaAvenida() + ", " + endereco.getNumero()
-                                    + " - " + endereco.getCidade() + ", " + endereco.getEstado() + ", " + endereco.getCep()
-                                    + ", " + endereco.getPais();
-
-                            textViewEnderecoCompletoDado.setText(enderecoCompleto);
-                            textViewPontoReferenciaDado.setText(textViewPontoReferenciaDado.getText().toString());
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Erro ao acessar o endereço: ", e);
-                });
     }
 
     public void updateTimeSincePost(Timestamp postTimestamp) {
@@ -339,99 +284,10 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewNomeTitulo = findViewById(R.id.textViewNomeTitulo);
         textViewIdadeGenero = findViewById(R.id.textViewIdadeGenero);
         textViewId = findViewById(R.id.textViewId);
-        textViewVistoPorUltimoTitulo = findViewById(R.id.textViewVistoPorUltimoTitulo);
-        textViewEnderecoTitulo = findViewById(R.id.textViewEnderecoTitulo);
-        textViewEnderecoCompletoDado = findViewById(R.id.textViewEnderecoCompletoDado);
-        textViewPontoReferenciaTitulo = findViewById(R.id.textViewPontoReferenciaTitulo);
-        textViewPontoReferenciaDado = findViewById(R.id.textViewPontoReferenciaDado);
-        textViewInformacoesGeraisTituloDado = findViewById(R.id.textViewInformacoesGeraisTituloDado);
         textViewEspecie = findViewById(R.id.textViewEspecie);
-        textViewRaca = findViewById(R.id.textViewRaca);
         textViewStatusPet = findViewById(R.id.textViewStatusPet);
-        textViewCorOlhos = findViewById(R.id.textViewCorOlhos);
-        textViewPorte = findViewById(R.id.textViewPorte);
-        textViewCorPredominante = findViewById(R.id.textViewCorPredominante);
         buttonEntrarEmContato = findViewById(R.id.buttonEntrarEmContato);
         buttonMenu = findViewById(R.id.buttonMenu);
-
-        // Inicializa as listas de componentes
-        inicializarListaDesaparecidoComponentes();
-        inicializarListaAdocaoComponentes();
-        inicializarListaProcurandoDonoComponents();
-    }
-
-    private void inicializarListaDesaparecidoComponentes() {
-        desaparecidoComponents = new ArrayList<>();
-        desaparecidoComponents.add(imageViewFotoPet);
-        desaparecidoComponents.add(textViewStatusPet);
-        desaparecidoComponents.add(textViewDesaparecidoHaTempo);
-        desaparecidoComponents.add(textViewNomeTitulo);
-        desaparecidoComponents.add(textViewIdadeGenero);
-        desaparecidoComponents.add(textViewId);
-
-        desaparecidoComponents.add(textViewVistoPorUltimoTitulo);
-        desaparecidoComponents.add(textViewEnderecoTitulo);
-        desaparecidoComponents.add(textViewEnderecoCompletoDado);
-        desaparecidoComponents.add(textViewPontoReferenciaTitulo);
-        desaparecidoComponents.add(textViewPontoReferenciaDado);
-
-        desaparecidoComponents.add(textViewInformacoesGeraisTituloDado);
-        desaparecidoComponents.add(textViewEspecie);
-        desaparecidoComponents.add(textViewRaca);
-        desaparecidoComponents.add(textViewCorOlhos);
-        desaparecidoComponents.add(textViewPorte);
-        desaparecidoComponents.add(textViewCorPredominante);
-        desaparecidoComponents.add(buttonEntrarEmContato);
-    }
-
-    private void inicializarListaAdocaoComponentes() {
-        adocaoComponents = new ArrayList<>();
-
-        adocaoComponents = new ArrayList<>();
-        adocaoComponents.add(imageViewFotoPet);
-        adocaoComponents.add(textViewStatusPet);
-        adocaoComponents.add(textViewDesaparecidoHaTempo);
-        adocaoComponents.add(textViewNomeTitulo);
-        adocaoComponents.add(textViewIdadeGenero);
-        adocaoComponents.add(textViewId);
-
-        adocaoComponents.add(textViewInformacoesGeraisTituloDado);
-        adocaoComponents.add(textViewEspecie);
-        adocaoComponents.add(textViewRaca);
-        adocaoComponents.add(textViewCorOlhos);
-        adocaoComponents.add(textViewPorte);
-        adocaoComponents.add(textViewCorPredominante);
-        adocaoComponents.add(buttonEntrarEmContato);
-    }
-
-    private void inicializarListaProcurandoDonoComponents() {
-        procurandoDonoComponents = new ArrayList<>();
-
-        procurandoDonoComponents.add(imageViewFotoPet);
-        procurandoDonoComponents.add(textViewStatusPet);
-        procurandoDonoComponents.add(textViewDesaparecidoHaTempo);
-        procurandoDonoComponents.add(textViewNomeTitulo);
-        procurandoDonoComponents.add(textViewIdadeGenero);
-        procurandoDonoComponents.add(textViewId);
-
-        procurandoDonoComponents.add(textViewVistoPorUltimoTitulo);
-        procurandoDonoComponents.add(textViewEnderecoTitulo);
-        procurandoDonoComponents.add(textViewEnderecoCompletoDado);
-        procurandoDonoComponents.add(textViewPontoReferenciaTitulo);
-        procurandoDonoComponents.add(textViewPontoReferenciaDado);
-
-        procurandoDonoComponents.add(textViewInformacoesGeraisTituloDado);
-        procurandoDonoComponents.add(textViewEspecie);
-        procurandoDonoComponents.add(textViewRaca);
-        procurandoDonoComponents.add(textViewCorOlhos);
-        procurandoDonoComponents.add(textViewPorte);
-        procurandoDonoComponents.add(textViewCorPredominante);
-    }
-
-    private void toggleViewsVisibility(List<View> views, int visibility) {
-        for (View view : views) {
-            view.setVisibility(visibility);
-        }
     }
 
     // Método para lidar com o clique no botão de voltar

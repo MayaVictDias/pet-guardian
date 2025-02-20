@@ -37,7 +37,6 @@
             android:background="@drawable/button_background_outline_gray"
             android:padding="12dp" />
 
-        <!-- Campo para o usuário preencher as vacinas -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,10 +81,6 @@
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_background_outline_gray"
             android:padding="12dp" />
-
-        <!-- Spinner para Castração -->
-
-        <!-- Spinner para Histórico de Doençãs ou Tratamentos -->
 
 
         <LinearLayout

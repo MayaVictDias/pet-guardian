@@ -53,26 +53,11 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
         if (position >= 0 && position < petList.size()) {
             Pet pet = petList.get(position);
 
-            String nomeBancoDadosStatus = "";
-
-            if(pet.getStatusPet().equals("Adoção")) {
-                nomeBancoDadosStatus = "adocao";
-            } else if (pet.getStatusPet().equals("Desaparecido")) {
-                nomeBancoDadosStatus = "desaparecido";
-            } else if (pet.getStatusPet().equals("Procurando dono")) {
-                nomeBancoDadosStatus = "procurandoDono";
-            }
-
             DocumentReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets") // Coleção de pets
-                    .document(pet.getIdTutor()) // ID do tutor
-                    .collection(nomeBancoDadosStatus) // Subcoleção do status
                     .document(pet.getIdPet());
 
-            DocumentReference enderecoRef = ConfiguracaoFirebase.getFirebase().collection("enderecos") // Coleção de pets
-                    .document(pet.getIdEndereco());
-
             holder.textViewNomePet.setText(pet.getNomePet());
-            holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
+            holder.textViewStatusPet.setText("ADOÇÃO");
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
 
             if (holder.textViewStatusPet.getText().equals("ADOÇÃO")) {
@@ -88,24 +73,6 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
                     .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
                     .error(R.drawable.no_image_found) // Imagem em caso de erro
                     .into(holder.imageViewFotoPet);
-
-            enderecoRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot snapshot = task.getResult();
-                    if (snapshot.exists()) {
-                        Endereco endereco = snapshot.toObject(Endereco.class);
-                        if (endereco != null && !pet.getStatusPet().equals("Adoção")) {
-                            holder.textViewCidadePet.setText(endereco.getCidade() + " - " + endereco.getEstado());
-                        } else {
-                            holder.textViewCidadePet.setVisibility(View.GONE);
-                        }
-                    }
-                } else {
-                    // Tratar erro, se necessário
-                    System.err.println("Erro ao recuperar o endereço: " + task.getException().getMessage());
-                }
-            });
-
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -92,11 +92,10 @@ public class HomeFragment extends Fragment {
                     String imagemUrl = document.getString("imagemUrl");
                     String idadePet = document.getString("idadePet");
                     String sobreOPet = document.getString("sobreOPet");
-                    String statusPet = document.getString("statusPet");
                     Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                            statusPet, imagemUrl, idEndereco, idTutor, dataCadastro));
+                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet,
+                            sobreOPet, imagemUrl, idTutor, dataCadastro));
                 }
 
                 // Notifica o adapter sobre as mudanças na lista

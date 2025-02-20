@@ -5,11 +5,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,15 +53,18 @@ public class ComportamentoPersonalidadeFragment extends Fragment {
 
         inicializarComponentes(view);
 
+        cadastroPetViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
+
+        carregarDados();
+
         // Configuração dos Spinners
         setupSpinners(view);
-
-        cadastroPetViewModel = new ViewModelProvider(requireActivity()).get(CadastroPetViewModel.class);
 
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 salvarDados();
+                cadastroPetViewModel.logPetData();
                 listener.replaceFragment(ConferirInformacoesNovoPetFragment.class);
 
             }
@@ -99,14 +104,43 @@ public class ComportamentoPersonalidadeFragment extends Fragment {
         spinnerAdestrado.setAdapter(adapterAdestrado);
     }
 
+    private void carregarDados() {
+        cadastroPetViewModel.getPet().observe(getViewLifecycleOwner(), new Observer<Pet>() {
+            @Override
+            public void onChanged(Pet petAtual) {
+                if (petAtual != null) {
+                    // Configura os valores nos campos
+                    spinnerNivelEnergia.setSelection(getIndex(spinnerNivelEnergia, petAtual.getNivelEnergia()));
+                    editTextSociabilidade.setText(petAtual.getSociabilidade());
+                    spinnerAdestrado.setSelection(petAtual.isAdestrado() ? getIndex(spinnerAdestrado, "Sim") : getIndex(spinnerAdestrado, "Não"));
+                }
+            }
+        });
+    }
+
+    // Método auxiliar para encontrar o índice de um item no Spinner
+    private int getIndex(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equals(value)) {
+                return i;
+            }
+        }
+        return 0; // Retorna o primeiro item se o valor não for encontrado
+    }
+
+
     private void salvarDados() {
-        // Obtém o objeto Pet atual do ViewModel (se ele já existir)
+
         Pet petAtual = cadastroPetViewModel.getPet().getValue();
 
         if (petAtual == null) {
             // Se o pet atual for nulo, crie um novo objeto Pet
             petAtual = new Pet();
         }
+
+        petAtual.setNivelEnergia(spinnerNivelEnergia.getSelectedItem().toString());
+        petAtual.setSociabilidade(editTextSociabilidade.getText().toString());
+        petAtual.setAdestrado(spinnerAdestrado.getSelectedItem().toString().equals("Sim"));
 
         // Salva o objeto Pet atualizado no ViewModel
         cadastroPetViewModel.setPet(petAtual);

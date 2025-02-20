@@ -55,7 +55,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
-            holder.textViewStatusPet.setText(pet.getStatusPet().toUpperCase());
+            holder.textViewStatusPet.setText("ADOÇÃO");
 
             if (holder.textViewStatusPet.getText().equals("ADOÇÃO")) {
                 holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
