@@ -40,10 +40,10 @@
                     android:id="@+id/buttonMenu"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_more_horiz_24x24"
                     android:layout_gravity="end"
                     android:layout_marginRight="24dp"
                     android:backgroundTint="@color/begeClaro"
+                    android:src="@drawable/ic_more_horiz_24x24"
                     android:text="Button" />
 
             </androidx.appcompat.widget.Toolbar>
@@ -123,7 +123,7 @@
                     android:fontFamily="@font/nunito_bold"
                     android:text="Informações gerais"
                     android:textColor="@color/coralSuave"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView62"
@@ -201,23 +201,190 @@
                     android:id="@+id/textViewCorPredominante"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginBottom="18dp"
                     android:fontFamily="@font/nunito_medium"
                     android:text="Cor predominante" />
 
                 <TextView
-                    android:id="@+id/textView72"
+                    android:id="@+id/textViewSaudeCuidados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Saúde e cuidados"
+                    android:textColor="@color/coralSuave"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textViewStatusVacinacaoTitulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Idade" />
+                    android:text="Status da vacinação"
+                    android:textColor="@color/marromEscuro" />
 
                 <TextView
-                    android:id="@+id/textView73"
+                    android:id="@+id/textViewStatusVacinacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:text="Idade" />
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Status da vacinação" />
+
+                <TextView
+                    android:id="@+id/textViewVacinasTomadasTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Vacinas tomadas"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewVacinasTomadas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Vacinas tomadas" />
+
+                <TextView
+                    android:id="@+id/textViewVermifugadoTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Vermifugado?"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewVermifugado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Vermifugado?" />
+
+                <TextView
+                    android:id="@+id/textViewDataUltimaVermifugacaoTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Data da última vermifugação"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewDataUltimaVermifugacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Data da última vermifugação" />
+
+                <TextView
+                    android:id="@+id/textViewPetCastradoTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Castrado?"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewPetCastrado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Castrado?" />
+
+                <TextView
+                    android:id="@+id/textViewHistoricoDoencasTratamentosTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Histórico de doenças ou tratamentos"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewHistoricoDoencasTratamentos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Histórico de doenças ou tratamentos" />
+
+                <TextView
+                    android:id="@+id/textViewNecessidadesEspeciaisTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Necessidades especiais"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewNecessidadesEspeciais"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Histórico de doenças ou tratamentos" />
+
+
+                <TextView
+                    android:id="@+id/textViewComportamentoPersonalidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Comportamento e personalidade"
+                    android:textColor="@color/coralSuave"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textViewNivelEnergiaTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Nível de energia"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewNivelEnergia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Nível de energia" />
+
+                <TextView
+                    android:id="@+id/textViewSociabilidadeTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Sociabilidade"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewSociabilidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Sociabilidade" />
+
+                <TextView
+                    android:id="@+id/textViewPetAdestradoTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Pet é adestrado?"
+                    android:textColor="@color/marromEscuro" />
+
+                <TextView
+                    android:id="@+id/textViewPetAdestrado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:fontFamily="@font/nunito_medium"
+                    android:text="Pet é adestrado?" />
 
                 <Button
                     android:id="@+id/buttonEntrarEmContato"

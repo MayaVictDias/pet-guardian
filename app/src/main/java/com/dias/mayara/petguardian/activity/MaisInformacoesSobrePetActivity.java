@@ -43,8 +43,19 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ImageView imageViewFotoPet;
-    private TextView textViewDesaparecidoHaTempo, textViewNomeTitulo, textViewIdadeGenero,
-            textViewId, textViewEspecie, textViewStatusPet;
+    private TextView textViewRaca, textViewCorOlhos, textViewPorte, textViewCorPredominante,
+            textViewStatusVacinacao, textViewVacinasTomadas, textViewVermifugado,
+            textViewDataUltimaVermifugacao, textViewPetCastrado,
+            textViewHistoricoDoencasTratamentos, textViewNecessidadesEspeciais,
+            textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado,
+            textViewStatusPet, textViewSaudeCuidados, textViewStatusVacinacaoTitulo,
+            textViewVacinasTomadasTitulo, textViewVermifugadoTitulo,
+            textViewDataUltimaVermifugacaoTitulo, textViewPetCastradoTitulo,
+            textViewHistoricoDoencasTratamentosTitulo, textViewNecessidadesEspeciaisTitulo,
+            textViewComportamentoPersonalidade, textViewNivelEnergiaTitulo,
+            textViewSociabilidadeTitulo, textViewPetAdestradoTitulo,
+            textViewDesaparecidoHaTempo, textViewNomeTitulo, textViewIdadeGenero,
+            textViewId, textViewEspecie;
     private Pet petSelecionado;
     private Button buttonEntrarEmContato;
     private ImageButton buttonMenu;
@@ -224,22 +235,49 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     }
 
     private void configurarCampos(Pet petSelecionado) {
+        // Configura a imagem do pet
         Glide.with(imageViewFotoPet.getContext())
-                .load(petSelecionado.getImagemUrl()) // Aqui você insere a URL da imagem
-                .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
-                .error(R.drawable.no_image_found) // Imagem em caso de erro
+                .load(petSelecionado.getImagemUrl())
+                .placeholder(R.drawable.imagem_carregamento)
+                .error(R.drawable.no_image_found)
                 .into(imageViewFotoPet);
 
+        // Atualiza o tempo desde o post
         updateTimeSincePost(petSelecionado.getDataCadastro());
 
+        // Configura os TextViews principais
         textViewNomeTitulo.setText(petSelecionado.getNomePet());
         textViewIdadeGenero.setText(petSelecionado.getIdadePet() + " • " + petSelecionado.getGeneroPet());
         textViewId.setText(petSelecionado.getIdPet());
         textViewEspecie.setText(petSelecionado.getEspeciePet());
 
+        // Configura o status do pet
         textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
         textViewStatusPet.setText("ADOÇÃO");
 
+        // Configura os TextViews de informações gerais
+        textViewRaca.setText(petSelecionado.getRacaPet());
+        textViewCorOlhos.setText(petSelecionado.getCorDosOlhos());
+        textViewPorte.setText(petSelecionado.getPorte());
+        textViewCorPredominante.setText(petSelecionado.getCorPredominante());
+
+        // Configura os TextViews de saúde e cuidados
+        textViewStatusVacinacao.setText(petSelecionado.getStatusVacinacao());
+        textViewVacinasTomadas.setText(petSelecionado.getVacinasTomadas());
+
+        // Corrigindo a lógica para vermifugado e castração
+        textViewVermifugado.setText("Sim".equalsIgnoreCase(petSelecionado.getVermifugado()) ? "Sim" : "Não");
+        textViewDataUltimaVermifugacao.setText(petSelecionado.getDataVermifugacao() != null ? petSelecionado.getDataVermifugacao().toDate().toString() : "Não informado");
+        textViewPetCastrado.setText("Sim".equalsIgnoreCase(petSelecionado.getStatusCastracao()) ? "Sim" : "Não");
+
+        // Configura os TextViews de histórico e necessidades especiais
+        textViewHistoricoDoencasTratamentos.setText(petSelecionado.getDoencasTratamentos());
+        textViewNecessidadesEspeciais.setText(petSelecionado.getNecessidadesEspeciais());
+
+        // Configura os TextViews de comportamento e personalidade
+        textViewNivelEnergia.setText(petSelecionado.getNivelEnergia());
+        textViewSociabilidade.setText(petSelecionado.getSociabilidade());
+        textViewPetAdestrado.setText(petSelecionado.isAdestrado() ? "Sim" : "Não");
     }
 
     public void updateTimeSincePost(Timestamp postTimestamp) {
@@ -284,9 +322,37 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewIdadeGenero = findViewById(R.id.textViewIdadeGenero);
         textViewId = findViewById(R.id.textViewId);
         textViewEspecie = findViewById(R.id.textViewEspecie);
-        textViewStatusPet = findViewById(R.id.textViewStatusPet);
         buttonEntrarEmContato = findViewById(R.id.buttonEntrarEmContato);
         buttonMenu = findViewById(R.id.buttonMenu);
+
+        // Inicializar os TextViews
+        textViewRaca = findViewById(R.id.textViewRaca);
+        textViewCorOlhos = findViewById(R.id.textViewCorOlhos);
+        textViewPorte = findViewById(R.id.textViewPorte);
+        textViewCorPredominante = findViewById(R.id.textViewCorPredominante);
+        textViewStatusVacinacao = findViewById(R.id.textViewStatusVacinacao);
+        textViewVacinasTomadas = findViewById(R.id.textViewVacinasTomadas);
+        textViewVermifugado = findViewById(R.id.textViewVermifugado);
+        textViewDataUltimaVermifugacao = findViewById(R.id.textViewDataUltimaVermifugacao);
+        textViewPetCastrado = findViewById(R.id.textViewPetCastrado);
+        textViewHistoricoDoencasTratamentos = findViewById(R.id.textViewHistoricoDoencasTratamentos);
+        textViewNecessidadesEspeciais = findViewById(R.id.textViewNecessidadesEspeciais);
+        textViewNivelEnergia = findViewById(R.id.textViewNivelEnergia);
+        textViewSociabilidade = findViewById(R.id.textViewSociabilidade);
+        textViewPetAdestrado = findViewById(R.id.textViewPetAdestrado);
+
+        // Inicializar os TextViews faltantes (sem os que possuem números)
+        textViewStatusPet = findViewById(R.id.textViewStatusPet);
+        textViewSaudeCuidados = findViewById(R.id.textViewSaudeCuidados);
+        textViewStatusVacinacaoTitulo = findViewById(R.id.textViewStatusVacinacaoTitulo);
+        textViewVacinasTomadasTitulo = findViewById(R.id.textViewVacinasTomadasTitulo);
+        textViewVermifugadoTitulo = findViewById(R.id.textViewVermifugadoTitulo);
+        textViewDataUltimaVermifugacaoTitulo = findViewById(R.id.textViewDataUltimaVermifugacaoTitulo);
+        textViewPetCastradoTitulo = findViewById(R.id.textViewPetCastradoTitulo);
+        textViewHistoricoDoencasTratamentosTitulo = findViewById(R.id.textViewHistoricoDoencasTratamentosTitulo);
+        textViewNecessidadesEspeciaisTitulo = findViewById(R.id.textViewNecessidadesEspeciaisTitulo);
+        textViewComportamentoPersonalidade = findViewById(R.id.textViewComportamentoPersonalidade);
+        textViewNivelEnergiaTitulo = findViewById(R.id.textViewNivelEnergiaTitulo);
     }
 
     // Método para lidar com o clique no botão de voltar

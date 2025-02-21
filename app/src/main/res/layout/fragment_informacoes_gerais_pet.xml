@@ -186,7 +186,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_medium"
-            android:text="Selecione a raça do pet"
+            android:text="Selecione a raça do pet. Caso desconheça, selecione 'Outro'"
             android:textSize="13sp"
             android:visibility="gone" />
 
