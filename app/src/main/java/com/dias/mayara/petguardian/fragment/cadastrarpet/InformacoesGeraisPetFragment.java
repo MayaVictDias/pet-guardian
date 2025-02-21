@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,11 +46,12 @@ public class InformacoesGeraisPetFragment extends Fragment {
     private RadioGroup radioGroupGenero, radioGroupEspecie, radioGroupIdade;
     private RadioButton radioButtonMacho, radioButtonFemea, radioButtonCachorro, radioButtonGato,
             radioButtonFilhote, radioButtonAdulto;
+    private TextView textViewExplicacaoRaça, textViewRaca;
     private CheckBox checkBoxNaoSeiNomePet;
     private ImageView escolherImagemPet;
-    private TextView textViewEscolherImagem;
+    private TextView textViewEscolherImagem, textViewExplicacaoRaca;
 
-    private Spinner spinnerCorDosOlhos, spinnerPorte, spinnerCorPredominante;
+    private Spinner spinnerCorDosOlhos, spinnerPorte, spinnerCorPredominante, spinnerRaca;
 
     private static final int SELECAO_CAMERA = 100;
     private String[] permissoesNecessarias = new String[]{
@@ -114,13 +114,49 @@ public class InformacoesGeraisPetFragment extends Fragment {
         escolherImagemPet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                    i.setType("image/*");
-                    if (i.resolveActivity(getActivity().getPackageManager()) != null) {
-                        startActivityForResult(i, SELECAO_CAMERA);
-
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.setType("image/*");
+                if (i.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_CAMERA);
                 }
+            }
+        });
+
+        // Configurar a visibilidade dos componentes de raça com base na espécie selecionada
+        radioGroupEspecie.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioButtonCachorro) {
+                // Se a espécie for cachorro
+                spinnerRaca.setVisibility(View.VISIBLE);
+                textViewExplicacaoRaca.setVisibility(View.VISIBLE);
+                textViewRaca.setVisibility(View.VISIBLE);
+
+                // Configurar o Spinner com o array de raças de cachorro
+                ArrayAdapter<CharSequence> adapterRacaCachorro = ArrayAdapter.createFromResource(
+                        requireContext(),
+                        R.array.racas_cachorro_array,
+                        android.R.layout.simple_spinner_item
+                );
+                adapterRacaCachorro.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerRaca.setAdapter(adapterRacaCachorro);
+            } else if (checkedId == R.id.radioButtonGato) {
+                // Se a espécie for gato
+                spinnerRaca.setVisibility(View.VISIBLE);
+                textViewExplicacaoRaca.setVisibility(View.VISIBLE);
+                textViewRaca.setVisibility(View.VISIBLE);
+
+                // Configurar o Spinner com o array de raças de gato
+                ArrayAdapter<CharSequence> adapterRacaGato = ArrayAdapter.createFromResource(
+                        requireContext(),
+                        R.array.racas_gato_array,
+                        android.R.layout.simple_spinner_item
+                );
+                adapterRacaGato.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerRaca.setAdapter(adapterRacaGato);
+            } else {
+                // Se nenhuma espécie for selecionada, ocultar os componentes de raça
+                spinnerRaca.setVisibility(View.GONE);
+                textViewExplicacaoRaca.setVisibility(View.GONE);
+                textViewRaca.setVisibility(View.GONE);
             }
         });
 
@@ -167,6 +203,11 @@ public class InformacoesGeraisPetFragment extends Fragment {
                 pet.setCorDosOlhos(spinnerCorDosOlhos.getSelectedItem().toString());
                 pet.setPorte(spinnerPorte.getSelectedItem().toString());
                 pet.setCorPredominante(spinnerCorPredominante.getSelectedItem().toString());
+
+                // Salvar a raça selecionada (se visível)
+                if (spinnerRaca.getVisibility() == View.VISIBLE) {
+                    pet.setRacaPet(spinnerRaca.getSelectedItem().toString());
+                }
 
                 // Salvar o objeto Pet no SharedViewModel
                 cadastroPetViewModel.setPet(pet);
@@ -261,6 +302,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
         );
         adapterCorPredominante.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCorPredominante.setAdapter(adapterCorPredominante);
+
     }
 
     private void setupEditTexts() {
@@ -356,6 +398,8 @@ public class InformacoesGeraisPetFragment extends Fragment {
         spinnerCorDosOlhos = view.findViewById(R.id.spinnerCorDosOlhos);
         spinnerPorte = view.findViewById(R.id.spinnerPorte);
         spinnerCorPredominante = view.findViewById(R.id.spinnerCorPredominante);
+        spinnerRaca = view.findViewById(R.id.spinnerRaca);
+        textViewExplicacaoRaca = view.findViewById(R.id.textViewExplicacaoRaca);
 
     }
 

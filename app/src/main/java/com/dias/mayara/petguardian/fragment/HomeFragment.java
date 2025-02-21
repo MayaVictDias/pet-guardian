@@ -81,22 +81,38 @@ public class HomeFragment extends Fragment {
         petsRef.whereEqualTo("statusPet", "Adoção").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 listaPetsAdocao.clear(); // Limpa a lista antes de adicionar novos dados
-                for (QueryDocumentSnapshot document : task.getResult()) {
+                for (QueryDocumentSnapshot snapshot : task.getResult()) {
                     // Obtendo os dados do documento
-                    String idPet = document.getString("idPet");
-                    String idTutor = document.getString("idTutor");
-                    String especiePet = document.getString("especiePet");
-                    String portePet = document.getString("portePet");
-                    String corPredominantePet = document.getString("corPredominantePet");
-                    String corDosOlhosPet = document.getString("corDosOlhosPet");
-                    String nomePet = document.getString("nomePet");
-                    String generoPet = document.getString("generoPet");
-                    String imagemUrl = document.getString("imagemUrl");
-                    String idadePet = document.getString("idadePet");
-                    Timestamp dataCadastro = document.getTimestamp("dataCadastro");
+                    String idPet = snapshot.getString("idPet");
+                    String idTutor = snapshot.getString("idTutor");
+                    String nomePet = snapshot.getString("nomePet");
+                    String idadePet = snapshot.getString("idadePet");
+                    String generoPet = snapshot.getString("generoPet");
+                    String especiePet = snapshot.getString("especiePet");
+                    String raca = snapshot.getString("racaPet");
+                    String corPredominantePet = snapshot.getString("corPredominantePet");
+                    String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
+                    String portePet = snapshot.getString("portePet");
+                    String imagemUrl = snapshot.getString("imagemUrl");
+                    String statusVacinacao = snapshot.getString("statusVacinacao");
+                    String vacinasTomadas = snapshot.getString("vacinasTomadas");
+                    String vermifugado = snapshot.getString("vermifugado");
+                    Timestamp dataVermifugacao = snapshot.getTimestamp("dataVermifugacao");
+                    String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
+                    String doencasTratamentos = snapshot.getString("doencasTratamentos");
+                    String statusCastracao = snapshot.getString("statusCastracao");
+                    String nivelEnergia = snapshot.getString("nivelEnergia");
+                    String sociabilidade = snapshot.getString("sociabilidade");
+                    String isAdestrado = snapshot.getString("sociabilidade");
+                    Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, corDosOlhosPet,
-                            corPredominantePet, portePet, imagemUrl, idTutor, dataCadastro));
+                    boolean adestrado = "Sim".equalsIgnoreCase(isAdestrado);
+
+                    listaPetsAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
+                            raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
+                            vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
+                            doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
+                            dataCadastro));
                 }
 
                 // Notifica o adapter sobre as mudanças na lista

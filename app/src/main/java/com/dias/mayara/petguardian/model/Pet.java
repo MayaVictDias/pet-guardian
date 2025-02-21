@@ -8,7 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +22,10 @@ public class Pet implements Serializable {
     private String idadePet;
     private String generoPet;
     private String especiePet;
+    private String racaPet;
+    private String corPredominante;
+    private String corDosOlhos;
+    private String porte;
     private String nomeLowerCase;
     private String imagemUrl; // Armazenará a URL da imagem
     private String statusVacinacao;
@@ -31,12 +34,9 @@ public class Pet implements Serializable {
     private Timestamp dataVermifugacao;
     private String necessidadesEspeciais;
     private String doencasTratamentos;
+    private String statusCastracao;
     private String nivelEnergia;
     private String sociabilidade;
-    private String statusCastracao;
-    private String corDosOlhos;
-    private String porte;
-    private String corPredominante;
     private boolean isAdestrado;
     private Timestamp dataCadastro;
 
@@ -48,33 +48,32 @@ public class Pet implements Serializable {
     }
 
     public Pet(String idTutor, String nomePet, String idadePet, String generoPet, String especiePet,
-               String statusCastracao, String corDosOlhos, String corPredominante, String porte, String imagemUrl,
+               String racaPet, String corPredominante, String corDosOlhos, String porte, String imagemUrl,
                String statusVacinacao, String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao,
-               String necessidadesEspeciais, String doencasTratamentos, String nivelEnergia,
-               String sociabilidade, boolean isAdestrado, Timestamp dataCadastro) {
+               String necessidadesEspeciais, String doencasTratamentos, String statusCastracao,
+               String nivelEnergia, String sociabilidade, boolean isAdestrado, Timestamp dataCadastro) {
 
         this.idTutor = idTutor;
         this.nomePet = nomePet;
-        this.corDosOlhos = corDosOlhos;
-        this.porte = porte;
-        this.corPredominante = corPredominante;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
-        this.statusCastracao = statusCastracao;
+        this.racaPet = racaPet;
+        this.corPredominante = corPredominante;
+        this.corDosOlhos = corDosOlhos;
+        this.porte = porte;
+        this.nomeLowerCase = nomePet.toLowerCase();
         this.imagemUrl = imagemUrl;
-
         this.statusVacinacao = statusVacinacao;
         this.vacinasTomadas = vacinasTomadas;
         this.vermifugado = vermifugado;
         this.dataVermifugacao = dataVermifugacao;
         this.necessidadesEspeciais = necessidadesEspeciais;
         this.doencasTratamentos = doencasTratamentos;
-
+        this.statusCastracao = statusCastracao;
         this.nivelEnergia = nivelEnergia;
         this.sociabilidade = sociabilidade;
         this.isAdestrado = isAdestrado;
-
         this.dataCadastro = dataCadastro;
 
         // Gera o ID único de 6 caracteres
@@ -83,35 +82,65 @@ public class Pet implements Serializable {
         this.idTutor = idUsuarioLogado;
     }
 
-    public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
-               String corDosOlhos, String corPredominante, String porte,
-               String imagemUrl, String idTutor, Timestamp dataCadastro) {
-        // Construtor com ID do pet, quando ele for puxado direto do banco de dados
+
+    public Pet(String idPet, String idTutor, String nomePet, String idadePet, String generoPet, String especiePet,
+               String racaPet, String corPredominante, String corDosOlhos, String porte, String imagemUrl,
+               String statusVacinacao, String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao,
+               String necessidadesEspeciais, String doencasTratamentos, String statusCastracao,
+               String nivelEnergia, String sociabilidade, boolean isAdestrado, Timestamp dataCadastro) {
+    // Construtor com idPet
         this.idPet = idPet;
+        this.idTutor = idTutor;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
-        this.porte = porte;
-        this.corPredominante = corPredominante;
-        this.corDosOlhos = corDosOlhos;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
+        this.racaPet = racaPet;
+        this.corPredominante = corPredominante;
+        this.corDosOlhos = corDosOlhos;
+        this.porte = porte;
+        this.nomeLowerCase = nomePet.toLowerCase();
         this.imagemUrl = imagemUrl;
-        this.idTutor = idTutor;
+        this.statusVacinacao = statusVacinacao;
+        this.vacinasTomadas = vacinasTomadas;
+        this.vermifugado = vermifugado;
+        this.dataVermifugacao = dataVermifugacao;
+        this.necessidadesEspeciais = necessidadesEspeciais;
+        this.doencasTratamentos = doencasTratamentos;
+        this.statusCastracao = statusCastracao;
+        this.nivelEnergia = nivelEnergia;
+        this.sociabilidade = sociabilidade;
+        this.isAdestrado = isAdestrado;
         this.dataCadastro = dataCadastro;
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
-               String corDosOlhos, String corPredominante, String porte,
-               String imagemUrl, String idTutor) { // Construtor sem data de cadastro
+               String racaPet, String corPredominante, String corDosOlhos, String porte, String imagemUrl,
+               String statusVacinacao, String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao,
+               String necessidadesEspeciais, String doencasTratamentos, String statusCastracao,
+               String nivelEnergia, String sociabilidade, boolean isAdestrado) {
+    // Construtor sem data de cadastro
+
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
-        this.imagemUrl = imagemUrl;
-        this.idTutor = idTutor;
-        this.porte = porte;
+        this.racaPet = racaPet;
         this.corPredominante = corPredominante;
         this.corDosOlhos = corDosOlhos;
+        this.porte = porte;
+        this.nomeLowerCase = nomePet.toLowerCase();
+        this.imagemUrl = imagemUrl;
+        this.statusVacinacao = statusVacinacao;
+        this.vacinasTomadas = vacinasTomadas;
+        this.vermifugado = vermifugado;
+        this.dataVermifugacao = dataVermifugacao;
+        this.necessidadesEspeciais = necessidadesEspeciais;
+        this.doencasTratamentos = doencasTratamentos;
+        this.statusCastracao = statusCastracao;
+        this.nivelEnergia = nivelEnergia;
+        this.sociabilidade = sociabilidade;
+        this.isAdestrado = isAdestrado;
 
         // Gera o ID único de 6 caracteres
         this.idPet = generateUniqueId();
@@ -161,9 +190,10 @@ public class Pet implements Serializable {
         petData.put("corDosOlhosPet", getCorDosOlhos());
         petData.put("corPredominantePet", getCorPredominante());
         petData.put("especiePet", getEspeciePet());
+        petData.put("racaPet", getRacaPet());
         petData.put("statusCastracao", getStatusCastracao());
         petData.put("imagemUrl", getImagemUrl());
-        petData.put("dataCadastro", getDataCadastro()); // Usando Timestamp diretamente
+        petData.put("dataCadastro", getDataCadastro());
         petData.put("statusVacinacao", getStatusVacinacao());
         petData.put("vacinasTomadas", getVacinasTomadas());
         petData.put("vermifugado", getVermifugado());
@@ -356,6 +386,14 @@ public class Pet implements Serializable {
 
     public void setCorPredominante(String corPredominante) {
         this.corPredominante = corPredominante;
+    }
+
+    public String getRacaPet() {
+        return racaPet;
+    }
+
+    public void setRacaPet(String racaPet) {
+        this.racaPet = racaPet;
     }
 
     @Override

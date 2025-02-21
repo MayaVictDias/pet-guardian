@@ -42,10 +42,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 public class ConferirInformacoesNovoPetFragment extends Fragment {
 
@@ -55,7 +53,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             textViewStatusVacinacao, textViewVacinasTomadas, textViewVermifugado, textViewDataUltimaVermifugacao,
             textViewPetCastrado, textViewHistoricoDoencasTratamentos, textViewCorDosOlhos, textViewCorPredominante,
             textViewPorte, textViewNecessidadesEspeciais, textViewNivelEnergia, textViewSociabilidade,
-            textViewPetAdestrado;
+            textViewPetAdestrado, textViewRaca;
 
     // TextViews para os títulos
     private TextView textViewStatusVacinacaoTitulo, textViewVacinasTomadasTitulo,
@@ -159,10 +157,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewIdadePet.getText().toString(),
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),
-                    textViewPetCastrado.getText().toString(),
-
-                    textViewCorDosOlhos.getText().toString(),
+                    textViewRaca.getText().toString(),
                     textViewCorPredominante.getText().toString(),
+                    textViewCorDosOlhos.getText().toString(),
                     textViewPorte.getText().toString(),
 
                     urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
@@ -172,6 +169,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     dataVermifugacao, // Passa o Timestamp convertido
                     textViewNecessidadesEspeciais.getText().toString(),
                     textViewHistoricoDoencasTratamentos.getText().toString(),
+                    textViewPetCastrado.getText().toString(),
                     textViewNivelEnergia.getText().toString(),
                     textViewSociabilidade.getText().toString(),
                     isAdestrado,
@@ -288,6 +286,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewCorDosOlhos.setText(pet.getCorDosOlhos());
                     textViewCorPredominante.setText(pet.getCorPredominante());
                     textViewPorte.setText(pet.getPorte());
+                    textViewRaca.setText(pet.getRacaPet());
 
                     textViewStatusVacinacao.setText(pet.getStatusVacinacao());
                     textViewVacinasTomadas.setText(pet.getVacinasTomadas());
@@ -331,6 +330,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewIdadePet = view.findViewById(R.id.textViewIdadePet);
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
+        textViewRaca = view.findViewById(R.id.textViewRaca);
 
         textViewCorDosOlhos = view.findViewById(R.id.textViewCorDosOlhos);
         textViewCorPredominante = view.findViewById(R.id.textViewCorPredominante);

@@ -124,18 +124,34 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             for (QueryDocumentSnapshot snapshot : snapshots) {
                 String idPet = snapshot.getString("idPet");
                 String idTutor = snapshot.getString("idTutor");
+                String nomePet = snapshot.getString("nomePet");
+                String idadePet = snapshot.getString("idadePet");
+                String generoPet = snapshot.getString("generoPet");
                 String especiePet = snapshot.getString("especiePet");
-                String portePet = snapshot.getString("portePet");
+                String raca = snapshot.getString("racaPet");
                 String corPredominantePet = snapshot.getString("corPredominantePet");
                 String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
-                String nomePet = snapshot.getString("nomePet");
-                String generoPet = snapshot.getString("generoPet");
+                String portePet = snapshot.getString("portePet");
                 String imagemUrl = snapshot.getString("imagemUrl");
-                String idadePet = snapshot.getString("idadePet");
+                String statusVacinacao = snapshot.getString("statusVacinacao");
+                String vacinasTomadas = snapshot.getString("vacinasTomadas");
+                String vermifugado = snapshot.getString("vermifugado");
+                Timestamp dataVermifugacao = snapshot.getTimestamp("dataVermifugacao");
+                String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
+                String doencasTratamentos = snapshot.getString("doencasTratamentos");
+                String statusCastracao = snapshot.getString("statusCastracao");
+                String nivelEnergia = snapshot.getString("nivelEnergia");
+                String sociabilidade = snapshot.getString("sociabilidade");
+                String isAdestrado = snapshot.getString("sociabilidade");
                 Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, corDosOlhosPet,
-                        corPredominantePet, portePet, imagemUrl, idTutor, dataCadastro));
+                boolean adestrado = "Sim".equalsIgnoreCase(isAdestrado);
+
+                petListAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
+                        raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
+                        vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
+                        doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
+                        dataCadastro));
             }
             petsAdapterAdocao.notifyDataSetChanged();
         });
