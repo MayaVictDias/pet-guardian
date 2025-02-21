@@ -103,6 +103,57 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/textViewCorDosOlhosTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Cor dos olhos"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewCorDosOlhos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Cor dos olhos"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewCorPredominanteTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Cor predominante"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewCorPredominante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Cor predominante"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewPorteTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Porte"
+            android:textColor="@color/marromEscuro"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textViewPorte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="Porte"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/textViewFoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

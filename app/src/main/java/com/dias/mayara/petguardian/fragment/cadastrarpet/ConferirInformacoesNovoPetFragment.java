@@ -53,14 +53,15 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private FragmentInteractionListener listener;
     private TextView textViewNomePet, textViewIdadePet, textViewGeneroPet, textViewEspecie,
             textViewStatusVacinacao, textViewVacinasTomadas, textViewVermifugado, textViewDataUltimaVermifugacao,
-            textViewPetCastrado, textViewHistoricoDoencasTratamentos, textViewNecessidadesEspeciais,
-            textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado;
+            textViewPetCastrado, textViewHistoricoDoencasTratamentos, textViewCorDosOlhos, textViewCorPredominante,
+            textViewPorte, textViewNecessidadesEspeciais, textViewNivelEnergia, textViewSociabilidade,
+            textViewPetAdestrado;
 
     // TextViews para os títulos
     private TextView textViewStatusVacinacaoTitulo, textViewVacinasTomadasTitulo,
             textViewVermifugadoTitulo, textViewDataVermifugacaoTitulo, textViewPetCastradoTitulo,
-            textViewHistoricoDoencasTratamentosTitulo, textViewNecessidadesEspeciaisTitulo,
-            textViewNivelEnergiaTitulo, textViewSociabilidadeTitulo, textViewPetAdestradoTitulo;
+            textViewHistoricoDoencasTratamentosTitulo, textViewNecessidadesEspeciaisTitulo, textViewNivelEnergiaTitulo,
+            textViewSociabilidadeTitulo, textViewPetAdestradoTitulo;
 
     private ImageView imageViewFotoPet;
 
@@ -159,6 +160,11 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),
                     textViewPetCastrado.getText().toString(),
+
+                    textViewCorDosOlhos.getText().toString(),
+                    textViewCorPredominante.getText().toString(),
+                    textViewPorte.getText().toString(),
+
                     urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
                     textViewStatusVacinacao.getText().toString(),
                     textViewVacinasTomadas.getText().toString(),
@@ -279,6 +285,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewIdadePet.setText(pet.getIdadePet());
                     textViewGeneroPet.setText(pet.getGeneroPet());
                     textViewEspecie.setText(pet.getEspeciePet());
+                    textViewCorDosOlhos.setText(pet.getCorDosOlhos());
+                    textViewCorPredominante.setText(pet.getCorPredominante());
+                    textViewPorte.setText(pet.getPorte());
 
                     textViewStatusVacinacao.setText(pet.getStatusVacinacao());
                     textViewVacinasTomadas.setText(pet.getVacinasTomadas());
@@ -323,7 +332,11 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
 
-        // ImageView (foto do pet)
+        textViewCorDosOlhos = view.findViewById(R.id.textViewCorDosOlhos);
+        textViewCorPredominante = view.findViewById(R.id.textViewCorPredominante);
+        textViewPorte = view.findViewById(R.id.textViewPorte);
+
+                // ImageView (foto do pet)
         imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);
 
         // TextViews (vacinação)

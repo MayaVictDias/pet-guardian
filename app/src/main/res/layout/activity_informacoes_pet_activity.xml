@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Características"
+                    android:text="Informações gerais"
                     android:textColor="@color/coralSuave"
                     android:textSize="16sp" />
 

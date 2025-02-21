@@ -18,11 +18,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,8 @@ public class InformacoesGeraisPetFragment extends Fragment {
     private CheckBox checkBoxNaoSeiNomePet;
     private ImageView escolherImagemPet;
     private TextView textViewEscolherImagem;
+
+    private Spinner spinnerCorDosOlhos, spinnerPorte, spinnerCorPredominante;
 
     private static final int SELECAO_CAMERA = 100;
     private String[] permissoesNecessarias = new String[]{
@@ -95,6 +99,8 @@ public class InformacoesGeraisPetFragment extends Fragment {
             }
         });
 
+        configurarSpinners();
+
         // Observa a imagem armazenada no ViewModel e atualiza a ImageView quando houver alteração
         cadastroPetViewModel.getImagemPet().observe(getViewLifecycleOwner(), imagemBytes -> {
             if (imagemBytes != null) {
@@ -121,62 +127,140 @@ public class InformacoesGeraisPetFragment extends Fragment {
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (editTextNomePet.getText() == null && !checkBoxNaoSeiNomePet.isChecked()
-                        || editTextNomePet.getText().toString().trim().isEmpty() && !checkBoxNaoSeiNomePet.isChecked()) {
-                    Toast.makeText(getContext(), "Preencha o campo 'Nome do pet'", Toast.LENGTH_SHORT).show();
-                } else if (radioGroupIdade.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(getContext(), "Preencha o campo 'Idade do pet'", Toast.LENGTH_SHORT).show();
-                } else if (radioGroupGenero.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(getContext(), "Selecione o gênero do pet", Toast.LENGTH_SHORT).show();
-                } else if (radioGroupEspecie.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(getContext(), "Selecione a espécie do pet", Toast.LENGTH_SHORT).show();
-                } else if (escolherImagemPet.getDrawable() == null) {
-                    Toast.makeText(getContext(), "Selecione uma imagem", Toast.LENGTH_SHORT).show();
-                }else {
-
-                    // Obter o texto dos campos EditText e salvar no objeto pet
-                    if (checkBoxNaoSeiNomePet.isChecked()) {
-                        pet.setNomePet("Nome desconhecido");
-                    } else {
-                        pet.setNomePet(editTextNomePet.getText().toString());
-                    }
-
-                    // Obter a seleção de Gênero
-                    int selectedGeneroId = radioGroupGenero.getCheckedRadioButtonId();
-                    if (selectedGeneroId == R.id.radioButtonMacho) {
-                        pet.setGeneroPet("Macho");
-                    } else if (selectedGeneroId == R.id.radioButtonFemea) {
-                        pet.setGeneroPet("Fêmea");
-                    }
-
-                    // Obter a seleção de Espécie
-                    int selectedEspecieId = radioGroupEspecie.getCheckedRadioButtonId();
-                    if (selectedEspecieId == R.id.radioButtonCachorro) {
-                        pet.setEspeciePet("Cachorro");
-                    } else if (selectedEspecieId == R.id.radioButtonGato) {
-                        pet.setEspeciePet("Gato");
-                    }
-
-                    // Obter a seleção de Idade
-                    int selectedIdadeId = radioGroupIdade.getCheckedRadioButtonId();
-                    if (selectedIdadeId == R.id.radioButtonFilhote) {
-                        pet.setIdadePet("Filhote");
-                    } else if (selectedIdadeId == R.id.radioButtonAdulto) {
-                        pet.setIdadePet("Adulto");
-                    }
-
-                    // Salvar o objeto Pet no SharedViewModel
-                    cadastroPetViewModel.setPet(pet);
-
-                    // Substituir o fragmento atual pelo próximo
-                    listener.replaceFragment(SaudeCuidadosNovoPetFragment.class);
-
+                // Verificar se todos os campos estão preenchidos corretamente
+                if (!validarCampos()) {
+                    return; // Interrompe o processo se algum campo estiver inválido
                 }
+
+                // Obter o texto dos campos EditText e salvar no objeto pet
+                if (checkBoxNaoSeiNomePet.isChecked()) {
+                    pet.setNomePet("Nome desconhecido");
+                } else {
+                    pet.setNomePet(editTextNomePet.getText().toString());
+                }
+
+                // Obter a seleção de Gênero
+                int selectedGeneroId = radioGroupGenero.getCheckedRadioButtonId();
+                if (selectedGeneroId == R.id.radioButtonMacho) {
+                    pet.setGeneroPet("Macho");
+                } else if (selectedGeneroId == R.id.radioButtonFemea) {
+                    pet.setGeneroPet("Fêmea");
+                }
+
+                // Obter a seleção de Espécie
+                int selectedEspecieId = radioGroupEspecie.getCheckedRadioButtonId();
+                if (selectedEspecieId == R.id.radioButtonCachorro) {
+                    pet.setEspeciePet("Cachorro");
+                } else if (selectedEspecieId == R.id.radioButtonGato) {
+                    pet.setEspeciePet("Gato");
+                }
+
+                // Obter a seleção de Idade
+                int selectedIdadeId = radioGroupIdade.getCheckedRadioButtonId();
+                if (selectedIdadeId == R.id.radioButtonFilhote) {
+                    pet.setIdadePet("Filhote");
+                } else if (selectedIdadeId == R.id.radioButtonAdulto) {
+                    pet.setIdadePet("Adulto");
+                }
+
+                // Obter a seleção dos Spinners
+                pet.setCorDosOlhos(spinnerCorDosOlhos.getSelectedItem().toString());
+                pet.setPorte(spinnerPorte.getSelectedItem().toString());
+                pet.setCorPredominante(spinnerCorPredominante.getSelectedItem().toString());
+
+                // Salvar o objeto Pet no SharedViewModel
+                cadastroPetViewModel.setPet(pet);
+
+                // Substituir o fragmento atual pelo próximo
+                listener.replaceFragment(SaudeCuidadosNovoPetFragment.class);
             }
         });
 
         return view;
+    }
+
+    private boolean validarCampos() {
+        // Verificar se o campo "Nome do pet" está preenchido
+        if (editTextNomePet.getText() == null && !checkBoxNaoSeiNomePet.isChecked()
+                || editTextNomePet.getText().toString().trim().isEmpty() && !checkBoxNaoSeiNomePet.isChecked()) {
+            Toast.makeText(getContext(), "Preencha o campo 'Nome do pet'", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se a idade do pet foi selecionada
+        if (radioGroupIdade.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(getContext(), "Preencha o campo 'Idade do pet'", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se o gênero do pet foi selecionado
+        if (radioGroupGenero.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(getContext(), "Selecione o gênero do pet", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se a espécie do pet foi selecionada
+        if (radioGroupEspecie.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(getContext(), "Selecione a espécie do pet", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se uma imagem foi selecionada
+        if (escolherImagemPet.getDrawable() == null) {
+            Toast.makeText(getContext(), "Selecione uma imagem", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se a cor dos olhos foi selecionada
+        if (spinnerCorDosOlhos.getSelectedItem().toString().equals("Selecione")) {
+            Toast.makeText(getContext(), "Selecione a cor dos olhos do pet", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se o porte foi selecionado
+        if (spinnerPorte.getSelectedItem().toString().equals("Selecione")) {
+            Toast.makeText(getContext(), "Selecione o porte do pet", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se a cor predominante foi selecionada
+        if (spinnerCorPredominante.getSelectedItem().toString().equals("Selecione")) {
+            Toast.makeText(getContext(), "Selecione a cor predominante do pet", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Se todas as verificações passarem, retornar true
+        return true;
+    }
+
+    private void configurarSpinners() {
+
+        // Configuração do Spinner para cor dos olhos
+        ArrayAdapter<CharSequence> adapterCorDosOlhos = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.cores_dos_olhos_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapterCorDosOlhos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCorDosOlhos.setAdapter(adapterCorDosOlhos);
+
+        // Configuração do Spinner para porte
+        ArrayAdapter<CharSequence> adapterPorte = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.porte_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapterPorte.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPorte.setAdapter(adapterPorte);
+
+        // Configuração do Spinner para cor predominante
+        ArrayAdapter<CharSequence> adapterCorPredominante = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.cor_predominante_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapterCorPredominante.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCorPredominante.setAdapter(adapterCorPredominante);
     }
 
     private void setupEditTexts() {
@@ -253,6 +337,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
     }
 
     public void inicializarComponentes(View view) {
+
         buttonAvancar = view.findViewById(R.id.buttonAvancar);
 
         editTextNomePet = view.findViewById(R.id.editTextNomePet);
@@ -268,6 +353,10 @@ public class InformacoesGeraisPetFragment extends Fragment {
         radioButtonCachorro = view.findViewById(R.id.radioButtonCachorro);
         radioButtonGato = view.findViewById(R.id.radioButtonGato);
         checkBoxNaoSeiNomePet = view.findViewById(R.id.checkBoxNaoSeiNomePet);
+        spinnerCorDosOlhos = view.findViewById(R.id.spinnerCorDosOlhos);
+        spinnerPorte = view.findViewById(R.id.spinnerPorte);
+        spinnerCorPredominante = view.findViewById(R.id.spinnerCorPredominante);
+
     }
 
     @Override

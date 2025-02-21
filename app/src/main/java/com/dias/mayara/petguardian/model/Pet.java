@@ -34,6 +34,9 @@ public class Pet implements Serializable {
     private String nivelEnergia;
     private String sociabilidade;
     private String statusCastracao;
+    private String corDosOlhos;
+    private String porte;
+    private String corPredominante;
     private boolean isAdestrado;
     private Timestamp dataCadastro;
 
@@ -45,27 +48,33 @@ public class Pet implements Serializable {
     }
 
     public Pet(String idTutor, String nomePet, String idadePet, String generoPet, String especiePet,
-               String statusCastracao, String imagemUrl, String statusVacinacao,
-               String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao, String necessidadesEspeciais,
-               String doencasTratamentos, String nivelEnergia, String sociabilidade, boolean isAdestrado,
-               Timestamp dataCadastro) {
+               String statusCastracao, String corDosOlhos, String corPredominante, String porte, String imagemUrl,
+               String statusVacinacao, String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao,
+               String necessidadesEspeciais, String doencasTratamentos, String nivelEnergia,
+               String sociabilidade, boolean isAdestrado, Timestamp dataCadastro) {
 
         this.idTutor = idTutor;
         this.nomePet = nomePet;
+        this.corDosOlhos = corDosOlhos;
+        this.porte = porte;
+        this.corPredominante = corPredominante;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.statusCastracao = statusCastracao;
         this.imagemUrl = imagemUrl;
+
         this.statusVacinacao = statusVacinacao;
         this.vacinasTomadas = vacinasTomadas;
         this.vermifugado = vermifugado;
         this.dataVermifugacao = dataVermifugacao;
         this.necessidadesEspeciais = necessidadesEspeciais;
         this.doencasTratamentos = doencasTratamentos;
+
         this.nivelEnergia = nivelEnergia;
         this.sociabilidade = sociabilidade;
         this.isAdestrado = isAdestrado;
+
         this.dataCadastro = dataCadastro;
 
         // Gera o ID único de 6 caracteres
@@ -75,11 +84,15 @@ public class Pet implements Serializable {
     }
 
     public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
+               String corDosOlhos, String corPredominante, String porte,
                String imagemUrl, String idTutor, Timestamp dataCadastro) {
         // Construtor com ID do pet, quando ele for puxado direto do banco de dados
         this.idPet = idPet;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
+        this.porte = porte;
+        this.corPredominante = corPredominante;
+        this.corDosOlhos = corDosOlhos;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.imagemUrl = imagemUrl;
@@ -88,6 +101,7 @@ public class Pet implements Serializable {
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
+               String corDosOlhos, String corPredominante, String porte,
                String imagemUrl, String idTutor) { // Construtor sem data de cadastro
         this.nomePet = nomePet;
         this.idadePet = idadePet;
@@ -95,6 +109,9 @@ public class Pet implements Serializable {
         this.especiePet = especiePet;
         this.imagemUrl = imagemUrl;
         this.idTutor = idTutor;
+        this.porte = porte;
+        this.corPredominante = corPredominante;
+        this.corDosOlhos = corDosOlhos;
 
         // Gera o ID único de 6 caracteres
         this.idPet = generateUniqueId();
@@ -140,6 +157,9 @@ public class Pet implements Serializable {
         petData.put("nomeLowerCasePet", getNomeLowerCase());
         petData.put("idadePet", getIdadePet());
         petData.put("generoPet", getGeneroPet());
+        petData.put("portePet", getPorte());
+        petData.put("corDosOlhosPet", getCorDosOlhos());
+        petData.put("corPredominantePet", getCorPredominante());
         petData.put("especiePet", getEspeciePet());
         petData.put("statusCastracao", getStatusCastracao());
         petData.put("imagemUrl", getImagemUrl());
@@ -308,6 +328,34 @@ public class Pet implements Serializable {
 
     public void setNomeLowerCase() {
         this.nomeLowerCase = nomePet.toLowerCase();
+    }
+
+    public void setNomeLowerCase(String nomeLowerCase) {
+        this.nomeLowerCase = nomeLowerCase;
+    }
+
+    public String getCorDosOlhos() {
+        return corDosOlhos;
+    }
+
+    public void setCorDosOlhos(String corDosOlhos) {
+        this.corDosOlhos = corDosOlhos;
+    }
+
+    public String getPorte() {
+        return porte;
+    }
+
+    public void setPorte(String porte) {
+        this.porte = porte;
+    }
+
+    public String getCorPredominante() {
+        return corPredominante;
+    }
+
+    public void setCorPredominante(String corPredominante) {
+        this.corPredominante = corPredominante;
     }
 
     @Override

@@ -125,14 +125,17 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 String idPet = snapshot.getString("idPet");
                 String idTutor = snapshot.getString("idTutor");
                 String especiePet = snapshot.getString("especiePet");
+                String portePet = snapshot.getString("portePet");
+                String corPredominantePet = snapshot.getString("corPredominantePet");
+                String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
                 String nomePet = snapshot.getString("nomePet");
                 String generoPet = snapshot.getString("generoPet");
                 String imagemUrl = snapshot.getString("imagemUrl");
                 String idadePet = snapshot.getString("idadePet");
-                String sobreOPet = snapshot.getString("sobreOPet");
                 Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, imagemUrl, idTutor, dataCadastro));
+                petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, corDosOlhosPet,
+                        corPredominantePet, portePet, imagemUrl, idTutor, dataCadastro));
             }
             petsAdapterAdocao.notifyDataSetChanged();
         });

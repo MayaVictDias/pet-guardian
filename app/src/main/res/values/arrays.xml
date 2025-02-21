@@ -43,4 +43,36 @@
         <item>Sim</item>
         <item>Não</item>
     </string-array>
+
+    <!-- Array para cores dos olhos -->
+    <string-array name="cores_dos_olhos_array">
+        <item>Selecione</item>
+        <item>Azul</item>
+        <item>Verde</item>
+        <item>Castanho</item>
+        <item>Preto</item>
+        <item>Amarelo</item>
+        <item>Vermelho</item>
+    </string-array>
+
+    <!-- Array para portes -->
+    <string-array name="porte_array">
+        <item>Selecione</item>
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+    </string-array>
+
+    <!-- Array para cores predominantes -->
+    <string-array name="cor_predominante_array">
+        <item>Selecione</item>
+        <item>Branco</item>
+        <item>Preto</item>
+        <item>Marrom</item>
+        <item>Cinza</item>
+        <item>Amarelo</item>
+        <item>Laranja</item>
+        <item>Malhado</item>
+    </string-array>
+
 </resources>

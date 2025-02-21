@@ -84,17 +84,19 @@ public class HomeFragment extends Fragment {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     // Obtendo os dados do documento
                     String idPet = document.getString("idPet");
-                    String idEndereco = document.getString("idEndereco");
                     String idTutor = document.getString("idTutor");
                     String especiePet = document.getString("especiePet");
+                    String portePet = document.getString("portePet");
+                    String corPredominantePet = document.getString("corPredominantePet");
+                    String corDosOlhosPet = document.getString("corDosOlhosPet");
                     String nomePet = document.getString("nomePet");
                     String generoPet = document.getString("generoPet");
                     String imagemUrl = document.getString("imagemUrl");
                     String idadePet = document.getString("idadePet");
-                    String sobreOPet = document.getString("sobreOPet");
                     Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, imagemUrl, idTutor, dataCadastro));
+                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, corDosOlhosPet,
+                            corPredominantePet, portePet, imagemUrl, idTutor, dataCadastro));
                 }
 
                 // Notifica o adapter sobre as mudanças na lista
