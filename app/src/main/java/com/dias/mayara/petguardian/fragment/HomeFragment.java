@@ -94,8 +94,7 @@ public class HomeFragment extends Fragment {
                     String sobreOPet = document.getString("sobreOPet");
                     Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
-                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet,
-                            sobreOPet, imagemUrl, idTutor, dataCadastro));
+                    listaPetsAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, imagemUrl, idTutor, dataCadastro));
                 }
 
                 // Notifica o adapter sobre as mudanças na lista

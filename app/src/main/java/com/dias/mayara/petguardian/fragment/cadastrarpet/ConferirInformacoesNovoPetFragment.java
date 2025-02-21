@@ -40,8 +40,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class ConferirInformacoesNovoPetFragment extends Fragment {
@@ -49,8 +52,7 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
     private Button buttonVoltar, buttonPublicar;
     private FragmentInteractionListener listener;
     private TextView textViewNomePet, textViewIdadePet, textViewGeneroPet, textViewEspecie,
-            textViewSobreOPet, textViewStatusPet, textViewStatusVacinacao,
-            textViewVacinasTomadas, textViewVermifugado, textViewDataUltimaVermifugacao,
+            textViewStatusVacinacao, textViewVacinasTomadas, textViewVermifugado, textViewDataUltimaVermifugacao,
             textViewPetCastrado, textViewHistoricoDoencasTratamentos, textViewNecessidadesEspeciais,
             textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado;
 
@@ -144,30 +146,30 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
 
     private void salvarDados() {
         try {
-
             boolean isAdestrado = "Adestrado".equalsIgnoreCase(textViewPetAdestrado.getText().toString().trim());
+
+            // Converte a data de vermifugação de String para Timestamp
+            Timestamp dataVermifugacao = convertStringToTimestamp(textViewDataUltimaVermifugacao.getText().toString());
 
             // Cria o objeto Pet com os dados necessários, mas sem a URL da imagem ainda
             pet = new Pet(
-                    usuarioLogadoRef.getId(),
+                    idUsuarioLogado,
                     textViewNomePet.getText().toString(),
                     textViewIdadePet.getText().toString(),
                     textViewGeneroPet.getText().toString(),
                     textViewEspecie.getText().toString(),
-                    textViewSobreOPet.getText().toString(),
                     textViewPetCastrado.getText().toString(),
                     urlImagemPet != null ? urlImagemPet.toString() : null, // Verifique se a URL da imagem é nula
                     textViewStatusVacinacao.getText().toString(),
                     textViewVacinasTomadas.getText().toString(),
                     textViewVermifugado.getText().toString(),
-                    textViewDataUltimaVermifugacao.getText().toString(),
+                    dataVermifugacao, // Passa o Timestamp convertido
                     textViewNecessidadesEspeciais.getText().toString(),
                     textViewHistoricoDoencasTratamentos.getText().toString(),
                     textViewNivelEnergia.getText().toString(),
                     textViewSociabilidade.getText().toString(),
                     isAdestrado,
                     Timestamp.now()
-
             );
 
             usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() + 1);
@@ -224,12 +226,32 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                                     }
                                 });
                             }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("Erro ConferirInformacoesNovoPetFragment", "erro: " + e.toString());
+                            }
                         });
                     }
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // Método para converter uma String no formato dd/MM/yyyy para um Timestamp
+    private Timestamp convertStringToTimestamp(String dateString) {
+        if (dateString == null || dateString.isEmpty()) {
+            return null; // Retorna null se a string for nula ou vazia
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date date = dateFormat.parse(dateString);
+            return new Timestamp(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Retorna null se a conversão falhar
         }
     }
 
@@ -257,11 +279,12 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewIdadePet.setText(pet.getIdadePet());
                     textViewGeneroPet.setText(pet.getGeneroPet());
                     textViewEspecie.setText(pet.getEspeciePet());
-                    textViewSobreOPet.setText(pet.getSobreOPet());
 
                     textViewStatusVacinacao.setText(pet.getStatusVacinacao());
+                    textViewVacinasTomadas.setText(pet.getVacinasTomadas());
                     textViewVermifugado.setText(pet.getVermifugado());
-                    textViewDataUltimaVermifugacao.setText(pet.getDataVermifugacao());
+                    textViewDataUltimaVermifugacao.setText(convertTimestampToString(pet.getDataVermifugacao()));
+                    textViewPetCastrado.setText(pet.getStatusCastracao());
                     textViewHistoricoDoencasTratamentos.setText(pet.getDoencasTratamentos());
                     textViewNecessidadesEspeciais.setText(pet.getNecessidadesEspeciais());
 
@@ -274,13 +297,19 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                         textViewPetAdestrado.setText("Não adestrado");
                     }
 
-                    textViewVacinasTomadas.setText(pet.getVacinasTomadas());
-                    textViewPetCastrado.setText(pet.getStatusCastracao());
-
 
                 }
             }
         });
+    }
+
+    // Método para converter um Timestamp em uma String no formato dd/MM/yyyy
+    private String convertTimestampToString(Timestamp timestamp) {
+        if (timestamp == null) {
+            return ""; // Retorna uma string vazia se o Timestamp for nulo
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(timestamp.toDate());
     }
 
     private void inicializarComponentes(View view) {
@@ -293,8 +322,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
         textViewIdadePet = view.findViewById(R.id.textViewIdadePet);
         textViewGeneroPet = view.findViewById(R.id.textViewGeneroPet);
         textViewEspecie = view.findViewById(R.id.textViewEspecie);
-        textViewSobreOPet = view.findViewById(R.id.textViewSobreOPet);
-        textViewStatusPet = view.findViewById(R.id.textViewStatusPet);
 
         // ImageView (foto do pet)
         imageViewFotoPet = view.findViewById(R.id.imageViewFotoPet);

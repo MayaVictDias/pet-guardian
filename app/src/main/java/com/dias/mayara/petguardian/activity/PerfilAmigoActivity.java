@@ -132,8 +132,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 String sobreOPet = snapshot.getString("sobreOPet");
                 Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, sobreOPet,
-                        imagemUrl, idTutor, dataCadastro));
+                petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet, imagemUrl, idTutor, dataCadastro));
             }
             petsAdapterAdocao.notifyDataSetChanged();
         });

@@ -103,24 +103,6 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/textView39"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Sobre o pet"
-            android:textColor="@color/marromEscuro"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/textViewSobreOPet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Sobre o pet"
-            android:textSize="15sp" />
-
-        <TextView
             android:id="@+id/textViewFoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

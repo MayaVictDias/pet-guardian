@@ -24,6 +24,11 @@ import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SaudeCuidadosNovoPetFragment extends Fragment {
 
@@ -106,7 +111,6 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
     }
 
     private void carregarDados() {
-
         sharedViewModel.getPet().observe(getViewLifecycleOwner(), new Observer<Pet>() {
             @Override
             public void onChanged(Pet petAtual) {
@@ -117,7 +121,7 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
                     spinnerVermifugacao.setSelection(getSpinnerIndex(spinnerVermifugacao, petAtual.getVermifugado()));
 
                     editTextDoencasTratamentos.setText(petAtual.getDoencasTratamentos());
-                    editTextDataVermifugacao.setText(petAtual.getDataVermifugacao());
+                    editTextDataVermifugacao.setText(convertTimestampToString(petAtual.getDataVermifugacao())); // Convertendo Timestamp para String
                     editTextNecessidadesEspeciais.setText(petAtual.getNecessidadesEspeciais());
                     editTextVacinas.setText(petAtual.getVacinasTomadas());
                 }
@@ -146,14 +150,25 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
             petAtual = new Pet();
         }
 
+        // Converte a data de vermifugação para um objeto Date
+        String dataVermifugacaoString = editTextDataVermifugacao.getText().toString();
+        Date dataVermifugacao = convertStringToDate(dataVermifugacaoString);
+
         petAtual.setStatusCastracao(spinnerCastracao.getSelectedItem().toString());
         petAtual.setStatusVacinacao(spinnerVacinacao.getSelectedItem().toString());
         petAtual.setVacinasTomadas(editTextVacinas.getText().toString());
         petAtual.setDoencasTratamentos(editTextDoencasTratamentos.getText().toString());
-        petAtual.setDataVermifugacao(editTextDataVermifugacao.getText().toString());
         petAtual.setVermifugado(spinnerVermifugacao.getSelectedItem().toString());
         petAtual.setNecessidadesEspeciais(editTextNecessidadesEspeciais.getText().toString());
         petAtual.setVacinasTomadas(editTextVacinas.getText().toString());
+
+        // Define a data de vermifugação como um Timestamp
+        if (dataVermifugacao != null) {
+            petAtual.setDataVermifugacao(new Timestamp(dataVermifugacao));
+        } else {
+            // Caso a conversão falhe, você pode definir um valor padrão ou tratar o erro
+            petAtual.setDataVermifugacao(null); // Ou defina um Timestamp com a data atual
+        }
 
         // Salva o objeto Pet atualizado no ViewModel
         sharedViewModel.setPet(petAtual);
@@ -235,6 +250,26 @@ public class SaudeCuidadosNovoPetFragment extends Fragment {
             formatted.append(clean);
         }
         return formatted.toString();
+    }
+
+    // Método para converter um Timestamp em uma String no formato dd/MM/yyyy
+    private String convertTimestampToString(Timestamp timestamp) {
+        if (timestamp == null) {
+            return ""; // Retorna uma string vazia se o Timestamp for nulo
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(timestamp.toDate());
+    }
+
+    // Método para converter uma String no formato dd/MM/yyyy para um objeto Date
+    private Date convertStringToDate(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Retorna null se a conversão falhar
+        }
     }
 
     private void inicializarComponentes(View view) {

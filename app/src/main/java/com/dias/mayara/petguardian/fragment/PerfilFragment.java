@@ -148,7 +148,7 @@ public class PerfilFragment extends Fragment {
                     Timestamp dataCadastro = document.getTimestamp("dataCadastro");
 
                     petListAdocao.add(new Pet(idPet, nomePet, idadePet, generoPet, especiePet,
-                            sobreOPet, imagemUrl, idTutor, dataCadastro));
+                            imagemUrl, idTutor, dataCadastro));
                 }
                 // Notifica o adapter sobre as mudanças na lista
                 petsAdapterAdocao.notifyDataSetChanged();

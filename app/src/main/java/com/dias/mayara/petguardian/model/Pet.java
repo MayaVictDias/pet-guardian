@@ -23,13 +23,12 @@ public class Pet implements Serializable {
     private String idadePet;
     private String generoPet;
     private String especiePet;
-    private String sobreOPet;
     private String nomeLowerCase;
     private String imagemUrl; // Armazenará a URL da imagem
     private String statusVacinacao;
     private String vacinasTomadas;
     private String vermifugado;
-    private String dataVermifugacao;
+    private Timestamp dataVermifugacao;
     private String necessidadesEspeciais;
     private String doencasTratamentos;
     private String nivelEnergia;
@@ -46,8 +45,8 @@ public class Pet implements Serializable {
     }
 
     public Pet(String idTutor, String nomePet, String idadePet, String generoPet, String especiePet,
-               String sobreOPet, String statusCastracao, String imagemUrl, String statusVacinacao,
-               String vacinasTomadas, String vermifugado, String dataVermifugacao, String necessidadesEspeciais,
+               String statusCastracao, String imagemUrl, String statusVacinacao,
+               String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao, String necessidadesEspeciais,
                String doencasTratamentos, String nivelEnergia, String sociabilidade, boolean isAdestrado,
                Timestamp dataCadastro) {
 
@@ -56,7 +55,6 @@ public class Pet implements Serializable {
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
-        this.sobreOPet = sobreOPet;
         this.statusCastracao = statusCastracao;
         this.imagemUrl = imagemUrl;
         this.statusVacinacao = statusVacinacao;
@@ -77,27 +75,24 @@ public class Pet implements Serializable {
     }
 
     public Pet(String idPet, String nomePet, String idadePet, String generoPet, String especiePet,
-               String sobreOPet, String imagemUrl, String idTutor, Timestamp dataCadastro) {
+               String imagemUrl, String idTutor, Timestamp dataCadastro) {
         // Construtor com ID do pet, quando ele for puxado direto do banco de dados
         this.idPet = idPet;
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
-        this.sobreOPet = sobreOPet;
         this.imagemUrl = imagemUrl;
         this.idTutor = idTutor;
         this.dataCadastro = dataCadastro;
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
-               String sobreOPet, String imagemUrl,
-               String idTutor) { // Construtor sem data de cadastro
+               String imagemUrl, String idTutor) { // Construtor sem data de cadastro
         this.nomePet = nomePet;
         this.idadePet = idadePet;
         this.generoPet = generoPet;
         this.especiePet = especiePet;
-        this.sobreOPet = sobreOPet;
         this.imagemUrl = imagemUrl;
         this.idTutor = idTutor;
 
@@ -146,7 +141,6 @@ public class Pet implements Serializable {
         petData.put("idadePet", getIdadePet());
         petData.put("generoPet", getGeneroPet());
         petData.put("especiePet", getEspeciePet());
-        petData.put("sobreOPet", getSobreOPet());
         petData.put("statusCastracao", getStatusCastracao());
         petData.put("imagemUrl", getImagemUrl());
         petData.put("dataCadastro", getDataCadastro()); // Usando Timestamp diretamente
@@ -228,15 +222,6 @@ public class Pet implements Serializable {
         this.especiePet = especiePet;
     }
 
-    public String getSobreOPet() {
-        return sobreOPet;
-    }
-
-    public void setSobreOPet(String sobreOPet) {
-        this.sobreOPet = sobreOPet;
-    }
-
-
     public String getStatusVacinacao() {
         return statusVacinacao;
     }
@@ -261,11 +246,11 @@ public class Pet implements Serializable {
         this.vermifugado = vermifugado;
     }
 
-    public String getDataVermifugacao() {
+    public Timestamp getDataVermifugacao() {
         return dataVermifugacao;
     }
 
-    public void setDataVermifugacao(String dataVermifugacao) {
+    public void setDataVermifugacao(Timestamp dataVermifugacao) {
         this.dataVermifugacao = dataVermifugacao;
     }
 
@@ -334,7 +319,6 @@ public class Pet implements Serializable {
                 ", idadePet='" + idadePet + '\'' +
                 ", generoPet='" + generoPet + '\'' +
                 ", especiePet='" + especiePet + '\'' +
-                ", sobreOPet='" + sobreOPet + '\'' +
                 ", imagemUrl='" + imagemUrl + '\'' +
                 ", statusVacinacao='" + statusVacinacao + '\'' +
                 ", vacinasTomadas='" + vacinasTomadas + '\'' +

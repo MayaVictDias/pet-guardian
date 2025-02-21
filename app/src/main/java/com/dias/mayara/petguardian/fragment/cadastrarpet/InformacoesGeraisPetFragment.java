@@ -41,7 +41,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
     private static final int REQUEST_LOCATION_PERMISSION = 100;
     private Button buttonAvancar;
     private FragmentInteractionListener listener;
-    private TextInputEditText editTextNomePet, editTextIdadePet, editTextSobreOPet;
+    private TextInputEditText editTextNomePet, editTextIdadePet;
     private RadioGroup radioGroupGenero, radioGroupEspecie, radioGroupIdade;
     private RadioButton radioButtonMacho, radioButtonFemea, radioButtonCachorro, radioButtonGato,
             radioButtonFilhote, radioButtonAdulto;
@@ -131,8 +131,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     Toast.makeText(getContext(), "Selecione o gênero do pet", Toast.LENGTH_SHORT).show();
                 } else if (radioGroupEspecie.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(getContext(), "Selecione a espécie do pet", Toast.LENGTH_SHORT).show();
-                } else if (editTextSobreOPet.getText() == null || editTextSobreOPet.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getContext(), "Preencha o campo 'Sobre o pet'", Toast.LENGTH_SHORT).show();
                 } else if (escolherImagemPet.getDrawable() == null) {
                     Toast.makeText(getContext(), "Selecione uma imagem", Toast.LENGTH_SHORT).show();
                 }else {
@@ -143,8 +141,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     } else {
                         pet.setNomePet(editTextNomePet.getText().toString());
                     }
-
-                    pet.setSobreOPet(editTextSobreOPet.getText().toString());
 
                     // Obter a seleção de Gênero
                     int selectedGeneroId = radioGroupGenero.getCheckedRadioButtonId();
@@ -169,12 +165,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
                     } else if (selectedIdadeId == R.id.radioButtonAdulto) {
                         pet.setIdadePet("Adulto");
                     }
-
-                    Log.d("PetInfo", "Nome: " + pet.getNomePet());
-                    Log.d("PetInfo", "Idade: " + pet.getIdadePet());
-                    Log.d("PetInfo", "Genero: " + pet.getGeneroPet());
-                    Log.d("PetInfo", "Especie: " + pet.getEspeciePet());
-                    Log.d("PetInfo", "Sobre: " + pet.getSobreOPet());
 
                     // Salvar o objeto Pet no SharedViewModel
                     cadastroPetViewModel.setPet(pet);
@@ -216,22 +206,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 pet.setIdadePet(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        // Watcher para a descrição do pet
-        editTextSobreOPet.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                pet.setSobreOPet(s.toString());
             }
 
             @Override
@@ -287,7 +261,6 @@ public class InformacoesGeraisPetFragment extends Fragment {
         radioButtonAdulto = view.findViewById(R.id.radioButtonAdulto);
         radioGroupGenero = view.findViewById(R.id.radioGroupGenero);
         radioGroupEspecie = view.findViewById(R.id.radioGroupEspecie);
-        editTextSobreOPet = view.findViewById(R.id.editTextSobreOPet);
         radioButtonMacho = view.findViewById(R.id.radioButtonMacho);
         radioButtonFemea = view.findViewById(R.id.radioButtonFemea);
         escolherImagemPet = view.findViewById(R.id.escolherImagemPet);
