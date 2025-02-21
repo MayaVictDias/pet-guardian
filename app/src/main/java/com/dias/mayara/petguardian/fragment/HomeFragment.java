@@ -21,6 +21,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.sql.Time;
@@ -75,51 +76,65 @@ public class HomeFragment extends Fragment {
         CollectionReference petsRef = db.collection("pets");
 
         // Consultando documentos
-        petsRef.whereEqualTo("statusPet", "Adoção").get().addOnCompleteListener(task -> {
+        petsRef.orderBy("dataCadastro", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 listaPetsAdocao.clear(); // Limpa a lista antes de adicionar novos dados
-                for (QueryDocumentSnapshot snapshot : task.getResult()) {
-                    // Obtendo os dados do documento
-                    String idPet = snapshot.getString("idPet");
-                    String idTutor = snapshot.getString("idTutor");
-                    String nomePet = snapshot.getString("nomePet");
-                    String idadePet = snapshot.getString("idadePet");
-                    String generoPet = snapshot.getString("generoPet");
-                    String especiePet = snapshot.getString("especiePet");
-                    String raca = snapshot.getString("racaPet");
-                    String corPredominantePet = snapshot.getString("corPredominantePet");
-                    String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
-                    String portePet = snapshot.getString("portePet");
-                    String imagemUrl = snapshot.getString("imagemUrl");
-                    String statusVacinacao = snapshot.getString("statusVacinacao");
-                    String vacinasTomadas = snapshot.getString("vacinasTomadas");
-                    String vermifugado = snapshot.getString("vermifugado");
-                    Timestamp dataVermifugacao = snapshot.getTimestamp("dataVermifugacao");
-                    String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
-                    String doencasTratamentos = snapshot.getString("doencasTratamentos");
-                    String statusCastracao = snapshot.getString("statusCastracao");
-                    String nivelEnergia = snapshot.getString("nivelEnergia");
-                    String sociabilidade = snapshot.getString("sociabilidade");
-                    String isAdestrado = snapshot.getString("sociabilidade");
-                    Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                    boolean adestrado = "Sim".equalsIgnoreCase(isAdestrado);
+                if (!task.getResult().isEmpty()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        // Obtendo os dados do documento
+                        String idPet = snapshot.getString("idPet");
+                        String idTutor = snapshot.getString("idTutor");
+                        String nomePet = snapshot.getString("nomePet");
+                        String idadePet = snapshot.getString("idadePet");
+                        String generoPet = snapshot.getString("generoPet");
+                        String especiePet = snapshot.getString("especiePet");
+                        String raca = snapshot.getString("racaPet");
+                        String corPredominantePet = snapshot.getString("corPredominantePet");
+                        String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
+                        String portePet = snapshot.getString("portePet");
+                        String imagemUrl = snapshot.getString("imagemUrl");
+                        String statusVacinacao = snapshot.getString("statusVacinacao");
+                        String vacinasTomadas = snapshot.getString("vacinasTomadas");
+                        String vermifugado = snapshot.getString("vermifugado");
 
-                    listaPetsAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
-                            raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
-                            vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
-                            doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
-                            dataCadastro));
+                        Timestamp dataVermifugacao = null;
+                        if (snapshot.contains("dataVermifugacao") && snapshot.get("dataVermifugacao") != null) {
+                            Object dataObj = snapshot.get("dataVermifugacao");
+                            if (dataObj instanceof Timestamp) {
+                                dataVermifugacao = (Timestamp) dataObj;
+                            } else {
+                                Log.w("Firestore", "O campo dataVermifugacao não é um Timestamp válido.");
+                            }
+                        }
+
+                        String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
+                        String doencasTratamentos = snapshot.getString("doencasTratamentos");
+                        String statusCastracao = snapshot.getString("statusCastracao");
+                        String nivelEnergia = snapshot.getString("nivelEnergia");
+                        String sociabilidade = snapshot.getString("sociabilidade");
+                        boolean isAdestrado = snapshot.getBoolean("isAdestrado");
+                        Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
+
+                        listaPetsAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
+                                raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
+                                vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
+                                doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, isAdestrado,
+                                dataCadastro));
+                    }
+                } else {
+                    Log.d("Firestore", "Nenhum pet encontrado para adoção.");
                 }
 
                 // Notifica o adapter sobre as mudanças na lista
-                petsAdapterAdocao.notifyDataSetChanged();
+                if (petsAdapterAdocao != null) {
+                    petsAdapterAdocao.notifyDataSetChanged();
+                }
             } else {
                 // Lida com erros, se necessário
                 Log.w("Firestore", "Erro ao obter os dados", task.getException());
             }
         });
-
     }
 
     private void inicializarComponentes(View view) {

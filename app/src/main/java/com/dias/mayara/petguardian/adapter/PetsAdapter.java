@@ -17,15 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
-import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
-import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.firebase.Timestamp;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
