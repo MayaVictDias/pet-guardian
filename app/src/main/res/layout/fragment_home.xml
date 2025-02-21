@@ -11,20 +11,6 @@
         android:orientation="vertical"
         tools:context=".fragment.HomeFragment">
 
-        <Button
-            android:id="@+id/buttonUsarMinhaLocalizacao"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="@drawable/btn_location_drawable"
-            android:fontFamily="@font/nunito_medium"
-            android:gravity="start"
-            android:text="Usar minha localização atual"
-            android:textColor="@color/marromEscuro"
-            android:textSize="12sp"
-            app:icon="@drawable/location_on"
-            app:iconGravity="start"
-            app:iconTint="@color/marromEscuro" />
-
         <TextView
             android:id="@+id/textView36"
             android:layout_width="match_parent"

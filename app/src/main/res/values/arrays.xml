@@ -78,7 +78,7 @@
     <!-- Raças de Cachorro -->
     <string-array name="racas_cachorro_array">
         <item>Selecione</item>
-        <item>Desconhecido</item>
+        <item>Outro</item>
         <item>Abissínio</item>
         <item>Akita Inu</item>
         <item>Beagle</item>
@@ -118,7 +118,7 @@
     <!-- Raças de Gato -->
     <string-array name="racas_gato_array">
         <item>Selecione</item>
-        <item>Desconhecido</item>
+        <item>Outro</item>
         <item>Abissínio</item>
         <item>American Shorthair</item>
         <item>Angorá Turco</item>

@@ -171,16 +171,14 @@
         </RadioGroup>
 
 
-
-
-
         <TextView
             android:id="@+id/textViewRaca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_bold"
             android:text="Raça"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textViewExplicacaoRaca"
@@ -189,7 +187,8 @@
             android:layout_marginBottom="6dp"
             android:fontFamily="@font/nunito_medium"
             android:text="Selecione a raça do pet"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
         <Spinner
             android:id="@+id/spinnerRaca"
@@ -197,7 +196,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/button_background_outline_gray"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:visibility="gone" />
 
 
         <TextView
@@ -274,11 +274,6 @@
             android:layout_marginBottom="12dp"
             android:background="@drawable/button_background_outline_gray"
             android:padding="12dp" />
-
-
-
-
-
 
 
         <TextView

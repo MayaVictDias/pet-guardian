@@ -46,10 +46,9 @@ public class InformacoesGeraisPetFragment extends Fragment {
     private RadioGroup radioGroupGenero, radioGroupEspecie, radioGroupIdade;
     private RadioButton radioButtonMacho, radioButtonFemea, radioButtonCachorro, radioButtonGato,
             radioButtonFilhote, radioButtonAdulto;
-    private TextView textViewExplicacaoRaça, textViewRaca;
+    private TextView textViewExplicacaoRaca, textViewRaca, textViewEscolherImagem;
     private CheckBox checkBoxNaoSeiNomePet;
     private ImageView escolherImagemPet;
-    private TextView textViewEscolherImagem, textViewExplicacaoRaca;
 
     private Spinner spinnerCorDosOlhos, spinnerPorte, spinnerCorPredominante, spinnerRaca;
 
@@ -138,6 +137,8 @@ public class InformacoesGeraisPetFragment extends Fragment {
                 );
                 adapterRacaCachorro.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerRaca.setAdapter(adapterRacaCachorro);
+
+                Toast.makeText(getContext(), "Lista de raças configurada para exibir cachorros", Toast.LENGTH_SHORT).show();
             } else if (checkedId == R.id.radioButtonGato) {
                 // Se a espécie for gato
                 spinnerRaca.setVisibility(View.VISIBLE);
@@ -151,13 +152,16 @@ public class InformacoesGeraisPetFragment extends Fragment {
                         android.R.layout.simple_spinner_item
                 );
                 adapterRacaGato.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerRaca.setAdapter(adapterRacaGato);
+                spinnerRaca.setAdapter(adapterRacaGato);Toast.makeText(getContext(), "Lista de raças configurada para exibir gatos", Toast.LENGTH_SHORT).show();
             } else {
                 // Se nenhuma espécie for selecionada, ocultar os componentes de raça
                 spinnerRaca.setVisibility(View.GONE);
                 textViewExplicacaoRaca.setVisibility(View.GONE);
                 textViewRaca.setVisibility(View.GONE);
             }
+
+            // Resetar a seleção do Spinner para "Selecione"
+            spinnerRaca.setSelection(0);
         });
 
         buttonAvancar.setOnClickListener(new View.OnClickListener() {
@@ -267,6 +271,12 @@ public class InformacoesGeraisPetFragment extends Fragment {
         // Verificar se a cor predominante foi selecionada
         if (spinnerCorPredominante.getSelectedItem().toString().equals("Selecione")) {
             Toast.makeText(getContext(), "Selecione a cor predominante do pet", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Verificar se a raça foi selecionada (se o spinner estiver visível)
+        if (spinnerRaca.getVisibility() == View.VISIBLE && spinnerRaca.getSelectedItem().toString().equals("Selecione")) {
+            Toast.makeText(getContext(), "Selecione a raça do pet", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -394,6 +404,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
         textViewEscolherImagem = view.findViewById(R.id.textViewEscolherImagem);
         radioButtonCachorro = view.findViewById(R.id.radioButtonCachorro);
         radioButtonGato = view.findViewById(R.id.radioButtonGato);
+        textViewRaca = view.findViewById(R.id.textViewRaca);
         checkBoxNaoSeiNomePet = view.findViewById(R.id.checkBoxNaoSeiNomePet);
         spinnerCorDosOlhos = view.findViewById(R.id.spinnerCorDosOlhos);
         spinnerPorte = view.findViewById(R.id.spinnerPorte);

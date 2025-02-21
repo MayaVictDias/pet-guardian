@@ -30,12 +30,9 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private Button buttonUsarMinhaLocalizacao;
     private RecyclerView recyclerViewCarrosselAdocao;
     private PetsAdapter petsAdapterAdocao;
-    private PetsAdapter petsAdapterDesaparecidos;
     private List<Pet> listaPetsAdocao = new ArrayList<>(); // Inicializando a lista de pets
-    private List<Pet> listaPetsDesaparecidos = new ArrayList<>(); // Inicializando a lista de pets
 
     public HomeFragment() {
         // Required empty public constructor
@@ -126,6 +123,5 @@ public class HomeFragment extends Fragment {
     }
 
     private void inicializarComponentes(View view) {
-        buttonUsarMinhaLocalizacao = view.findViewById(R.id.buttonUsarMinhaLocalizacao);
     }
 }

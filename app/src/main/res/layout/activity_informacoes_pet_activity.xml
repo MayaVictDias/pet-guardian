@@ -116,24 +116,6 @@
                     android:textColor="@color/marromEscuro" />
 
                 <TextView
-                    android:id="@+id/textViewInformacoesGeraisTitulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="Informações gerais"
-                    android:textColor="@color/coralSuave"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/textViewInformacoesGeraisTituloDado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/nunito_medium"
-                    android:text="Informações gerais" />
-
-                <TextView
                     android:id="@+id/textView61"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
