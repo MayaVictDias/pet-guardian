@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -14,109 +13,131 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/escolherImagemPet"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/profile_image" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_margin="24dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/escolherImagemPet"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:src="@drawable/profile_image" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="24dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textViewNomeUsuario"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily=" "
-                        android:text="Nome do usuário"
-                        android:textColor="@color/marromEscuro"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/textViewPerfilCidadeUsuario"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily=" "
-                        android:text="Cidade do usuário"
-                        android:textColor="@color/marromEscuro"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/textViewQuantidadePetsCadastrados"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily=" "
-                        android:text="Quantidade de pets cadastrados"
-                        android:textColor="@color/marromEscuro"
-                        android:textSize="13sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginBottom="12dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="267dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="48dp"
-                    android:gravity="center_vertical">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/button_background_outline_gray"
-                        android:fontFamily="@font/nunito_medium"
-                        android:hint="Pesquisar pet" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ImageButton
-                    android:id="@+id/buttonFiltrar"
+                <TextView
+                    android:id="@+id/textViewNomeUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="48dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_filter_gray_36x36" />
+                    android:text="Nome do usuário"
+                    android:textColor="@color/marromEscuro"
+                    android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/textViewPerfilCidadeUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cidade do usuário"
+                    android:textColor="@color/marromEscuro"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/textViewQuantidadePetsCadastrados"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quantidade de pets cadastrados"
+                    android:textColor="@color/marromEscuro"
+                    android:textSize="13sp" />
             </LinearLayout>
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewPetsParaAdocao"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="267dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="48dp"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_background_outline_gray"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="Pesquisar pet" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/buttonFiltrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/nunito_bold"
-                android:text="Pets para adoção"
-                android:textColor="@color/coralSuave"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPetsParaAdocao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="48dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_filter_gray_36x36" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Layout centralizado para "Não há pets cadastrados" -->
+            <LinearLayout
+                android:id="@+id/layoutSemPets"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_pata_marrom_36x36" />
+
+                <TextView
+                    android:id="@+id/textViewSemPets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Não há pets cadastrados"
+                    android:textSize="18sp"
+                    android:textColor="@color/marromEscuro"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Layout separado para o RecyclerView -->
+            <LinearLayout
+                android:id="@+id/layoutComPets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewPetsParaAdocao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
     </LinearLayout>
+
 </ScrollView>

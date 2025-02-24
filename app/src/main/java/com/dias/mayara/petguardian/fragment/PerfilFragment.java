@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PerfilFragment extends Fragment {
 
     private Usuario usuarioLogado;
+    private LinearLayout layoutSemPets, layoutComPets;
 
     private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
     private CircleImageView imagemPerfilUsuario;
@@ -54,6 +57,7 @@ public class PerfilFragment extends Fragment {
 
     private List<Pet> petListAdocao = new ArrayList<>();
     private PetsAdapter petsAdapterAdocao;
+    private ListenerRegistration petsListener; // Listener para atualizações em tempo real
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -112,6 +116,7 @@ public class PerfilFragment extends Fragment {
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
 
+        // Inicia a escuta em tempo real para os pets
         getPetsAdocao();
 
         buttonFiltrar.setOnClickListener(new View.OnClickListener() {
@@ -125,58 +130,73 @@ public class PerfilFragment extends Fragment {
     }
 
     private void getPetsAdocao() {
-        // Referência para a coleção pets do usuário logado e a subcoleção adocao
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference petsRef = db.collection("pets");
 
-        // Consultando os documentos
-        petsRef.whereEqualTo("statusPet", "Adoção").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                petListAdocao.clear(); // Limpa a lista antes de adicionar novos dados
-                for (QueryDocumentSnapshot snapshot : task.getResult()) {
-                    // Obtendo os dados do documento
-                    String idPet = snapshot.getString("idPet");
-                    String idTutor = snapshot.getString("idTutor");
-                    String nomePet = snapshot.getString("nomePet");
-                    String idadePet = snapshot.getString("idadePet");
-                    String generoPet = snapshot.getString("generoPet");
-                    String especiePet = snapshot.getString("especiePet");
-                    String raca = snapshot.getString("racaPet");
-                    String corPredominantePet = snapshot.getString("corPredominantePet");
-                    String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
-                    String portePet = snapshot.getString("portePet");
-                    String imagemUrl = snapshot.getString("imagemUrl");
-                    String statusVacinacao = snapshot.getString("statusVacinacao");
-                    String vacinasTomadas = snapshot.getString("vacinasTomadas");
-                    String vermifugado = snapshot.getString("vermifugado");
-                    Timestamp dataVermifugacao = snapshot.getTimestamp("dataVermifugacao");
-                    String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
-                    String doencasTratamentos = snapshot.getString("doencasTratamentos");
-                    String statusCastracao = snapshot.getString("statusCastracao");
-                    String nivelEnergia = snapshot.getString("nivelEnergia");
-                    String sociabilidade = snapshot.getString("sociabilidade");
-                    String isAdestrado = snapshot.getString("sociabilidade");
-                    Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
+        // Configura um listener em tempo real para a coleção de pets
+        petsListener = petsRef.whereEqualTo("idTutor", idUsuarioLogado)
+                .addSnapshotListener((snapshots, error) -> {
+                    if (error != null) {
+                        Log.w("Firestore", "Erro ao ouvir mudanças", error);
+                        return;
+                    }
 
-                    boolean adestrado = "Sim".equalsIgnoreCase(isAdestrado);
+                    if (snapshots != null && !snapshots.isEmpty()) {
+                        petListAdocao.clear(); // Limpa a lista antes de adicionar novos dados
+                        for (QueryDocumentSnapshot snapshot : snapshots) {
+                            // Obtendo os dados do documento
+                            String idPet = snapshot.getString("idPet");
+                            String idTutor = snapshot.getString("idTutor");
+                            String nomePet = snapshot.getString("nomePet");
+                            String idadePet = snapshot.getString("idadePet");
+                            String generoPet = snapshot.getString("generoPet");
+                            String especiePet = snapshot.getString("especiePet");
+                            String raca = snapshot.getString("racaPet");
+                            String corPredominantePet = snapshot.getString("corPredominantePet");
+                            String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
+                            String portePet = snapshot.getString("portePet");
+                            String imagemUrl = snapshot.getString("imagemUrl");
+                            String statusVacinacao = snapshot.getString("statusVacinacao");
+                            String vacinasTomadas = snapshot.getString("vacinasTomadas");
+                            String vermifugado = snapshot.getString("vermifugado");
+                            Timestamp dataVermifugacao = snapshot.getTimestamp("dataVermifugacao");
+                            String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
+                            String doencasTratamentos = snapshot.getString("doencasTratamentos");
+                            String statusCastracao = snapshot.getString("statusCastracao");
+                            String nivelEnergia = snapshot.getString("nivelEnergia");
+                            String sociabilidade = snapshot.getString("sociabilidade");
+                            String isAdestrado = snapshot.getString("sociabilidade");
+                            Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
 
-                    petListAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
-                            raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
-                            vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
-                            doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
-                            dataCadastro));
-                }
-                // Notifica o adapter sobre as mudanças na lista
-                petsAdapterAdocao.notifyDataSetChanged();
-            } else {
-                // Lida com erros, se necessário
-                Log.w("Firestore", "Erro ao obter os dados", task.getException());
-            }
-        });
+                            boolean adestrado = "Sim".equalsIgnoreCase(isAdestrado);
+
+                            petListAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
+                                    raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
+                                    vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
+                                    doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
+                                    dataCadastro));
+                        }
+
+                        // Verifica se há pets na lista
+                        if (petListAdocao.isEmpty()) {
+                            layoutSemPets.setVisibility(View.VISIBLE); // Exibe o layout "Sem Pets"
+                            layoutComPets.setVisibility(View.GONE); // Oculta o layout "Com Pets"
+                        } else {
+                            layoutSemPets.setVisibility(View.GONE); // Oculta o layout "Sem Pets"
+                            layoutComPets.setVisibility(View.VISIBLE); // Exibe o layout "Com Pets"
+                        }
+
+                        // Notifica o adapter sobre as mudanças na lista
+                        petsAdapterAdocao.notifyDataSetChanged();
+                    } else {
+                        // Caso não haja documentos
+                        layoutSemPets.setVisibility(View.VISIBLE);
+                        layoutComPets.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void recuperarDadosUsuarioLogado() {
-        // Referência para o documento do usuário logado
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference usuarioRef = db.collection("usuarios").document(idUsuarioLogado);
 
@@ -209,5 +229,18 @@ public class PerfilFragment extends Fragment {
         textViewQuantidadePetsCadastrados = view.findViewById(R.id.textViewQuantidadePetsCadastrados);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
+
+        // Inicializa os layouts de "Sem Pets" e "Com Pets"
+        layoutSemPets = view.findViewById(R.id.layoutSemPets);
+        layoutComPets = view.findViewById(R.id.layoutComPets);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Remove o listener para evitar vazamentos de memória
+        if (petsListener != null) {
+            petsListener.remove();
+        }
     }
 }
