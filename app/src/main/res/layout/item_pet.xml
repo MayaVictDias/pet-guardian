@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="245dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="10dp"
     android:orientation="vertical">
@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="245dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/begeClaro"
             android:elevation="10dp"
@@ -25,18 +25,8 @@
             <ImageView
                 android:id="@+id/imageViewFotoPet"
                 android:layout_width="match_parent"
-                android:layout_height="155dp"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/textViewStatusPet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/verdeOlivaClaro"
-                android:fontFamily="@font/nunito_bold"
-                android:gravity="clip_horizontal|center_horizontal"
-                android:text="STATUS"
-                android:textColor="@color/begeClaro" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,9 +39,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Nome"
                     android:textColor="@color/marromEscuro"

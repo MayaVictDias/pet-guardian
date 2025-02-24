@@ -48,16 +48,6 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
             // Configura os campos do pet
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
-            holder.textViewStatusPet.setText("ADOÇÃO");
-
-            // Define a cor de fundo do status do pet
-            if (holder.textViewStatusPet.getText().equals("ADOÇÃO")) {
-                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
-            } else if (holder.textViewStatusPet.getText().equals("DESAPARECIDO")) {
-                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#FF0000"));
-            } else if (holder.textViewStatusPet.getText().equals("PROCURANDO DONO")) {
-                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#0047FF"));
-            }
 
             // Carrega a imagem do pet usando Glide
             Glide.with(holder.imageViewFotoPet.getContext())
@@ -89,7 +79,7 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
 
     static class PetViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewStatusPet, textViewNomePet, textViewIdadeGenero, textViewDesaparecidoHaTempo,
+        private TextView textViewNomePet, textViewIdadeGenero, textViewDesaparecidoHaTempo,
                 textViewCidadePet;
         private ImageView imageViewFotoPet;
         private CardView cardView;
@@ -100,7 +90,6 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewFotoPet = itemView.findViewById(R.id.imageViewFotoPet);
-            textViewStatusPet = itemView.findViewById(R.id.textViewStatusPet);
             textViewNomePet = itemView.findViewById(R.id.textViewNomePet);
             textViewIdadeGenero = itemView.findViewById(R.id.textViewIdadeGenero);
             textViewDesaparecidoHaTempo = itemView.findViewById(R.id.textViewDesaparecidoHaTempo);

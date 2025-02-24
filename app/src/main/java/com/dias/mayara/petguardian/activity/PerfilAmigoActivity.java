@@ -100,7 +100,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
         // Configura o adapter e layout manager para pets para adoção
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
-        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
 
         buttonFiltrar.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FiltroActivity.class)));
@@ -257,7 +257,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private void inicializarComponentes() {
         textViewNomeUsuario = findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
-        imagemPerfilUsuario = findViewById(R.id.escolherImagemPet);
+        imagemPerfilUsuario = findViewById(R.id.imagemUsuario);
         recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
         textViewQuantidadePetsCadastrados = findViewById(R.id.textViewQuantidadePetsCadastrados);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);

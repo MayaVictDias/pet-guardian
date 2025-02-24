@@ -301,7 +301,7 @@
             android:layout_marginBottom="12dp">
 
             <ImageView
-                android:id="@+id/escolherImagemPet"
+                android:id="@+id/imagemUsuario"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/border_dashed"

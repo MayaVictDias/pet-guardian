@@ -30,9 +30,6 @@
             android:name=".activity.MeusPets"
             android:exported="false" />
         <activity
-            android:name=".activity.SelecaoEnderecoActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.CadastrarNovoUsuario.InserirEnderecoActivity"
             android:exported="false" />
         <activity

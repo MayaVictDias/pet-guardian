@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
         inicializarComponentes(view);
 
         // Configurando o layout manager para os RecyclerViews
-        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewCarrosselAdocao.setLayoutManager(layoutManagerAdocao);
 
         return view;

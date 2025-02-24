@@ -68,12 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Se o usuário estiver vindo da tela de cadastro de novo usuário, irá visualizar a modal de boas vindas
-        Intent intent = getIntent();
-        if (intent != null && intent.getBooleanExtra("exibir_modal_boas_vindas", false)) {
-            exibirModalBoasVindas();
-        }
-
         // Inicializa a instância do Firebase e referências do banco de dados
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         usuariosRef = firebaseRef.collection("usuarios");
@@ -196,33 +190,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private void exibirModalBoasVindas() {
-        // Inflar o layout personalizado
-        View modalView = getLayoutInflater().inflate(R.layout.modal_boas_vindas, null);
-
-        // Criar o AlertDialog com o layout personalizado
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(modalView);  // Define o layout customizado no diálogo
-
-        AlertDialog dialog = builder.create();
-
-        // Encontrar e configurar os componentes da modal
-        TextView titulo = modalView.findViewById(R.id.titulo);
-        TextView mensagem = modalView.findViewById(R.id.mensagem);
-        Button botaoFechar = modalView.findViewById(R.id.botao_fechar);
-
-        // Definir comportamento do botão para fechar a modal
-        botaoFechar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();  // Fecha a modal
-            }
-        });
-
-        // Exibir a modal
-        dialog.show();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

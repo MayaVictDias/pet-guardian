@@ -54,17 +54,6 @@
                 android:layout_height="251dp"
                 app:srcCompat="@drawable/imagem_carregamento" />
 
-            <TextView
-                android:id="@+id/textViewStatusPet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/verdeOlivaClaro"
-                android:fontFamily="@font/nunito_bold"
-                android:gravity="center_horizontal"
-                android:text="STATUS"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

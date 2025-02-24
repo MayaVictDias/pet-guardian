@@ -48,16 +48,6 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
             holder.textViewNomePet.setText(pet.getNomePet());
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
-            holder.textViewStatusPet.setText("ADOÇÃO");
-
-            if (holder.textViewStatusPet.getText().equals("ADOÇÃO")) {
-                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
-            } else if (holder.textViewStatusPet.getText().equals("DESAPARECIDO")) {
-                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#FF0000"));
-            } else if (holder.textViewStatusPet.getText().equals("PROCURANDO DONO")) {
-                holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#0047FF"));
-            }
-
             Glide.with(holder.imageViewFotoPet.getContext())
                     .load(pet.getImagemUrl()) // Aqui você insere a URL da imagem
                     .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
@@ -86,8 +76,7 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
 
     static class PetViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewStatusPet, textViewNomePet, textViewIdadeGenero, textViewDesaparecidoHaTempo,
-                textViewCidadePet;
+        private TextView textViewNomePet, textViewIdadeGenero, textViewDesaparecidoHaTempo;
         private ImageView imageViewFotoPet;
         private CardView cardView;
 
@@ -97,11 +86,9 @@ public class PetsAdapter extends RecyclerView.Adapter<PetsAdapter.PetViewHolder>
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewFotoPet = itemView.findViewById(R.id.imageViewFotoPet);
-            textViewStatusPet = itemView.findViewById(R.id.textViewStatusPet);
             textViewNomePet = itemView.findViewById(R.id.textViewNomePet);
             textViewIdadeGenero = itemView.findViewById(R.id.textViewIdadeGenero);
             textViewDesaparecidoHaTempo = itemView.findViewById(R.id.textViewDesaparecidoHaTempo);
-            textViewCidadePet = itemView.findViewById(R.id.textViewCidadePet);
             cardView = itemView.findViewById(R.id.cardView);
         }
 

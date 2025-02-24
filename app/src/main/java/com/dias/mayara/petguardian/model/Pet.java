@@ -23,9 +23,9 @@ public class Pet implements Serializable {
     private String generoPet;
     private String especiePet;
     private String racaPet;
-    private String corPredominante;
-    private String corDosOlhos;
-    private String porte;
+    private String corPredominantePet;
+    private String corDosOlhosPet;
+    private String portePet;
     private String nomeLowerCase;
     private String imagemUrl; // Armazenará a URL da imagem
     private String statusVacinacao;
@@ -59,9 +59,9 @@ public class Pet implements Serializable {
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.racaPet = racaPet;
-        this.corPredominante = corPredominante;
-        this.corDosOlhos = corDosOlhos;
-        this.porte = porte;
+        this.corPredominantePet = corPredominante;
+        this.corDosOlhosPet = corDosOlhos;
+        this.portePet = porte;
         this.nomeLowerCase = nomePet.toLowerCase();
         this.imagemUrl = imagemUrl;
         this.statusVacinacao = statusVacinacao;
@@ -96,9 +96,9 @@ public class Pet implements Serializable {
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.racaPet = racaPet;
-        this.corPredominante = corPredominante;
-        this.corDosOlhos = corDosOlhos;
-        this.porte = porte;
+        this.corPredominantePet = corPredominante;
+        this.corDosOlhosPet = corDosOlhos;
+        this.portePet = porte;
         this.nomeLowerCase = nomePet.toLowerCase();
         this.imagemUrl = imagemUrl;
         this.statusVacinacao = statusVacinacao;
@@ -115,7 +115,7 @@ public class Pet implements Serializable {
     }
 
     public Pet(String nomePet, String idadePet, String generoPet, String especiePet,
-               String racaPet, String corPredominante, String corDosOlhos, String porte, String imagemUrl,
+               String racaPet, String corPredominante, String corDosOlhosPet, String porte, String imagemUrl,
                String statusVacinacao, String vacinasTomadas, String vermifugado, Timestamp dataVermifugacao,
                String necessidadesEspeciais, String doencasTratamentos, String statusCastracao,
                String nivelEnergia, String sociabilidade, boolean isAdestrado) {
@@ -126,9 +126,9 @@ public class Pet implements Serializable {
         this.generoPet = generoPet;
         this.especiePet = especiePet;
         this.racaPet = racaPet;
-        this.corPredominante = corPredominante;
-        this.corDosOlhos = corDosOlhos;
-        this.porte = porte;
+        this.corPredominantePet = corPredominante;
+        this.corDosOlhosPet = corDosOlhosPet;
+        this.portePet = porte;
         this.nomeLowerCase = nomePet.toLowerCase();
         this.imagemUrl = imagemUrl;
         this.statusVacinacao = statusVacinacao;
@@ -186,9 +186,9 @@ public class Pet implements Serializable {
         petData.put("nomeLowerCasePet", getNomeLowerCase());
         petData.put("idadePet", getIdadePet());
         petData.put("generoPet", getGeneroPet());
-        petData.put("portePet", getPorte());
-        petData.put("corDosOlhosPet", getCorDosOlhos());
-        petData.put("corPredominantePet", getCorPredominante());
+        petData.put("portePet", getPortePet());
+        petData.put("corDosOlhosPet", getCorDosOlhosPet());
+        petData.put("corPredominantePet", getCorPredominantePet());
         petData.put("especiePet", getEspeciePet());
         petData.put("racaPet", getRacaPet());
         petData.put("statusCastracao", getStatusCastracao());
@@ -364,28 +364,28 @@ public class Pet implements Serializable {
         this.nomeLowerCase = nomeLowerCase;
     }
 
-    public String getCorDosOlhos() {
-        return corDosOlhos;
+    public String getCorDosOlhosPet() {
+        return corDosOlhosPet;
     }
 
-    public void setCorDosOlhos(String corDosOlhos) {
-        this.corDosOlhos = corDosOlhos;
+    public void setCorDosOlhosPet(String corDosOlhosPet) {
+        this.corDosOlhosPet = corDosOlhosPet;
     }
 
-    public String getPorte() {
-        return porte;
+    public String getPortePet() {
+        return portePet;
     }
 
-    public void setPorte(String porte) {
-        this.porte = porte;
+    public void setPortePet(String portePet) {
+        this.portePet = portePet;
     }
 
-    public String getCorPredominante() {
-        return corPredominante;
+    public String getCorPredominantePet() {
+        return corPredominantePet;
     }
 
-    public void setCorPredominante(String corPredominante) {
-        this.corPredominante = corPredominante;
+    public void setCorPredominantePet(String corPredominantePet) {
+        this.corPredominantePet = corPredominantePet;
     }
 
     public String getRacaPet() {

@@ -15,7 +15,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.dias.mayara.petguardian.R;
-import com.dias.mayara.petguardian.activity.SelecaoEnderecoActivity;
 import com.dias.mayara.petguardian.helper.FragmentInteractionListener;
 import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
@@ -157,28 +156,8 @@ public class StatusPetFragment extends Fragment {
         // Chama a função inicialmente para definir a visibilidade correta
         toggleOptions(radioGroup.getCheckedRadioButtonId());
 
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.mapFragmentContainer, mapFragment)
-                .commit();
-
-        mapFragment.getMapAsync(googleMap -> {
-            // Configure o comportamento do mapa
-            googleMap.setMyLocationEnabled(true); // Mostrar localização atual
-            googleMap.setOnMapClickListener(latLng -> {
-                // Abra a tela para selecionar um endereço
-                abrirTelaSelecaoEndereco(latLng);
-            });
-        });
-
         return view;
 
-    }
-
-    private void abrirTelaSelecaoEndereco(LatLng latLngAtual) {
-        Intent intent = new Intent(getContext(), SelecaoEnderecoActivity.class);
-        intent.putExtra("LAT_LNG_ATUAL", latLngAtual);
-        startActivityForResult(intent, REQUEST_CODE_SELECAO_ENDERECO);
     }
 
 

@@ -113,7 +113,7 @@ public class PerfilFragment extends Fragment {
 
         // Configura o adapter e layout manager para pets para adoção
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
-        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
 
         // Inicia a escuta em tempo real para os pets
@@ -225,7 +225,7 @@ public class PerfilFragment extends Fragment {
     private void inicializarComponentes(View view) {
         textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
-        imagemPerfilUsuario = view.findViewById(R.id.escolherImagemPet);
+        imagemPerfilUsuario = view.findViewById(R.id.imagemUsuario);
         textViewQuantidadePetsCadastrados = view.findViewById(R.id.textViewQuantidadePetsCadastrados);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);

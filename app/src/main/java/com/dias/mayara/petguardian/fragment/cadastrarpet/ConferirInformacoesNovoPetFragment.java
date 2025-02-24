@@ -283,9 +283,9 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     textViewIdadePet.setText(pet.getIdadePet());
                     textViewGeneroPet.setText(pet.getGeneroPet());
                     textViewEspecie.setText(pet.getEspeciePet());
-                    textViewCorDosOlhos.setText(pet.getCorDosOlhos());
-                    textViewCorPredominante.setText(pet.getCorPredominante());
-                    textViewPorte.setText(pet.getPorte());
+                    textViewCorDosOlhos.setText(pet.getCorDosOlhosPet());
+                    textViewCorPredominante.setText(pet.getCorPredominantePet());
+                    textViewPorte.setText(pet.getPortePet());
                     textViewRaca.setText(pet.getRacaPet());
 
                     textViewStatusVacinacao.setText(pet.getStatusVacinacao());

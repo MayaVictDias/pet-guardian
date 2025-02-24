@@ -1,10 +1,8 @@
 package com.dias.mayara.petguardian.activity;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
-import com.dias.mayara.petguardian.model.Endereco;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,8 +32,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
@@ -47,9 +42,8 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             textViewStatusVacinacao, textViewVacinasTomadas, textViewVermifugado,
             textViewDataUltimaVermifugacao, textViewPetCastrado,
             textViewHistoricoDoencasTratamentos, textViewNecessidadesEspeciais,
-            textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado,
-            textViewStatusPet, textViewSaudeCuidados, textViewStatusVacinacaoTitulo,
-            textViewVacinasTomadasTitulo, textViewVermifugadoTitulo,
+            textViewNivelEnergia, textViewSociabilidade, textViewPetAdestrado, textViewSaudeCuidados,
+            textViewStatusVacinacaoTitulo, textViewVacinasTomadasTitulo, textViewVermifugadoTitulo,
             textViewDataUltimaVermifugacaoTitulo, textViewPetCastradoTitulo,
             textViewHistoricoDoencasTratamentosTitulo, textViewNecessidadesEspeciaisTitulo,
             textViewComportamentoPersonalidade, textViewNivelEnergiaTitulo,
@@ -251,19 +245,19 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewId.setText(petSelecionado.getIdPet());
         textViewEspecie.setText(petSelecionado.getEspeciePet());
 
-        // Configura o status do pet
-        textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
-        textViewStatusPet.setText("ADOÇÃO");
-
         // Configura os TextViews de informações gerais
         textViewRaca.setText(petSelecionado.getRacaPet());
-        textViewCorOlhos.setText(petSelecionado.getCorDosOlhos());
-        textViewPorte.setText(petSelecionado.getPorte());
-        textViewCorPredominante.setText(petSelecionado.getCorPredominante());
+        textViewCorOlhos.setText(petSelecionado.getCorDosOlhosPet());
+        textViewPorte.setText(petSelecionado.getPortePet());
+        textViewCorPredominante.setText(petSelecionado.getCorPredominantePet());
 
         // Configura os TextViews de saúde e cuidados
         textViewStatusVacinacao.setText(petSelecionado.getStatusVacinacao());
-        textViewVacinasTomadas.setText(petSelecionado.getVacinasTomadas());
+        if (petSelecionado.getVacinasTomadas().equals("") || petSelecionado.getVacinasTomadas() == null) {
+            textViewVacinasTomadas.setText("Não informado");
+        } else {
+            textViewVacinasTomadas.setText(petSelecionado.getVacinasTomadas());
+        }
 
         // Corrigindo a lógica para vermifugado e castração
         textViewVermifugado.setText("Sim".equalsIgnoreCase(petSelecionado.getVermifugado()) ? "Sim" : "Não");
@@ -342,7 +336,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewPetAdestrado = findViewById(R.id.textViewPetAdestrado);
 
         // Inicializar os TextViews faltantes (sem os que possuem números)
-        textViewStatusPet = findViewById(R.id.textViewStatusPet);
         textViewSaudeCuidados = findViewById(R.id.textViewSaudeCuidados);
         textViewStatusVacinacaoTitulo = findViewById(R.id.textViewStatusVacinacaoTitulo);
         textViewVacinasTomadasTitulo = findViewById(R.id.textViewVacinasTomadasTitulo);

@@ -204,9 +204,9 @@ public class InformacoesGeraisPetFragment extends Fragment {
                 }
 
                 // Obter a seleção dos Spinners
-                pet.setCorDosOlhos(spinnerCorDosOlhos.getSelectedItem().toString());
-                pet.setPorte(spinnerPorte.getSelectedItem().toString());
-                pet.setCorPredominante(spinnerCorPredominante.getSelectedItem().toString());
+                pet.setCorDosOlhosPet(spinnerCorDosOlhos.getSelectedItem().toString());
+                pet.setPortePet(spinnerPorte.getSelectedItem().toString());
+                pet.setCorPredominantePet(spinnerCorPredominante.getSelectedItem().toString());
 
                 // Salvar a raça selecionada (se visível)
                 if (spinnerRaca.getVisibility() == View.VISIBLE) {
@@ -400,7 +400,7 @@ public class InformacoesGeraisPetFragment extends Fragment {
         radioGroupEspecie = view.findViewById(R.id.radioGroupEspecie);
         radioButtonMacho = view.findViewById(R.id.radioButtonMacho);
         radioButtonFemea = view.findViewById(R.id.radioButtonFemea);
-        escolherImagemPet = view.findViewById(R.id.escolherImagemPet);
+        escolherImagemPet = view.findViewById(R.id.imagemUsuario);
         textViewEscolherImagem = view.findViewById(R.id.textViewEscolherImagem);
         radioButtonCachorro = view.findViewById(R.id.radioButtonCachorro);
         radioButtonGato = view.findViewById(R.id.radioButtonGato);
