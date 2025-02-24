@@ -58,6 +58,9 @@ public class SearchFragment extends Fragment {
 
         idUsuarioLogado = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        petsRef = ConfiguracaoFirebase.getFirebase().collection("pets");
+        usuariosRef = ConfiguracaoFirebase.getFirebase().collection("usuarios");
+
     }
 
     @Override
@@ -66,30 +69,7 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        recyclerViewPesquisaPessoas = view.findViewById(R.id.recyclerViewPesquisaPessoas);
-        recyclerViewPesquisaPet = view.findViewById(R.id.recyclerViewPesquisaPet);
-        searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
-
-        listaUsuarios = new ArrayList<>();
-        listaPets = new ArrayList<>();
-
-        petsRef = ConfiguracaoFirebase.getFirebase().collection("todosPets");
-        usuariosRef = ConfiguracaoFirebase.getFirebase().collection("usuarios");
-
-        // Configuração do adapter de pesquisa
-        pesquisaUsuarioAdapter = new PesquisaUsuarioAdapter(listaUsuarios);
-        petsPesquisaAdapter = new PetsPesquisaAdapter(listaPets);
-
-        // Configuração do RecyclerView pessoas
-        recyclerViewPesquisaPessoas.setHasFixedSize(true);
-        recyclerViewPesquisaPessoas.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerViewPesquisaPessoas.setAdapter(pesquisaUsuarioAdapter);
-
-        // Configuração do RecyclerView pets
-        recyclerViewPesquisaPet.setHasFixedSize(true);
-        recyclerViewPesquisaPet.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        recyclerViewPesquisaPet.setAdapter(petsPesquisaAdapter);
+        configurarRecycleViews(view);
 
         // Configuração do evento de clique
         recyclerViewPesquisaPessoas.addOnItemTouchListener(new RecyclerItemClickListener(
@@ -168,6 +148,30 @@ public class SearchFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void configurarRecycleViews(View view) {
+        recyclerViewPesquisaPessoas = view.findViewById(R.id.recyclerViewPesquisaPessoas);
+        recyclerViewPesquisaPet = view.findViewById(R.id.recyclerViewPesquisaPet);
+        searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
+
+        listaUsuarios = new ArrayList<>();
+        listaPets = new ArrayList<>();
+
+        // Configuração do adapter de pesquisa
+        pesquisaUsuarioAdapter = new PesquisaUsuarioAdapter(listaUsuarios);
+        petsPesquisaAdapter = new PetsPesquisaAdapter(listaPets);
+
+        // Configuração do RecyclerView pessoas
+        recyclerViewPesquisaPessoas.setHasFixedSize(true);
+        recyclerViewPesquisaPessoas.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerViewPesquisaPessoas.setAdapter(pesquisaUsuarioAdapter);
+
+        // Configuração do RecyclerView pets
+        recyclerViewPesquisaPet.setHasFixedSize(true);
+        recyclerViewPesquisaPet.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recyclerViewPesquisaPet.setAdapter(petsPesquisaAdapter);
     }
 
     private void pesquisarUsuarios(String textoDigitado) {

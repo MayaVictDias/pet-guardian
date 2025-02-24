@@ -16,11 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.activity.MaisInformacoesSobrePetActivity;
-import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.model.Pet;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +45,12 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
         if (position >= 0 && position < petList.size()) {
             Pet pet = petList.get(position);
 
-            DocumentReference petRef = ConfiguracaoFirebase.getFirebase().collection("pets") // Coleção de pets
-                    .document(pet.getIdPet());
-
+            // Configura os campos do pet
             holder.textViewNomePet.setText(pet.getNomePet());
-            holder.textViewStatusPet.setText("ADOÇÃO");
             holder.textViewIdadeGenero.setText(pet.getIdadePet() + " • " + pet.getGeneroPet());
+            holder.textViewStatusPet.setText("ADOÇÃO");
 
+            // Define a cor de fundo do status do pet
             if (holder.textViewStatusPet.getText().equals("ADOÇÃO")) {
                 holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#00FF47"));
             } else if (holder.textViewStatusPet.getText().equals("DESAPARECIDO")) {
@@ -63,39 +59,21 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
                 holder.textViewStatusPet.setBackgroundColor(Color.parseColor("#0047FF"));
             }
 
+            // Carrega a imagem do pet usando Glide
             Glide.with(holder.imageViewFotoPet.getContext())
-                    .load(pet.getImagemUrl()) // Aqui você insere a URL da imagem
+                    .load(pet.getImagemUrl()) // URL da imagem
                     .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
                     .error(R.drawable.no_image_found) // Imagem em caso de erro
                     .into(holder.imageViewFotoPet);
 
+            // Configura o clique no cardView
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    // Referência ao documento do pet no Firestore
-                    DocumentReference petRef = ConfiguracaoFirebase.getFirebase()
-                            .collection("pets")
-                            .document(pet.getIdPet());
-
-                    // Recuperando os dados do pet
-                    petRef.get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot snapshot = task.getResult();
-                            if (snapshot.exists()) {
-                                Pet petSelecionado = snapshot.toObject(Pet.class);
-
-                                if (petSelecionado != null) {
-                                    Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
-                                    i.putExtra("petSelecionado", petSelecionado);
-                                    holder.itemView.getContext().startActivity(i);
-                                }
-                            }
-                        } else {
-                            // Tratar erro, se necessário
-                            System.err.println("Erro ao recuperar o pet: " + task.getException().getMessage());
-                        }
-                    });
+                    // Passa apenas o ID do pet para a próxima atividade
+                    Intent i = new Intent(holder.itemView.getContext(), MaisInformacoesSobrePetActivity.class);
+                    i.putExtra("petId", pet.getIdPet()); // Passa o ID do pet
+                    holder.itemView.getContext().startActivity(i);
                 }
             });
 
@@ -162,7 +140,6 @@ public class PetsPesquisaAdapter extends RecyclerView.Adapter<PetsPesquisaAdapte
                 return days + " dia(s) atrás";
             }
         }
-
 
         @Override
         protected void finalize() throws Throwable {

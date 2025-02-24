@@ -84,13 +84,6 @@
                     android:layout_marginEnd="30dp"
                     android:text="Desaparecido há tempo" />
 
-                <TextView
-                    android:id="@+id/textViewCidadePet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:text="Cidade" />
             </LinearLayout>
 
         </LinearLayout>
