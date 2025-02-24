@@ -27,9 +27,6 @@
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme">
 
-                <!-- Botão do lado esquerdo -->
-
-                <!-- Adicionando um TextView para o título -->
                 <TextView
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
@@ -148,23 +145,53 @@
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/textViewPetsParaAdocao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/nunito_bold"
-                android:text="Pets para adoção"
-                android:textColor="@color/coralSuave"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPetsParaAdocao"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Layout centralizado para "Não há pets cadastrados" -->
+                <LinearLayout
+                    android:id="@+id/layoutSemPets"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_pata_marrom_36x36" />
+
+                    <TextView
+                        android:id="@+id/textViewSemPets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Não há pets cadastrados"
+                        android:textSize="18sp"
+                        android:textColor="@color/marromEscuro"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+
+                <!-- Layout separado para o RecyclerView -->
+                <LinearLayout
+                    android:id="@+id/layoutComPets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewPetsParaAdocao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

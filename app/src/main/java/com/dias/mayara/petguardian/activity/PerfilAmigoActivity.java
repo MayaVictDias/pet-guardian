@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
     private RecyclerView recyclerViewPetsParaAdocao;
+    private LinearLayout layoutSemPets, layoutComPets; // Adicionado
 
     private FirebaseFirestore firebaseRef;
     private CollectionReference usuariosRef;
@@ -111,15 +114,14 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 .collection("pets");
 
         Query query = databaseReference
-                .whereEqualTo("statusPet", "Adoção")
                 .whereEqualTo("idTutor", usuarioID);
-
 
         listenerRegistrationPetsAdocao = query.addSnapshotListener((snapshots, e) -> {
             if (e != null) {
                 Log.e("Firestore", "Erro ao carregar os pets para adoção", e);
                 return;
             }
+
             petListAdocao.clear();
             for (QueryDocumentSnapshot snapshot : snapshots) {
                 String idPet = snapshot.getString("idPet");
@@ -153,10 +155,19 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                         doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
                         dataCadastro));
             }
+
+            // Verifica se há pets na lista
+            if (petListAdocao.isEmpty()) {
+                layoutSemPets.setVisibility(View.VISIBLE); // Exibe o layout "Sem Pets"
+                layoutComPets.setVisibility(View.GONE); // Oculta o layout "Com Pets"
+            } else {
+                layoutSemPets.setVisibility(View.GONE); // Oculta o layout "Sem Pets"
+                layoutComPets.setVisibility(View.VISIBLE); // Exibe o layout "Com Pets"
+            }
+
             petsAdapterAdocao.notifyDataSetChanged();
         });
     }
-
 
     private void recuperarDadosPerfilAmigo() {
         if (usuarioAmigoRef == null) return;
@@ -251,9 +262,12 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         textViewQuantidadePetsCadastrados = findViewById(R.id.textViewQuantidadePetsCadastrados);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);
         toolbar = findViewById(R.id.toolbar);
+
+        // Inicializa os layouts de "Sem Pets" e "Com Pets"
+        layoutSemPets = findViewById(R.id.layoutSemPets);
+        layoutComPets = findViewById(R.id.layoutComPets);
     }
 
-    // Método para lidar com o clique no botão de voltar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();  // Volta para a tela anterior

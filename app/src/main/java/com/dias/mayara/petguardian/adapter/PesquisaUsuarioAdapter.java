@@ -57,7 +57,7 @@ public class PesquisaUsuarioAdapter extends RecyclerView.Adapter<PesquisaUsuario
         Glide.with(holder.imageViewPesquisaFotoUsuario.getContext())
                 .load(usuario.getCaminhoFotoUsuario()) // Aqui você insere a URL da imagem
                 .placeholder(R.drawable.imagem_carregamento) // Imagem padrão enquanto carrega
-                .error(R.drawable.no_image_found) // Imagem em caso de erro
+                .error(R.drawable.profile_image) // Imagem em caso de erro
                 .into(holder.imageViewPesquisaFotoUsuario);
     }
 
