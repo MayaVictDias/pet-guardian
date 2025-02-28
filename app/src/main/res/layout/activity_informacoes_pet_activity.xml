@@ -41,33 +41,37 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="end"
-                    android:layout_marginRight="24dp"
+                    android:layout_marginEnd="24dp"
                     android:backgroundTint="@color/begeClaro"
-                    android:src="@drawable/ic_more_horiz_24x24"
-                    android:text="Button" />
-
+                    android:src="@drawable/ic_more_horiz_24x24"/>
             </androidx.appcompat.widget.Toolbar>
 
+            <!-- Imagem do pet -->
             <ImageView
                 android:id="@+id/imageViewFotoPet"
                 android:layout_width="match_parent"
                 android:layout_height="251dp"
+                android:scaleType="centerCrop"
+                android:background="@color/cinzaClaro"
                 app:srcCompat="@drawable/imagem_carregamento" />
 
+            <!-- Informações do pet -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="24dp"
                 android:orientation="vertical">
 
+                <!-- Nome e tempo de postagem -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:id="@+id/textViewNomeTitulo"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_bold"
@@ -86,34 +90,55 @@
                         android:textSize="15sp" />
                 </LinearLayout>
 
+                <!-- Idade e gênero -->
                 <TextView
                     android:id="@+id/textViewIdadeGenero"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Idade - Genero"
+                    android:text="Idade - Gênero"
                     android:textColor="@color/marromEscuro"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/textViewId"
+                <!-- ID e botão de cópia -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/nunito_medium"
-                    android:text="ID"
-                    android:textColor="@color/marromEscuro" />
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
+                    <TextView
+                        android:id="@+id/textViewId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:textSize="24dp"
+                        android:layout_gravity="center"
+                        android:text="ID"
+                        android:textColor="@color/marromEscuro" />
+
+                    <ImageButton
+                        android:id="@+id/buttonCopiarId"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_content_copy_24x24"
+                        android:contentDescription="Copiar ID"
+                        android:layout_gravity="center_vertical" />
+                </LinearLayout>
+
+                <!-- Informações gerais -->
                 <TextView
                     android:id="@+id/textView61"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Informações gerais"
                     android:textColor="@color/coralSuave"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Espécie -->
                 <TextView
                     android:id="@+id/textView62"
                     android:layout_width="match_parent"
@@ -126,10 +151,11 @@
                     android:id="@+id/textViewEspecie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Espécie" />
+                    android:text="Cachorro"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Raça -->
                 <TextView
                     android:id="@+id/textView64"
                     android:layout_width="match_parent"
@@ -142,10 +168,11 @@
                     android:id="@+id/textViewRaca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Raça" />
+                    android:text="Golden Retriever"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Cor dos olhos -->
                 <TextView
                     android:id="@+id/textView66"
                     android:layout_width="match_parent"
@@ -158,10 +185,11 @@
                     android:id="@+id/textViewCorOlhos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Cor dos olhos" />
+                    android:text="Castanho"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Porte -->
                 <TextView
                     android:id="@+id/textView68"
                     android:layout_width="match_parent"
@@ -174,10 +202,11 @@
                     android:id="@+id/textViewPorte"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Porte" />
+                    android:text="Grande"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Cor predominante -->
                 <TextView
                     android:id="@+id/textView70"
                     android:layout_width="match_parent"
@@ -190,20 +219,22 @@
                     android:id="@+id/textViewCorPredominante"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="18dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Cor predominante" />
+                    android:text="Dourado"
+                    android:layout_marginBottom="24dp" />
 
+                <!-- Saúde e cuidados -->
                 <TextView
                     android:id="@+id/textViewSaudeCuidados"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Saúde e cuidados"
                     android:textColor="@color/coralSuave"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Status da vacinação -->
                 <TextView
                     android:id="@+id/textViewStatusVacinacaoTitulo"
                     android:layout_width="match_parent"
@@ -216,10 +247,11 @@
                     android:id="@+id/textViewStatusVacinacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Status da vacinação" />
+                    android:text="Completo"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Vacinas tomadas -->
                 <TextView
                     android:id="@+id/textViewVacinasTomadasTitulo"
                     android:layout_width="match_parent"
@@ -232,10 +264,11 @@
                     android:id="@+id/textViewVacinasTomadas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Vacinas tomadas" />
+                    android:text="Raiva, V8, Antirrábica"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Vermifugado -->
                 <TextView
                     android:id="@+id/textViewVermifugadoTitulo"
                     android:layout_width="match_parent"
@@ -248,10 +281,11 @@
                     android:id="@+id/textViewVermifugado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Vermifugado?" />
+                    android:text="Sim"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Data da última vermifugação -->
                 <TextView
                     android:id="@+id/textViewDataUltimaVermifugacaoTitulo"
                     android:layout_width="match_parent"
@@ -264,10 +298,11 @@
                     android:id="@+id/textViewDataUltimaVermifugacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Data da última vermifugação" />
+                    android:text="01/01/2023"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Castrado -->
                 <TextView
                     android:id="@+id/textViewPetCastradoTitulo"
                     android:layout_width="match_parent"
@@ -280,10 +315,11 @@
                     android:id="@+id/textViewPetCastrado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Castrado?" />
+                    android:text="Sim"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Histórico de doenças ou tratamentos -->
                 <TextView
                     android:id="@+id/textViewHistoricoDoencasTratamentosTitulo"
                     android:layout_width="match_parent"
@@ -296,10 +332,11 @@
                     android:id="@+id/textViewHistoricoDoencasTratamentos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Histórico de doenças ou tratamentos" />
+                    android:text="Nenhum"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Necessidades especiais -->
                 <TextView
                     android:id="@+id/textViewNecessidadesEspeciaisTitulo"
                     android:layout_width="match_parent"
@@ -312,21 +349,22 @@
                     android:id="@+id/textViewNecessidadesEspeciais"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="18dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Histórico de doenças ou tratamentos" />
+                    android:text="Nenhuma"
+                    android:layout_marginBottom="24dp" />
 
-
+                <!-- Comportamento e personalidade -->
                 <TextView
                     android:id="@+id/textViewComportamentoPersonalidade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Comportamento e personalidade"
                     android:textColor="@color/coralSuave"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Nível de energia -->
                 <TextView
                     android:id="@+id/textViewNivelEnergiaTitulo"
                     android:layout_width="match_parent"
@@ -339,10 +377,11 @@
                     android:id="@+id/textViewNivelEnergia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Nível de energia" />
+                    android:text="Alto"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Sociabilidade -->
                 <TextView
                     android:id="@+id/textViewSociabilidadeTitulo"
                     android:layout_width="match_parent"
@@ -355,10 +394,11 @@
                     android:id="@+id/textViewSociabilidade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Sociabilidade" />
+                    android:text="Amigável"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Pet é adestrado? -->
                 <TextView
                     android:id="@+id/textViewPetAdestradoTitulo"
                     android:layout_width="match_parent"
@@ -371,16 +411,20 @@
                     android:id="@+id/textViewPetAdestrado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="18dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Pet é adestrado?" />
+                    android:text="Sim"
+                    android:layout_marginBottom="24dp" />
 
+                <!-- Botão de entrar em contato -->
                 <Button
                     android:id="@+id/buttonEntrarEmContato"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ENTRAR EM CONTATO" />
-
+                    android:text="ENTRAR EM CONTATO"
+                    android:backgroundTint="@color/coralSuave"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="12dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -1,6 +1,9 @@
 package com.dias.mayara.petguardian.activity;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuInflater;
@@ -51,7 +54,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             textViewDesaparecidoHaTempo, textViewNomeTitulo, textViewIdadeGenero,
             textViewId, textViewEspecie;
     private Pet petSelecionado;
-    private Button buttonEntrarEmContato;
+    private Button buttonEntrarEmContato, buttonCopiarId;
     private ImageButton buttonMenu;
 
     private String idUsuarioLogado;
@@ -161,6 +164,22 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                 closeButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
 
                 bottomSheetDialog.show();
+            }
+        });
+
+        buttonCopiarId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtém o texto do ID
+                String id = textViewId.getText().toString();
+
+                // Copia o ID para a área de transferência
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("ID do Pet", id);
+                clipboard.setPrimaryClip(clip);
+
+                // Exibe uma mensagem de confirmação
+                Toast.makeText(getApplicationContext(), "ID copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -315,6 +334,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewNomeTitulo = findViewById(R.id.textViewNomeTitulo);
         textViewIdadeGenero = findViewById(R.id.textViewIdadeGenero);
         textViewId = findViewById(R.id.textViewId);
+        buttonCopiarId = findViewById(R.id.buttonCopiarId);
         textViewEspecie = findViewById(R.id.textViewEspecie);
         buttonEntrarEmContato = findViewById(R.id.buttonEntrarEmContato);
         buttonMenu = findViewById(R.id.buttonMenu);
