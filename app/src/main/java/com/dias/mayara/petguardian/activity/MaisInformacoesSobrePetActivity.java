@@ -54,7 +54,8 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             textViewDesaparecidoHaTempo, textViewNomeTitulo, textViewIdadeGenero,
             textViewId, textViewEspecie;
     private Pet petSelecionado;
-    private Button buttonEntrarEmContato, buttonCopiarId;
+    private Button buttonEntrarEmContato;
+    private ImageButton buttonCopiarId;
     private ImageButton buttonMenu;
 
     private String idUsuarioLogado;
@@ -218,7 +219,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                     // Código para excluir o item
                     petsRef.delete();
 
-                    usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() - 1);
+                    usuarioRef.update("quantidadePetsCadastrados", usuario.getQuantidadePetsCadastrados() - 1);
 
                     dialog.cancel();
 

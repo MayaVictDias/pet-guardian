@@ -421,7 +421,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="ENTRAR EM CONTATO"
-                    android:backgroundTint="@color/coralSuave"
+                    android:backgroundTint="@color/verdeOlivaClaro"
                     android:textColor="@color/white"
                     android:textAllCaps="false"
                     android:layout_marginTop="12dp" />
