@@ -72,6 +72,8 @@ public class UsuarioFirebase {
         DocumentReference usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios")
                 .document(usuario.getIdUsuario());
 
+        Log.d("Usuário firebase getIdUsuario", usuario.getIdUsuario());
+
         if (firebaseUser.getPhotoUrl() == null) {
             usuario.setCaminhoFotoUsuario("");
         } else {

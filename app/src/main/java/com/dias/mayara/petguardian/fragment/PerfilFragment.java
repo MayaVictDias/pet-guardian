@@ -212,8 +212,6 @@ public class PerfilFragment extends Fragment {
                         // Atualizando a interface com os dados do usuário
                         textViewNomeUsuario.setText(usuario.getNomeUsuario());
                         textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
-                        textViewQuantidadePetsCadastrados.setText(usuario.getQuantidadePetsCadastrados() +
-                                " pet(s) cadastrado(s)");
                     }
                 }
             } else {
@@ -226,7 +224,6 @@ public class PerfilFragment extends Fragment {
         textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
         textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = view.findViewById(R.id.imagemUsuario);
-        textViewQuantidadePetsCadastrados = view.findViewById(R.id.textViewQuantidadePetsCadastrados);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
 

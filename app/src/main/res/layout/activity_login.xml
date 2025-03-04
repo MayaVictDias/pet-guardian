@@ -73,15 +73,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <CheckBox
-        android:id="@+id/checkBoxLembrarUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="24dp"
-        android:text="Lembre-se de mim" />
-
     <Button
         android:id="@+id/buttonLogin"
         style="@style/CustomButtonStyleYellowBackground"

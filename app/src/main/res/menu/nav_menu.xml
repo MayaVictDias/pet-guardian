@@ -2,16 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_notificacoes"
-        android:icon="@drawable/ic_notificacoes"
-        android:title="Notificações" />
-
-    <item
-        android:id="@+id/nav_meus_pets"
-        android:icon="@drawable/ic_meus_pets"
-        android:title="Meus pets" />
-
-    <item
         android:id="@+id/nav_configuracoes"
         android:icon="@drawable/ic_settings_coral_28x28"
         android:title="Configurações" />

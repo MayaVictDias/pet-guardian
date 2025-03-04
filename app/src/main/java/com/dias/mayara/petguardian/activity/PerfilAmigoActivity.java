@@ -216,8 +216,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                         textViewNomeUsuario.setText(usuario.getNomeUsuario());
                         textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() +
                                 " - " + usuario.getEstadoUsuario());
-                        textViewQuantidadePetsCadastrados.setText(usuario.getQuantidadePetsCadastrados() +
-                                " pet(s) cadastrado(s)");
                     }
                 } else {
                     Log.d("Firestore", "Documento do usuário não encontrado!");
@@ -259,7 +257,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = findViewById(R.id.imagemUsuario);
         recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
-        textViewQuantidadePetsCadastrados = findViewById(R.id.textViewQuantidadePetsCadastrados);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);
         toolbar = findViewById(R.id.toolbar);
 

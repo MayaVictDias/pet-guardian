@@ -2,10 +2,13 @@ package com.dias.mayara.petguardian.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
@@ -33,10 +38,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class EditarPerfilActivity extends AppCompatActivity {
 
@@ -47,8 +55,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private Usuario usuarioLogado;
 
     private String identificadorUsuario;
+    private DocumentReference usuarioRef;
 
     private static final int SELECAO_GALERIA = 200;
+    private static final int REQUEST_CODE_PERMISSIONS = 100;
     private StorageReference storageRef;
     private String[] permissoesNecessarias = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE
@@ -74,25 +84,47 @@ public class EditarPerfilActivity extends AppCompatActivity {
         storageRef = ConfiguracaoFirebase.getFirebaseStorage();
 
         // Inicializa o usuário logado
-        usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado(); // Método hipotético para obter o usuário logado
+        usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
+        usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios").
+                document(usuarioLogado.getIdUsuario());
 
         // Verifica se usuarioLogado não é nulo e preenche os EditTexts
         if (usuarioLogado != null) {
             editTextNomeUsuario.setText(usuarioLogado.getNomeUsuario());
             editTextEmail.setText(usuarioLogado.getEmailUsuario());
-            editTextCelular.setText(usuarioLogado.getCelularUsuario());
+            // No método onCreate ou onde for apropriado, após a inicialização do usuarioRef
+            usuarioRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        // Verificar se o campo celularUsuario existe no documento
+                        String celular = documentSnapshot.getString("celularUsuario");
+
+                        if (celular != null) {
+                            // Defina o valor do celular no EditText
+                            editTextCelular.setText(celular);
+                        }
+                    } else {
+                        Log.d("EditarPerfil", "Documento não encontrado.");
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("EditarPerfil", "Erro ao obter dados: ", e);
+                }
+            });
+
         } else {
             Toast.makeText(this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
         }
 
-
         Uri url = Uri.parse(usuarioLogado.getCaminhoFotoUsuario());
+        Log.d("URL da foto: ", url.toString());
 
-        if(url != null && !url.equals("")) {
-
+        if (url != null && !url.toString().isEmpty()) {
             Glide.with(EditarPerfilActivity.this).load(url).into(imageViewFotoPerfilUsuario);
         } else {
-
             imageViewFotoPerfilUsuario.setImageResource(R.drawable.profile_image);
         }
 
@@ -100,10 +132,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
         buttonAlterarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); // Abre a galeria do celular
-
-                if(i.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(i, SELECAO_GALERIA);
+                if (verificarPermissoes()) {
+                    abrirGaleria();
+                } else {
+                    solicitarPermissoes();
                 }
             }
         });
@@ -118,66 +150,92 @@ public class EditarPerfilActivity extends AppCompatActivity {
         });
     }
 
+    private boolean verificarPermissoes() {
+        for (String permissao : permissoesNecessarias) {
+            if (ContextCompat.checkSelfPermission(this, permissao) != PackageManager.PERMISSION_GRANTED) {
+                return false; // Permissão não concedida
+            }
+        }
+        return true; // Todas as permissões concedidas
+    }
+
+    private void solicitarPermissoes() {
+        ActivityCompat.requestPermissions(this, permissoesNecessarias, REQUEST_CODE_PERMISSIONS);
+    }
+
+    private void abrirGaleria() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, SELECAO_GALERIA);
+        }
+    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK) {
-
-            Bitmap imagem = null;
-
-            try {
-                // Selecao apenas da galeria de fotos
-                if(requestCode == SELECAO_GALERIA) {
-                    Uri localImagemSelecionada = data.getData();
-                    imagem = MediaStore.Images.Media.getBitmap(getContentResolver(), localImagemSelecionada);
-                }
-
-                // Caso tenha sido escolhida uma imagem
-                if(imagem != null) {
-
-                    // Configura imagem na tela
-                    imageViewFotoPerfilUsuario.setImageBitmap(imagem);
-
-                    // Recuperar dados da imagem para salvar no firebase
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-                    byte[] dadosImagem = baos.toByteArray();
-
-                    // Salvar imagem no firebase
-                    final StorageReference imagemRef = storageRef.child("imagens").
-                            child("perfil").child(identificadorUsuario + ".jpeg");
-                    UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(EditarPerfilActivity.this, "Erro ao fazer upload da imagem",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    Uri url = task.getResult();
-                                    atualizarFotoUsuario(url);
-                                }
-                            });
-                        }
-                    });
-
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (verificarPermissoes()) {
+                abrirGaleria();
+            } else {
+                Toast.makeText(this, "Permissões necessárias não concedidas.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void atualizarFotoUsuario(Uri url) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECAO_GALERIA) {
+                Uri imagemSelecionada = data.getData(); // Obtém o URI da imagem selecionada
+                if (imagemSelecionada != null) {
+                    try {
+                        // Exibe a imagem selecionada no ImageView
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagemSelecionada);
+                        imageViewFotoPerfilUsuario.setImageBitmap(bitmap); // Exibe no ImageView
+
+                        // Converte a imagem para bytes e faz o upload
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] imagemBytes = baos.toByteArray();
+
+                        // Faz o upload da imagem para o Firebase Storage
+                        fazerUploadImagem(imagemBytes);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(EditarPerfilActivity.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    }
+
+    private void fazerUploadImagem(byte[] imagemBytes) {
+        StorageReference imagemRef = storageRef.child("imagens/perfil/" + identificadorUsuario + ".jpeg");
+        UploadTask uploadTask = imagemRef.putBytes(imagemBytes);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Obtém a URL da imagem após o upload
+                imagemRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Atualiza a foto do usuário no Firebase
+                        atualizarFotoUsuario(uri);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditarPerfilActivity.this, "Erro ao fazer upload da imagem.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void atualizarFotoUsuario(Uri url) {
         // Atualizar foto no perfil
         UsuarioFirebase.atualizarFotoUsuario(url);
 
@@ -186,7 +244,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         usuarioLogado.atualizar();
 
         Toast.makeText(this, "Sua foto foi atualizada!", Toast.LENGTH_SHORT).show();
-
     }
 
     private void mostrarDialogConfirmacaoSenha() {
@@ -230,12 +287,12 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private void salvarAlteracoes() {
         String nomeAtualizado = editTextNomeUsuario.getText().toString();
         String emailAtualizado = editTextEmail.getText().toString();
+        String celularAtualizado = editTextCelular.getText().toString(); // Captura o valor do celular
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
 
         if (usuarioAtual != null) {
             // Atualizar e-mail no Firebase Authentication
-
             usuarioAtual.updateEmail(emailAtualizado)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -246,6 +303,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                             if (usuarioLogado != null) {
                                 usuarioLogado.setNomeUsuario(nomeAtualizado);
                                 usuarioLogado.setEmailUsuario(emailAtualizado);
+                                usuarioLogado.setCelularUsuario(celularAtualizado); // Atualiza o celular
                                 usuarioLogado.atualizar(); // Método hipotético para salvar no banco de dados
                             }
 
@@ -260,7 +318,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
             Toast.makeText(EditarPerfilActivity.this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     public void inicializarComponentes() {
         toolbar = findViewById(R.id.toolbarPrincipal);

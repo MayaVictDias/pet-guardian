@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextLoginEmail, editTextLoginSenha;
     private Button buttonLogin;
     private ProgressBar progressBar;
-    private CheckBox checkBoxLembrarUsuario;
 
     private FirebaseAuth autenticacao;
     private Usuario usuario;
@@ -73,14 +72,12 @@ public class LoginActivity extends AppCompatActivity {
 
         autenticacao = ConfiguracaoFirebase.getFirebaseAuth();
 
-        autenticacao.signInWithEmailAndPassword(
-                usuario.getEmailUsuario(),
-                usuario.getSenhaUsuario()
-        ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        autenticacao.signInWithEmailAndPassword(usuario.getEmailUsuario(), usuario.getSenhaUsuario()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
+                    /*
                     // Verificar o estado da checkbox e salvar nas SharedPreferences
                     SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
@@ -95,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     editor.apply(); // Aplica as mudanças nas SharedPreferences
+
+                     */
                     progressBar.setVisibility(View.GONE);
 
                     // Redireciona para a MainActivity
@@ -116,11 +115,13 @@ public class LoginActivity extends AppCompatActivity {
         editTextLoginSenha = findViewById(R.id.editTextLoginSenha);
         buttonLogin = findViewById(R.id.buttonLogin);
         progressBar = findViewById(R.id.progressBar);
-        checkBoxLembrarUsuario = findViewById(R.id.checkBoxLembrarUsuario);
 
+        /*
         SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         boolean lembrarUsuario = preferences.getBoolean("manterLogado", false);
         checkBoxLembrarUsuario.setChecked(lembrarUsuario);
+
+        */
     }
 
     // Método para lidar com o clique no botão de voltar

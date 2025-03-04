@@ -120,11 +120,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                if (id == R.id.nav_notificacoes) {
-                    // Handle Notificações click
-                } else if (id == R.id.nav_meus_pets) {
-                    startActivity(new Intent(MainActivity.this, MeusPets.class));
-                } else if (id == R.id.nav_configuracoes) {
+                if (id == R.id.nav_configuracoes) {
                     startActivity(new Intent(MainActivity.this, ConfiguracoesActivity.class));
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);

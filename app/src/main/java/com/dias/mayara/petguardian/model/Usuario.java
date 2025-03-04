@@ -141,4 +141,19 @@ public class Usuario implements Serializable {
     public void setNomeLowercaseUsuario(String nomeLowercaseUsuario) {
         this.nomeLowercaseUsuario = nomeUsuario.toLowerCase();
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "idUsuario='" + idUsuario + '\'' +
+                ", nomeUsuario='" + nomeUsuario + '\'' +
+                ", nomeLowercaseUsuario='" + getNomeLowercaseUsuario() + '\'' +
+                ", emailUsuario='" + emailUsuario + '\'' +
+                ", celularUsuario='" + celularUsuario + '\'' +
+                ", caminhoFotoUsuario='" + caminhoFotoUsuario + '\'' +
+                ", cidadeUsuario='" + cidadeUsuario + '\'' +
+                ", estadoUsuario='" + estadoUsuario + '\'' +
+                ", quantidadePetsCadastrados=" + quantidadePetsCadastrados +
+                '}';
+    }
 }
