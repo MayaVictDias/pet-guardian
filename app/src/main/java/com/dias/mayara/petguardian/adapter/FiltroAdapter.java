@@ -13,7 +13,6 @@ import com.google.android.material.chip.Chip;
 import java.util.List;
 
 public class FiltroAdapter extends RecyclerView.Adapter<FiltroAdapter.FiltroViewHolder> {
-
     private List<String> filtros;
     private OnFiltroRemovedListener listener;
 
@@ -34,18 +33,30 @@ public class FiltroAdapter extends RecyclerView.Adapter<FiltroAdapter.FiltroView
         String filtro = filtros.get(position);
         holder.chipFiltro.setText(filtro);
 
-        // Remove o filtro quando o ícone de fechar é clicado
         holder.chipFiltro.setOnCloseIconClickListener(v -> {
+            // Remove o filtro da lista
             filtros.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, filtros.size());
+
+            // Notifica o listener sobre a remoção do filtro
             listener.onFiltroRemoved(filtro);
+
+            // Verifica se a lista de filtros está vazia
+            if (filtros.isEmpty()) {
+                listener.onTodosFiltrosRemovidos();
+            }
         });
     }
 
     @Override
     public int getItemCount() {
         return filtros.size();
+    }
+
+    public void setFiltros(List<String> filtros) {
+        this.filtros = filtros;
+        notifyDataSetChanged();
     }
 
     public static class FiltroViewHolder extends RecyclerView.ViewHolder {
@@ -58,6 +69,7 @@ public class FiltroAdapter extends RecyclerView.Adapter<FiltroAdapter.FiltroView
     }
 
     public interface OnFiltroRemovedListener {
-        void onFiltroRemoved(String filtro);
+        void onFiltroRemoved(String filtro); // Chamado quando um filtro é removido
+        void onTodosFiltrosRemovidos(); // Chamado quando todos os filtros são removidos
     }
 }

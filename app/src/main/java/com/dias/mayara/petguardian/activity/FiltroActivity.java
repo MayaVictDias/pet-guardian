@@ -1,5 +1,6 @@
 package com.dias.mayara.petguardian.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -46,6 +47,34 @@ public class FiltroActivity extends AppCompatActivity {
         });
 
         configurarAdapters();
+
+        buttonFiltrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Coletar os valores dos Spinners
+                String status = spinnerStatusPet.getSelectedItem().toString();
+                String idade = spinnerIdadePet.getSelectedItem().toString();
+                String genero = spinnerGeneroPet.getSelectedItem().toString();
+                String especie = spinnerEspeciePet.getSelectedItem().toString();
+                String corOlhos = spinnerCorDosOlhos.getSelectedItem().toString();
+                String corPredominante = spinnerCorPredominante.getSelectedItem().toString();
+
+                // Criar um Intent para retornar os filtros
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("status", status);
+                resultIntent.putExtra("idade", idade);
+                resultIntent.putExtra("genero", genero);
+                resultIntent.putExtra("especie", especie);
+                resultIntent.putExtra("corOlhos", corOlhos);
+                resultIntent.putExtra("corPredominante", corPredominante);
+
+                // Definir o resultado como OK e enviar o Intent de volta
+                setResult(RESULT_OK, resultIntent);
+                finish(); // Fechar a FiltroActivity
+            }
+        });
+
+
 
     }
 
