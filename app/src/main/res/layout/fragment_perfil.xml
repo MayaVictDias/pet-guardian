@@ -73,16 +73,21 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="48dp"
-                    android:gravity="center_vertical">
+                    android:layout_height="match_parent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:id="@+id/editTextPesquisarPet"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
                         android:background="@drawable/button_background_outline_gray"
-                        android:fontFamily="@font/nunito_medium" />
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textSize="14sp" /> <!-- Tamanho da fonte ajustado -->
                 </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
 
             <!-- Layout do botão de filtro -->
@@ -102,6 +107,16 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFiltros"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:visibility="gone"
+            tools:listitem="@layout/item_filtro" />
 
         <LinearLayout
             android:layout_width="match_parent"

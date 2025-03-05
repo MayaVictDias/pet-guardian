@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.activity.FiltroActivity;
+import com.dias.mayara.petguardian.adapter.FiltroAdapter;
 import com.dias.mayara.petguardian.adapter.PetsAdapter;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
@@ -46,7 +48,8 @@ public class PerfilFragment extends Fragment {
     private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
-    private RecyclerView recyclerViewPetsParaAdocao;
+    private RecyclerView recyclerViewPetsParaAdocao, recyclerViewFiltros;
+    private EditText editTextPesquisarPet;
 
     private FirebaseUser usuarioPerfil;
 
@@ -115,6 +118,26 @@ public class PerfilFragment extends Fragment {
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
+
+        recyclerViewFiltros.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        List<String> filtros = new ArrayList<>();
+        FiltroAdapter adapter = new FiltroAdapter(filtros, filtro -> {
+            // Lógica para remover o filtro da lista de filtros ativos
+            // Exemplo: atualizar a lista de pets com base nos filtros restantes
+            Log.d("FiltroRemovido", "Filtro removido: " + filtro);
+        });
+
+        recyclerViewFiltros.setAdapter(adapter);
+
+        // Exemplo de adição de filtros
+        filtros.add("Cachorro");
+        filtros.add("Pequeno Porte");
+        filtros.add("Macho");
+
+        // Torna o RecyclerView visível
+        recyclerViewFiltros.setVisibility(View.VISIBLE);
+        adapter.notifyDataSetChanged();
 
         // Inicia a escuta em tempo real para os pets
         getPetsAdocao();
@@ -225,7 +248,9 @@ public class PerfilFragment extends Fragment {
         textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = view.findViewById(R.id.imagemUsuario);
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
+        recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
+        editTextPesquisarPet = view.findViewById(R.id.editTextPesquisarPet);
 
         // Inicializa os layouts de "Sem Pets" e "Com Pets"
         layoutSemPets = view.findViewById(R.id.layoutSemPets);
