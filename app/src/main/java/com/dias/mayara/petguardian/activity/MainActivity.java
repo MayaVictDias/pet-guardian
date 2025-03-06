@@ -42,6 +42,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private ValueEventListener valueEventListenerPerfil;
     private Usuario usuarioLogado;
 
-    private ImageView userProfileImage;
+    private CircleImageView userProfileImage;
     private TextView userName;
     private TextView userLocation;
 
@@ -101,17 +103,22 @@ public class MainActivity extends AppCompatActivity {
 
         // Personalizar o cabeçalho
         View headerView = navigationView.getHeaderView(0);
+
         userProfileImage = headerView.findViewById(R.id.user_profile_image);
-        userName = headerView.findViewById(R.id.user_name);
-        userLocation = headerView.findViewById(R.id.user_location);
+
+        // Recuperar dados do usuário
+        usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
 
         // Exibir foto do usuario, caso ele tenha setado uma
         Uri url = usuarioPerfil.getPhotoUrl();
         if (url != null) {
-            Glide.with(MainActivity.this).load(url).into(userProfileImage);
+            Glide.with(this).load(url).into(userProfileImage);
         } else {
             userProfileImage.setImageResource(R.drawable.profile_image);
         }
+
+        userName = headerView.findViewById(R.id.user_name);
+        userLocation = headerView.findViewById(R.id.user_location);
 
         recuperarDadosUsuarioLogado();
 
