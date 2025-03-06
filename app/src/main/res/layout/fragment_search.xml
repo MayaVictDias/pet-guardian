@@ -38,7 +38,7 @@
                     android:focusableInTouchMode="true"
                     android:iconifiedByDefault="false"
                     android:padding="8dp"
-                    android:queryHint="Buscar" />
+                    android:queryHint="Buscar por nome ou ID" />
             </androidx.cardview.widget.CardView>
 
             <ImageButton

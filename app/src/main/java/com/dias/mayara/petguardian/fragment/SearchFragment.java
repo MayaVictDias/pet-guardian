@@ -248,26 +248,49 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         if (textoDigitado.length() > 0) {
             String textoLowercase = textoDigitado.toLowerCase();
 
-            // Query para pesquisar pets no Firestore
-            Query query = petsRef
+            // Query para pesquisar pets no Firestore pelo nome ou idPet
+            Query queryNome = petsRef
                     .whereGreaterThanOrEqualTo("nomeLowerCasePet", textoLowercase)
                     .whereLessThanOrEqualTo("nomeLowerCasePet", textoLowercase + "\uf8ff");
 
-            query.get().addOnCompleteListener(task -> {
+            Query queryIdPet = petsRef
+                    .whereEqualTo("idPet", textoDigitado); // Busca exata pelo idPet
+
+            // Executa as consultas
+            queryNome.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     listaPets.clear();
                     for (DocumentSnapshot document : task.getResult()) {
                         Pet pet = document.toObject(Pet.class);
-                        if (pet != null) {
+                        if (pet != null && !listaPets.contains(pet)) { // Evita duplicatas
                             listaPets.add(pet);
                         }
                     }
-                    petsPesquisaAdapter.notifyDataSetChanged();
-                    checkRecyclerViewEmpty(recyclerViewPesquisaPet, layoutEmptyStatePets, "Não há pets encontrados");
+
+                    // Agora, busca pelo idPet
+                    queryIdPet.get().addOnCompleteListener(taskIdPet -> {
+                        if (taskIdPet.isSuccessful()) {
+                            for (DocumentSnapshot document : taskIdPet.getResult()) {
+                                Pet pet = document.toObject(Pet.class);
+                                if (pet != null && !listaPets.contains(pet)) { // Evita duplicatas
+                                    listaPets.add(pet);
+                                }
+                            }
+
+                            // Atualiza o adapter
+                            petsPesquisaAdapter.notifyDataSetChanged();
+                            checkRecyclerViewEmpty(recyclerViewPesquisaPet, layoutEmptyStatePets, "Não há pets encontrados");
+                        } else {
+                            Log.e("SearchFragment", "Erro ao pesquisar pets pelo idPet: " + taskIdPet.getException().getMessage());
+                        }
+                    });
                 } else {
-                    Log.e("SearchFragment", "Erro ao pesquisar pets: " + task.getException().getMessage());
+                    Log.e("SearchFragment", "Erro ao pesquisar pets pelo nome: " + task.getException().getMessage());
                 }
             });
+        } else {
+            // Se o texto estiver vazio, recarrega os últimos pets
+            carregarUltimosPets();
         }
     }
 
