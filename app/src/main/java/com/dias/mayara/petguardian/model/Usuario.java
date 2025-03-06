@@ -1,6 +1,7 @@
 package com.dias.mayara.petguardian.model;
 
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -57,6 +58,7 @@ public class Usuario implements Serializable {
         usuarioMap.put("estadoUsuario", getCidadeUsuario());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFotoUsuario());
+        usuarioMap.put("dataCadastro", Timestamp.now());
         usuarioMap.put("quantidadePetsCadastrados", getQuantidadePetsCadastrados());
 
         return usuarioMap;

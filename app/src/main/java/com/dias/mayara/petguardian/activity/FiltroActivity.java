@@ -74,8 +74,6 @@ public class FiltroActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void configurarAdapters() {

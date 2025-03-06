@@ -357,7 +357,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
-        editTextPesquisarPet = view.findViewById(R.id.editTextPesquisarPet);
+        editTextPesquisarPet = view.findViewById(R.id.searchViewPesquisa);
 
         // Inicializa os layouts de "Sem Pets" e "Com Pets"
         layoutSemPets = view.findViewById(R.id.layoutSemPets);
