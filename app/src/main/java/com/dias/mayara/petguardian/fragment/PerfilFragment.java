@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -28,7 +29,7 @@ import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Pet;
 import com.dias.mayara.petguardian.model.Usuario;
-import com.google.firebase.Timestamp;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -47,18 +48,18 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
     private Usuario usuarioLogado;
     private LinearLayout layoutSemPets, layoutComPets;
 
-    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
+    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar;
     private RecyclerView recyclerViewPetsParaAdocao, recyclerViewFiltros;
     private EditText editTextPesquisarPet;
 
     private FirebaseUser usuarioPerfil;
-
     private FirebaseFirestore firebaseRef;
     private CollectionReference usuariosRef;
     private DocumentReference usuarioLogadoRef;
     private String idUsuarioLogado;
+
     // Variáveis para armazenar os filtros atuais
     private String status = "Selecione";
     private String idade = "Selecione";
@@ -69,18 +70,15 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
     private List<Pet> petListAdocao = new ArrayList<>();
     private PetsAdapter petsAdapterAdocao;
-    private ListenerRegistration petsListener; // Listener para atualizações em tempo real
-    private static final int FILTRO_REQUEST_CODE = 1; // Código de requisição para a FiltroActivity
+    private ListenerRegistration petsListener;
+    private static final int FILTRO_REQUEST_CODE = 1;
 
     public PerfilFragment() {
         // Required empty public constructor
     }
 
     public static PerfilFragment newInstance() {
-        PerfilFragment fragment = new PerfilFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new PerfilFragment();
     }
 
     @Override
@@ -91,7 +89,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         // Inicializa a instância do Firebase e referências do banco de dados
@@ -99,11 +96,9 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         usuariosRef = firebaseRef.collection("usuarios");
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
 
-        // Obtém os dados do usuário logado e configura a referência para o nó do usuário específico
+        // Obtém os dados do usuário logado
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
         usuarioLogadoRef = usuariosRef.document(usuarioLogado.getIdUsuario());
-
-        // Recuperar dados do usuário
         usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
 
         // Inicializa os componentes de interface
@@ -112,7 +107,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Recupera os dados do usuário logado
         recuperarDadosUsuarioLogado();
 
-        // Exibir foto do usuario, caso ele tenha setado uma
+        // Exibir foto do usuário, caso ele tenha setado uma
         Uri url = usuarioPerfil.getPhotoUrl();
         if (url != null) {
             Glide.with(PerfilFragment.this).load(url).into(imagemPerfilUsuario);
@@ -132,21 +127,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         recyclerViewFiltros.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         List<String> filtros = new ArrayList<>();
-        FiltroAdapter adapter = new FiltroAdapter(filtros, new FiltroAdapter.OnFiltroRemovedListener() {
-            @Override
-            public void onFiltroRemoved(String filtro) {
-                // Lógica para remover um filtro específico
-                Log.d("FiltroRemovido", "Filtro removido: " + filtro);
-            }
-
-            @Override
-            public void onTodosFiltrosRemovidos() {
-                // Lógica para quando todos os filtros são removidos
-                Log.d("FiltroRemovido", "Todos os filtros foram removidos");
-                getPetsAdocao(); // Recarrega a lista de pets sem filtros
-            }
-        });
-
+        FiltroAdapter adapter = new FiltroAdapter(filtros, this);
         recyclerViewFiltros.setAdapter(adapter);
 
         // Torna o RecyclerView visível
@@ -156,17 +137,66 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Inicia a escuta em tempo real para os pets
         getPetsAdocao();
 
-        buttonFiltrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Abrir a FiltroActivity com startActivityForResult
-                Intent intent = new Intent(getContext(), FiltroActivity.class);
-                startActivityForResult(intent, FILTRO_REQUEST_CODE);
-            }
+        // Adicionar um TextWatcher ao editTextPesquisarPet
+        if (editTextPesquisarPet != null) {
+            editTextPesquisarPet.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // Não é necessário implementar
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // Quando o texto mudar, realizar a pesquisa
+                    String textoPesquisa = s.toString().trim();
+                    pesquisarPets(textoPesquisa);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // Não é necessário implementar
+                }
+            });
+        } else {
+            Log.e("PerfilFragment", "EditText de pesquisa não encontrado no layout");
+        }
+
+        buttonFiltrar.setOnClickListener(v -> {
+            // Abrir a FiltroActivity com startActivityForResult
+            Intent intent = new Intent(getContext(), FiltroActivity.class);
+            startActivityForResult(intent, FILTRO_REQUEST_CODE);
         });
 
-
         return view;
+    }
+
+    private void inicializarComponentes(View view) {
+        textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
+        textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
+        imagemPerfilUsuario = view.findViewById(R.id.imagemUsuario);
+        recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
+        recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
+        buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
+        editTextPesquisarPet = view.findViewById(R.id.editTextPesquisarPet); // ID corrigido
+
+        // Inicializa os layouts de "Sem Pets" e "Com Pets"
+        layoutSemPets = view.findViewById(R.id.layoutSemPets);
+        layoutComPets = view.findViewById(R.id.layoutComPets);
+    }
+
+    @Override
+    public void onFiltroRemoved(String filtro) {
+        // Lógica para remover um filtro específico
+        Log.d("PerfilFragment", "Filtro removido: " + filtro);
+    }
+
+    @Override
+    public void onTodosFiltrosRemovidos() {
+        // Lógica para remover todos os filtros
+        Log.d("PerfilFragment", "Todos os filtros foram removidos");
+
+        // Recarregar a lista de pets sem filtros
+        getPetsAdocao();
     }
 
     private void getPetsAdocao() {
@@ -194,7 +224,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
                                 petListAdocao.add(pet);
                             }
 
-                            // Atualiza a interface
+                            // Atualiza a interface com base na lista de pets
                             if (petListAdocao.isEmpty()) {
                                 layoutSemPets.setVisibility(View.VISIBLE);
                                 layoutComPets.setVisibility(View.GONE);
@@ -209,65 +239,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
                             layoutComPets.setVisibility(View.GONE);
                         }
                     });
-        }
-    }
-
-    private void recuperarDadosUsuarioLogado() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference usuarioRef = db.collection("usuarios").document(idUsuarioLogado);
-
-        // Consultando os dados do usuário
-        usuarioRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Criando o objeto Usuario a partir dos dados do Firestore
-                    Usuario usuario = document.toObject(Usuario.class);
-
-                    if (usuario != null) {
-                        // Atualizando a interface com os dados do usuário
-                        textViewNomeUsuario.setText(usuario.getNomeUsuario());
-                        textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
-                    }
-                }
-            } else {
-                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", task.getException());
-            }
-        });
-    }
-
-    // Sobrescrever onActivityResult para receber os filtros
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == FILTRO_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // Receber os filtros do Intent
-            status = data.getStringExtra("status");
-            idade = data.getStringExtra("idade");
-            genero = data.getStringExtra("genero");
-            especie = data.getStringExtra("especie");
-            corOlhos = data.getStringExtra("corOlhos");
-            corPredominante = data.getStringExtra("corPredominante");
-
-            // Atualizar a lista de filtros ativos
-            List<String> filtrosAtivos = new ArrayList<>();
-            if (!status.equals("Selecione")) filtrosAtivos.add("Status: " + status);
-            if (!idade.equals("Selecione")) filtrosAtivos.add("Idade: " + idade);
-            if (!genero.equals("Selecione")) filtrosAtivos.add("Gênero: " + genero);
-            if (!especie.equals("Selecione")) filtrosAtivos.add("Espécie: " + especie);
-            if (!corOlhos.equals("Selecione")) filtrosAtivos.add("Cor dos Olhos: " + corOlhos);
-            if (!corPredominante.equals("Selecione")) filtrosAtivos.add("Cor Predominante: " + corPredominante);
-
-            // Atualizar o RecyclerView de filtros
-            FiltroAdapter adapter = (FiltroAdapter) recyclerViewFiltros.getAdapter();
-            if (adapter != null) {
-                adapter.setFiltros(filtrosAtivos);
-                adapter.notifyDataSetChanged();
-            }
-
-            // Aplicar os filtros na consulta ao Firestore
-            aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
         }
     }
 
@@ -328,48 +299,99 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         });
     }
 
-    @Override
-    public void onFiltroRemoved(String filtro) {
-        // Lógica para remover um filtro específico (se necessário)
-        Log.d("PerfilFragment", "Filtro removido: " + filtro);
+    private void pesquisarPets(String textoPesquisa) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference petsRef = db.collection("pets");
+
+        // Realiza a consulta no Firestore
+        petsRef.whereEqualTo("idTutor", idUsuarioLogado)
+                .whereGreaterThanOrEqualTo("nomePet", textoPesquisa)
+                .whereLessThanOrEqualTo("nomePet", textoPesquisa + "\uf8ff")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Limpa a lista atual de pets
+                        petListAdocao.clear();
+
+                        // Adiciona os pets encontrados à lista
+                        for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                            Pet pet = snapshot.toObject(Pet.class);
+                            petListAdocao.add(pet);
+                        }
+
+                        // Atualiza a interface com base na lista de pets
+                        if (petListAdocao.isEmpty()) {
+                            layoutSemPets.setVisibility(View.VISIBLE); // Exibe "Não há pets cadastrados"
+                            layoutComPets.setVisibility(View.GONE); // Oculta a lista de pets
+                        } else {
+                            layoutSemPets.setVisibility(View.GONE); // Oculta "Não há pets cadastrados"
+                            layoutComPets.setVisibility(View.VISIBLE); // Exibe a lista de pets
+                        }
+
+                        // Notifica o adapter sobre as mudanças na lista
+                        petsAdapterAdocao.notifyDataSetChanged();
+                    } else {
+                        // Trata erros na consulta
+                        Log.e("PerfilFragment", "Erro ao pesquisar pets", task.getException());
+                    }
+                });
+    }
+
+    private void recuperarDadosUsuarioLogado() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference usuarioRef = db.collection("usuarios").document(idUsuarioLogado);
+
+        // Consultando os dados do usuário
+        usuarioRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Criando o objeto Usuario a partir dos dados do Firestore
+                    Usuario usuario = document.toObject(Usuario.class);
+
+                    if (usuario != null) {
+                        // Atualizando a interface com os dados do usuário
+                        textViewNomeUsuario.setText(usuario.getNomeUsuario());
+                        textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
+                    }
+                }
+            } else {
+                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", task.getException());
+            }
+        });
     }
 
     @Override
-    public void onTodosFiltrosRemovidos() {
-        // Lógica para remover todos os filtros
-        Log.d("PerfilFragment", "Todos os filtros foram removidos");
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        // Recarregar a lista de pets sem filtros
-        getPetsAdocao();
-    }
+        if (requestCode == FILTRO_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // Receber os filtros do Intent
+            status = data.getStringExtra("status");
+            idade = data.getStringExtra("idade");
+            genero = data.getStringExtra("genero");
+            especie = data.getStringExtra("especie");
+            corOlhos = data.getStringExtra("corOlhos");
+            corPredominante = data.getStringExtra("corPredominante");
 
-    // No método onde você configura o adapter:
-    private void configurarAdapter() {
-        List<String> filtros = new ArrayList<>();
-        FiltroAdapter adapter = new FiltroAdapter(filtros, this); // Passa "this" como listener
-        recyclerViewFiltros.setAdapter(adapter);
-    }
+            // Atualizar a lista de filtros ativos
+            List<String> filtrosAtivos = new ArrayList<>();
+            if (!status.equals("Selecione")) filtrosAtivos.add("Status: " + status);
+            if (!idade.equals("Selecione")) filtrosAtivos.add("Idade: " + idade);
+            if (!genero.equals("Selecione")) filtrosAtivos.add("Gênero: " + genero);
+            if (!especie.equals("Selecione")) filtrosAtivos.add("Espécie: " + especie);
+            if (!corOlhos.equals("Selecione")) filtrosAtivos.add("Cor dos Olhos: " + corOlhos);
+            if (!corPredominante.equals("Selecione")) filtrosAtivos.add("Cor Predominante: " + corPredominante);
 
-    private void inicializarComponentes(View view) {
-        textViewNomeUsuario = view.findViewById(R.id.textViewNomeUsuario);
-        textViewPerfilCidadeUsuario = view.findViewById(R.id.textViewPerfilCidadeUsuario);
-        imagemPerfilUsuario = view.findViewById(R.id.imagemUsuario);
-        recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
-        recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
-        buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
-        editTextPesquisarPet = view.findViewById(R.id.searchViewPesquisa);
+            // Atualizar o RecyclerView de filtros
+            FiltroAdapter adapter = (FiltroAdapter) recyclerViewFiltros.getAdapter();
+            if (adapter != null) {
+                adapter.setFiltros(filtrosAtivos);
+                adapter.notifyDataSetChanged();
+            }
 
-        // Inicializa os layouts de "Sem Pets" e "Com Pets"
-        layoutSemPets = view.findViewById(R.id.layoutSemPets);
-        layoutComPets = view.findViewById(R.id.layoutComPets);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // Remove o listener para evitar vazamentos de memória
-        if (petsListener != null) {
-            petsListener.remove();
+            // Aplicar os filtros na consulta ao Firestore
+            aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
         }
     }
 }

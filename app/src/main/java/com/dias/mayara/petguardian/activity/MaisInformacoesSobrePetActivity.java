@@ -151,7 +151,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 String nomeUsuario = document.getString("nomeUsuario");
                                 String emailUsuario = document.getString("emailUsuario");
-                                String telefoneUsuario = document.getString("telefoneUsuario");
+                                String telefoneUsuario = document.getString("celularUsuario");
 
                                 textViewNomeResponsavel.setText(nomeUsuario);
                                 textViewEmailResponsavel.setText(emailUsuario);

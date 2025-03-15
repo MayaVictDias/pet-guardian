@@ -53,7 +53,7 @@
 
         <!-- RecyclerView para os Chips (etiquetas) -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewChips"
+            android:id="@+id/recyclerViewFiltros"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"

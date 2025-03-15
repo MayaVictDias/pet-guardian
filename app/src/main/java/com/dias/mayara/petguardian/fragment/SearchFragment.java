@@ -181,7 +181,7 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
     private void configurarRecycleViews(View view) {
         recyclerViewPesquisaPessoas = view.findViewById(R.id.recyclerViewPesquisaPessoas);
         recyclerViewPesquisaPet = view.findViewById(R.id.recyclerViewPesquisaPet);
-        recyclerViewChips = view.findViewById(R.id.recyclerViewChips);
+        recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
         searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
 
         // Inicializa as listas
@@ -204,9 +204,9 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         recyclerViewPesquisaPet.setAdapter(petsPesquisaAdapter);
 
         // Configuração do RecyclerView de chips (etiquetas)
-        recyclerViewChips.setHasFixedSize(true);
-        recyclerViewChips.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewChips.setAdapter(filtroAdapter);
+        recyclerViewFiltros.setHasFixedSize(true);
+        recyclerViewFiltros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewFiltros.setAdapter(filtroAdapter);
     }
 
     private void pesquisarUsuarios(String textoDigitado) {
@@ -320,6 +320,9 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
             filtroAdapter.setFiltros(filtrosAtivos);
             filtroAdapter.notifyDataSetChanged();
 
+            // Verifica se o RecyclerView de filtros está vazio
+            checkRecyclerViewFiltrosEmpty();
+
             // Aplicar os filtros na consulta ao Firestore
             aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
         }
@@ -427,6 +430,14 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
                 });
     }
 
+    private void checkRecyclerViewFiltrosEmpty() {
+        if (filtroAdapter == null || filtroAdapter.getItemCount() == 0) {
+            recyclerViewFiltros.setVisibility(View.GONE); // Esconde o RecyclerView
+        } else {
+            recyclerViewFiltros.setVisibility(View.VISIBLE); // Mostra o RecyclerView
+        }
+    }
+
     private void inicializarComponentes(View view) {
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
 
@@ -434,18 +445,28 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         layoutEmptyStateFiltros = view.findViewById(R.id.layoutEmptyStateFiltros);
         layoutEmptyStatePets = view.findViewById(R.id.layoutEmptyStatePets);
+
+        // Verifica se o RecyclerView de filtros está vazio ao inicializar
+        checkRecyclerViewFiltrosEmpty();
     }
 
     @Override
     public void onFiltroRemoved(String filtro) {
         // Lógica para quando um filtro é removido
         Log.d("SearchFragment", "Filtro removido: " + filtro);
+
+        // Verifica se o RecyclerView de filtros está vazio
+        checkRecyclerViewFiltrosEmpty();
     }
 
     @Override
     public void onTodosFiltrosRemovidos() {
         // Lógica para quando todos os filtros são removidos
         Log.d("SearchFragment", "Todos os filtros foram removidos");
+
+        // Verifica se o RecyclerView de filtros está vazio
+        checkRecyclerViewFiltrosEmpty();
+
         // Recarrega a lista de pets e usuários sem filtros
         pesquisarUsuarios("");
         pesquisarPets("");
