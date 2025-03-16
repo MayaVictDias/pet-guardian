@@ -139,7 +139,7 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         carregarUltimosUsuarios();
 
         // Configuração da SearchView
-        searchViewPesquisa.setQueryHint("Buscar");
+        searchViewPesquisa.setQueryHint("Buscar por nome ou ID");
         searchViewPesquisa.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String textoDigitado) {

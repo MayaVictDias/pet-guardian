@@ -64,109 +64,119 @@
         <!-- Layout para dividir o espaço entre os dois RecyclerViews -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
             android:orientation="vertical">
 
-            <!-- Resultados para pet -->
-            <TextView
-                android:id="@+id/textView41"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="12dp"
-                android:fontFamily="@font/nunito_bold"
-                android:text="Resultados para pet"
-                android:textColor="@color/coralSuave" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <!-- Layout para quando não há pets cadastrados -->
-            <LinearLayout
-                android:id="@+id/layoutEmptyStatePets"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_pata_marrom_36x36" />
-
+                <!-- Resultados para pet -->
                 <TextView
-                    android:id="@+id/textViewEmptyState"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textView41"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Não há pets cadastrados"
-                    android:textColor="@color/marromEscuro"
-                    android:textSize="18sp" />
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Resultados para pet"
+                    android:textColor="@color/coralSuave" />
+
+                <!-- Layout para quando não há pets cadastrados -->
+                <LinearLayout
+                    android:id="@+id/layoutEmptyStatePets"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_pata_marrom_36x36" />
+
+                    <TextView
+                        android:id="@+id/textViewEmptyState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Não há pets cadastrados"
+                        android:textColor="@color/marromEscuro"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- RecyclerView para pets -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewPesquisaPet"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="1" />
             </LinearLayout>
 
-            <!-- RecyclerView para pets -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPesquisaPet"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp" />
+                android:orientation="vertical">
+
+                <!-- Resultados para pessoas -->
+                <TextView
+                    android:id="@+id/textView42"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Resultados para pessoas"
+                    android:textColor="@color/coralSuave" />
+
+                <!-- Layout para quando não há usuários cadastrados -->
+                <LinearLayout
+                    android:id="@+id/layoutEmptyStateFiltros"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_pata_marrom_36x36" />
+
+                    <TextView
+                        android:id="@+id/textViewEmptyState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Não há usuários cadastrados"
+                        android:textColor="@color/marromEscuro"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- RecyclerView para pessoas -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewPesquisaPessoas"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Layout para dividir o espaço entre os dois RecyclerViews -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Resultados para pessoas -->
-            <TextView
-                android:id="@+id/textView42"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="12dp"
-                android:fontFamily="@font/nunito_bold"
-                android:text="Resultados para pessoas"
-                android:textColor="@color/coralSuave" />
-
-            <!-- Layout para quando não há usuários cadastrados -->
-            <LinearLayout
-                android:id="@+id/layoutEmptyStateFiltros"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_pata_marrom_36x36" />
-
-                <TextView
-                    android:id="@+id/textViewEmptyState"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Não há usuários cadastrados"
-                    android:textColor="@color/marromEscuro"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- RecyclerView para pessoas -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPesquisaPessoas"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="24dp"
-                android:layout_weight="1" />
-        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

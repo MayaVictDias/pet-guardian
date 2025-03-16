@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,6 +37,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
     private ImageButton buttonFiltrar;
     private RecyclerView recyclerViewPetsParaAdocao, recyclerViewFiltros;
     private EditText editTextPesquisarPet;
+    private SearchView searchViewPesquisa;
 
     private FirebaseUser usuarioPerfil;
     private FirebaseFirestore firebaseRef;
@@ -138,28 +141,19 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         getPetsAdocao();
 
         // Adicionar um TextWatcher ao editTextPesquisarPet
-        if (editTextPesquisarPet != null) {
-            editTextPesquisarPet.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // Não é necessário implementar
-                }
+        searchViewPesquisa.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                pesquisarPets(query);
+                return false;
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    // Quando o texto mudar, realizar a pesquisa
-                    String textoPesquisa = s.toString().trim();
-                    pesquisarPets(textoPesquisa);
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    // Não é necessário implementar
-                }
-            });
-        } else {
-            Log.e("PerfilFragment", "EditText de pesquisa não encontrado no layout");
-        }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                pesquisarPets(newText);
+                return true;
+            }
+        });
 
         buttonFiltrar.setOnClickListener(v -> {
             // Abrir a FiltroActivity com startActivityForResult
@@ -177,7 +171,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
-        editTextPesquisarPet = view.findViewById(R.id.editTextPesquisarPet); // ID corrigido
+        searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
 
         // Inicializa os layouts de "Sem Pets" e "Com Pets"
         layoutSemPets = view.findViewById(R.id.layoutSemPets);
@@ -299,42 +293,74 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         });
     }
 
-    private void pesquisarPets(String textoPesquisa) {
+    private void pesquisarPets(String textoDigitado) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference petsRef = db.collection("pets");
 
-        // Realiza a consulta no Firestore
-        petsRef.whereEqualTo("idTutor", idUsuarioLogado)
-                .whereGreaterThanOrEqualTo("nomePet", textoPesquisa)
-                .whereLessThanOrEqualTo("nomePet", textoPesquisa + "\uf8ff")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Limpa a lista atual de pets
-                        petListAdocao.clear();
+        // Limpa a lista de pets
+        petListAdocao.clear();
 
-                        // Adiciona os pets encontrados à lista
-                        for (QueryDocumentSnapshot snapshot : task.getResult()) {
-                            Pet pet = snapshot.toObject(Pet.class);
+        // Confere se há texto para pesquisar
+        if (textoDigitado.length() > 0) {
+            String textoLowercase = textoDigitado.toLowerCase();
+
+            // Query para pesquisar pets no Firestore
+            Query queryNome = petsRef
+                    .whereEqualTo("idTutor", idUsuarioLogado) // Filtra apenas os pets do usuário logado
+                    .whereGreaterThanOrEqualTo("nomeLowerCasePet", textoLowercase)
+                    .whereLessThanOrEqualTo("nomeLowerCasePet", textoLowercase + "\uf8ff");
+
+            Query queryIdPet = petsRef
+                    .whereEqualTo("idTutor", idUsuarioLogado) // Filtra apenas os pets do usuário logado
+                    .whereEqualTo("idPet", textoDigitado); // Busca exata pelo idPet
+
+            // Executa as consultas
+            queryNome.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    petListAdocao.clear();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Pet pet = document.toObject(Pet.class);
+                        if (pet != null && !petListAdocao.contains(pet)) { // Evita duplicatas
                             petListAdocao.add(pet);
                         }
-
-                        // Atualiza a interface com base na lista de pets
-                        if (petListAdocao.isEmpty()) {
-                            layoutSemPets.setVisibility(View.VISIBLE); // Exibe "Não há pets cadastrados"
-                            layoutComPets.setVisibility(View.GONE); // Oculta a lista de pets
-                        } else {
-                            layoutSemPets.setVisibility(View.GONE); // Oculta "Não há pets cadastrados"
-                            layoutComPets.setVisibility(View.VISIBLE); // Exibe a lista de pets
-                        }
-
-                        // Notifica o adapter sobre as mudanças na lista
-                        petsAdapterAdocao.notifyDataSetChanged();
-                    } else {
-                        // Trata erros na consulta
-                        Log.e("PerfilFragment", "Erro ao pesquisar pets", task.getException());
                     }
-                });
+
+                    // Agora, busca pelo idPet
+                    queryIdPet.get().addOnCompleteListener(taskIdPet -> {
+                        if (taskIdPet.isSuccessful()) {
+                            for (DocumentSnapshot document : taskIdPet.getResult()) {
+                                Pet pet = document.toObject(Pet.class);
+                                if (pet != null && !petListAdocao.contains(pet)) { // Evita duplicatas
+                                    petListAdocao.add(pet);
+                                }
+                            }
+
+                            // Atualiza o adapter
+                            petsAdapterAdocao.notifyDataSetChanged();
+                            Log.d("PerfilFragment lista de pets: ", petListAdocao.toString());
+                            checkRecyclerViewEmpty();
+                        } else {
+                            Log.e("PerfilFragment", "Erro ao pesquisar pets pelo idPet: " + taskIdPet.getException().getMessage());
+                        }
+                    });
+                } else {
+                    Log.e("PerfilFragment", "Erro ao pesquisar pets pelo nome: " + task.getException().getMessage());
+                }
+            });
+        } else {
+            // Se o texto estiver vazio, recarrega todos os pets do usuário
+            getPetsAdocao();
+        }
+    }
+
+    private void checkRecyclerViewEmpty() {
+        if (petListAdocao.isEmpty()) {
+            layoutSemPets.setVisibility(View.VISIBLE); // Exibe "Não há pets cadastrados"
+            layoutComPets.setVisibility(View.GONE); // Oculta a lista de pets
+        } else {
+            layoutSemPets.setVisibility(View.GONE); // Oculta "Não há pets cadastrados"
+            layoutComPets.setVisibility(View.VISIBLE); // Exibe a lista de pets
+        }
     }
 
     private void recuperarDadosUsuarioLogado() {
