@@ -1,182 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_perfil_amigo.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.PerfilAmigoActivity">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/begeClaro"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/begeClaro"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
+            android:layout_gravity="center"
+            android:fontFamily="@font/nunito_medium"
+            android:gravity="center"
+            android:text="Pet Guardian"
+            android:textColor="@color/marromEscuro"
+            android:textSize="20sp" />
+    </androidx.appcompat.widget.Toolbar>
 
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nunito_medium"
-                android:gravity="center"
-                android:text="Pet Guardian"
-                android:textColor="@color/marromEscuro"
-                android:textSize="20sp" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imagemUsuario"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:src="@drawable/profile_image" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="24dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textViewNomeUsuario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nome do usuário"
-                    android:textColor="@color/marromEscuro"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/textViewPerfilCidadeUsuario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cidade do usuário"
-                    android:textColor="@color/marromEscuro"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-
-            <!-- Layout do campo de pesquisa -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="48dp"
-                    android:fontFamily="@font/nunito_medium"
-                    android:text="Pesquisar pet"
-                    android:textSize="12sp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="48dp"
-                    android:gravity="center_vertical">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/button_background_outline_gray"
-                        android:fontFamily="@font/nunito_medium" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <!-- Layout do botão de filtro -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/buttonFiltrar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:srcCompat="@drawable/ic_filter_gray_36x36" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="60dp"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Layout centralizado para "Não há pets cadastrados" -->
-            <LinearLayout
-                android:id="@+id/layoutSemPets"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_pata_marrom_36x36" />
-
-                <TextView
-                    android:id="@+id/textViewSemPets"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Não há pets cadastrados"
-                    android:textColor="@color/marromEscuro"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- Layout separado para o RecyclerView -->
-            <LinearLayout
-                android:id="@+id/layoutComPets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewPetsParaAdocao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
+    <!-- Inclui o conteúdo do PerfilFragment -->
+    <include
+        layout="@layout/layout_conteudo_perfil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

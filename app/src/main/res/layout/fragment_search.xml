@@ -37,7 +37,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:iconifiedByDefault="false"
-                    android:padding="8dp"
+                    android:padding="10dp"
                     android:queryHint="Buscar por nome ou ID" />
             </androidx.cardview.widget.CardView>
 
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="10dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_filter_gray_36x36" />
         </LinearLayout>

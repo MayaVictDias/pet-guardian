@@ -237,6 +237,8 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
                     Log.e("SearchFragment", "Erro ao pesquisar usuários: " + task.getException().getMessage());
                 }
             });
+        } else {
+            carregarUltimosUsuarios();
         }
     }
 

@@ -40,7 +40,22 @@
             android:exported="false" />
         <activity
             android:name=".activity.MaisInformacoesSobrePetActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Defina o esquema e o host do seu Deep Link -->
+                <data
+                    android:host="petguardian.com"
+                    android:scheme="https" />
+                <data
+                    android:host="petguardian.com"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.CadastrarPetActivity"
             android:exported="false" />
@@ -70,6 +85,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
+
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

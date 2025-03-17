@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import com.dias.mayara.petguardian.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -55,6 +57,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
             textViewId, textViewEspecie;
     private Pet petSelecionado;
     private Button buttonEntrarEmContato;
+    private FloatingActionButton buttonGerarLink;
     private ImageButton buttonCopiarId;
     private ImageButton buttonMenu;
 
@@ -79,20 +82,48 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         // Inicializa os componentes
         inicializarComponentes();
 
-        // Recuperar pet selecionado
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            petId = getIntent().getStringExtra("petId");
+        // Verifica se a atividade foi aberta por um Deep Link
+        Uri data = getIntent().getData();
+        if (data != null) {
+            // Extrai o ID do pet do Deep Link
+            petId = data.getQueryParameter("id");
+        } else {
+            // Recuperar pet selecionado via Intent normal
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                petId = getIntent().getStringExtra("petId");
+            }
         }
 
         if (petId != null) {
             buscarDadosDoPet(petId); // Busca os dados do pet
         } else {
             // Tratar caso o ID do pet não seja recebido
+            Toast.makeText(this, "ID do pet não encontrado.", Toast.LENGTH_SHORT).show();
             finish();
         }
-    }
 
+        buttonGerarLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Verifica se o petSelecionado foi carregado
+                if (petSelecionado != null) {
+                    // Cria o link dinâmico
+                    String deepLink = "https://petguardian.com/pet?id=" + petSelecionado.getIdPet();
+
+                    // Copia o link para a área de transferência
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Link do Pet", deepLink);
+                    clipboard.setPrimaryClip(clip);
+
+                    // Exibe uma mensagem de confirmação
+                    Toast.makeText(getApplicationContext(), "Link copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Dados do pet não carregados.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     private void buscarDadosDoPet(String petId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference petRef = db.collection("pets").document(petId);
@@ -339,6 +370,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
         textViewEspecie = findViewById(R.id.textViewEspecie);
         buttonEntrarEmContato = findViewById(R.id.buttonEntrarEmContato);
         buttonMenu = findViewById(R.id.buttonMenu);
+        buttonGerarLink = findViewById(R.id.buttonGerarLink);
 
         // Inicializar os TextViews
         textViewRaca = findViewById(R.id.textViewRaca);

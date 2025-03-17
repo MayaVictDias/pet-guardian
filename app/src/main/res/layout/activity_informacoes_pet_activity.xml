@@ -43,7 +43,7 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="24dp"
                     android:backgroundTint="@color/begeClaro"
-                    android:src="@drawable/ic_more_horiz_24x24"/>
+                    android:src="@drawable/ic_more_horiz_24x24" />
             </androidx.appcompat.widget.Toolbar>
 
             <!-- Imagem do pet -->
@@ -51,8 +51,8 @@
                 android:id="@+id/imageViewFotoPet"
                 android:layout_width="match_parent"
                 android:layout_height="251dp"
-                android:scaleType="centerCrop"
                 android:background="@color/cinzaClaro"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/imagem_carregamento" />
 
             <!-- Informações do pet -->
@@ -66,8 +66,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textViewNomeTitulo"
@@ -105,27 +105,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textViewId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_bold"
-                        android:textSize="18dp"
                         android:layout_gravity="center"
+                        android:fontFamily="@font/nunito_bold"
                         android:text="ID"
-                        android:textColor="@color/marromEscuro" />
+                        android:textColor="@color/marromEscuro"
+                        android:textSize="18dp" />
 
                     <ImageButton
                         android:id="@+id/buttonCopiarId"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
+                        android:layout_gravity="center_vertical"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_content_copy_18x18"
                         android:contentDescription="Copiar ID"
-                        android:layout_gravity="center_vertical" />
+                        android:src="@drawable/ic_content_copy_18x18" />
                 </LinearLayout>
 
                 <!-- Informações gerais -->
@@ -133,11 +133,11 @@
                     android:id="@+id/textView61"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Informações gerais"
                     android:textColor="@color/coralSuave"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="20sp" />
 
                 <!-- Espécie -->
                 <TextView
@@ -152,9 +152,9 @@
                     android:id="@+id/textViewEspecie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Cachorro"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Cachorro" />
 
                 <!-- Raça -->
                 <TextView
@@ -169,9 +169,9 @@
                     android:id="@+id/textViewRaca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Golden Retriever"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Golden Retriever" />
 
                 <!-- Cor dos olhos -->
                 <TextView
@@ -186,9 +186,9 @@
                     android:id="@+id/textViewCorOlhos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Castanho"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Castanho" />
 
                 <!-- Porte -->
                 <TextView
@@ -203,9 +203,9 @@
                     android:id="@+id/textViewPorte"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Grande"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Grande" />
 
                 <!-- Cor predominante -->
                 <TextView
@@ -220,20 +220,20 @@
                     android:id="@+id/textViewCorPredominante"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Dourado"
-                    android:layout_marginBottom="24dp" />
+                    android:text="Dourado" />
 
                 <!-- Saúde e cuidados -->
                 <TextView
                     android:id="@+id/textViewSaudeCuidados"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Saúde e cuidados"
                     android:textColor="@color/coralSuave"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="20sp" />
 
                 <!-- Status da vacinação -->
                 <TextView
@@ -248,9 +248,9 @@
                     android:id="@+id/textViewStatusVacinacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Completo"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Completo" />
 
                 <!-- Vacinas tomadas -->
                 <TextView
@@ -265,9 +265,9 @@
                     android:id="@+id/textViewVacinasTomadas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Raiva, V8, Antirrábica"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Raiva, V8, Antirrábica" />
 
                 <!-- Vermifugado -->
                 <TextView
@@ -282,9 +282,9 @@
                     android:id="@+id/textViewVermifugado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Sim"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Sim" />
 
                 <!-- Data da última vermifugação -->
                 <TextView
@@ -299,9 +299,9 @@
                     android:id="@+id/textViewDataUltimaVermifugacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="01/01/2023"
-                    android:layout_marginBottom="12dp" />
+                    android:text="01/01/2023" />
 
                 <!-- Castrado -->
                 <TextView
@@ -316,9 +316,9 @@
                     android:id="@+id/textViewPetCastrado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Sim"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Sim" />
 
                 <!-- Histórico de doenças ou tratamentos -->
                 <TextView
@@ -333,9 +333,9 @@
                     android:id="@+id/textViewHistoricoDoencasTratamentos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Nenhum"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Nenhum" />
 
                 <!-- Necessidades especiais -->
                 <TextView
@@ -350,20 +350,20 @@
                     android:id="@+id/textViewNecessidadesEspeciais"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Nenhuma"
-                    android:layout_marginBottom="24dp" />
+                    android:text="Nenhuma" />
 
                 <!-- Comportamento e personalidade -->
                 <TextView
                     android:id="@+id/textViewComportamentoPersonalidade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="Comportamento e personalidade"
                     android:textColor="@color/coralSuave"
-                    android:textSize="20sp"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="20sp" />
 
                 <!-- Nível de energia -->
                 <TextView
@@ -378,9 +378,9 @@
                     android:id="@+id/textViewNivelEnergia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Alto"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Alto" />
 
                 <!-- Sociabilidade -->
                 <TextView
@@ -395,9 +395,9 @@
                     android:id="@+id/textViewSociabilidade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Amigável"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Amigável" />
 
                 <!-- Pet é adestrado? -->
                 <TextView
@@ -412,21 +412,33 @@
                     android:id="@+id/textViewPetAdestrado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Sim"
-                    android:layout_marginBottom="24dp" />
+                    android:text="Sim" />
 
                 <!-- Botão de entrar em contato -->
                 <Button
                     android:id="@+id/buttonEntrarEmContato"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ENTRAR EM CONTATO"
+                    android:layout_marginTop="12dp"
                     android:backgroundTint="@color/verdeOlivaClaro"
-                    android:textColor="@color/white"
+                    android:text="ENTRAR EM CONTATO"
                     android:textAllCaps="false"
-                    android:layout_marginTop="12dp" />
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <!-- Botão flutuante para gerar link -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonGerarLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Gerar link do pet"
+        android:src="@drawable/ic_share_brown_24x24"
+        app:backgroundTint="@color/verdeOlivaClaro"
+        app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

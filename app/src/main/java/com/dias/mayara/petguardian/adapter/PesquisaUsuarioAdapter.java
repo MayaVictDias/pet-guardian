@@ -35,7 +35,6 @@ public class PesquisaUsuarioAdapter extends RecyclerView.Adapter<PesquisaUsuario
             textViewNomeUsuario = itemView.findViewById(R.id.textViewPesquisaNomeUsuario);
             textViewPesquisaCidadeUsuario = itemView.findViewById(R.id.textViewPesquisaCidadeUsuario);
             imageViewPesquisaFotoUsuario = itemView.findViewById(R.id.imageViewPesquisaFotoUsuario);
-            textViewPesquisaQuantidadePetsUsuario = itemView.findViewById(R.id.textViewPesquisaQuantidadePetsUsuario);
         }
     }
 

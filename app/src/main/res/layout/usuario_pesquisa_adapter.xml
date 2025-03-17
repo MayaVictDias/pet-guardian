@@ -44,13 +44,6 @@
                 android:fontFamily="@font/nunito_medium"
                 android:text="Cidade do usuário" />
 
-            <TextView
-                android:id="@+id/textViewPesquisaQuantidadePetsUsuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/nunito_medium"
-                android:text="Quantidade de pets do usuário" />
         </LinearLayout>
 
     </LinearLayout>
