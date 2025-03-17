@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -83,14 +85,23 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         // Recupera os dados do usuário logado
         recuperarDadosUsuarioLogado();
 
-        // Recuperar usuário selecionado
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            usuarioID = bundle.getString("usuarioID");
-            if (usuarioID != null) {
-                usuarioAmigoRef = usuariosRef.document(usuarioID);
-                recuperarDadosPerfilAmigo();
+        // Verifica se a atividade foi iniciada por um deeplink
+        Intent intent = getIntent();
+        Uri data = intent.getData();
+        if (data != null) {
+            // Extrai o usuarioID da URL do deeplink
+            usuarioID = data.getQueryParameter("usuarioID");
+        } else {
+            // Caso contrário, tenta recuperar o usuarioID do Bundle
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                usuarioID = bundle.getString("usuarioID");
             }
+        }
+
+        if (usuarioID != null) {
+            usuarioAmigoRef = usuariosRef.document(usuarioID);
+            recuperarDadosPerfilAmigo();
         }
 
         // Inicializando as listas e os adapters antes de carregar os dados do Firebase

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -406,5 +407,20 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();  // Volta para a tela anterior
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Verifica se há atividades na pilha
+        if (isTaskRoot()) {
+            // Se não houver atividades na pilha, abre a MainActivity
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish(); // Finaliza a atividade atual
+        } else {
+            // Se houver atividades na pilha, volta para a anterior
+            super.onBackPressed();
+        }
     }
 }

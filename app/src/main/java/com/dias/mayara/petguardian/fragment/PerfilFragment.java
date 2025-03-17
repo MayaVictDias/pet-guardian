@@ -1,6 +1,9 @@
 package com.dias.mayara.petguardian.fragment;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,11 +18,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
@@ -52,7 +57,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
     private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario;
     private CircleImageView imagemPerfilUsuario;
-    private ImageButton buttonFiltrar;
+    private ImageButton buttonFiltrar, buttonCompartilharPerfil;
     private RecyclerView recyclerViewPetsParaAdocao, recyclerViewFiltros;
     private EditText editTextPesquisarPet;
     private SearchView searchViewPesquisa;
@@ -140,6 +145,26 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Inicia a escuta em tempo real para os pets
         getPetsAdocao();
 
+        // No método onCreate ou em outro local apropriado
+        buttonCompartilharPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Recupera o ID do usuário (substitua pelo método correto para obter o ID)
+                String idUsuario = UsuarioFirebase.getIdentificadorUsuario();
+
+                // Gera o link dinâmico
+                String deepLink = "https://petguardian.com/perfil?id=" + idUsuario;
+
+                // Copia o link para a área de transferência
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Link do Perfil", deepLink);
+                clipboard.setPrimaryClip(clip);
+
+                // Exibe uma mensagem de confirmação
+                Toast.makeText(getContext(), "Link copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Adicionar um TextWatcher ao editTextPesquisarPet
         searchViewPesquisa.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -171,6 +196,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         recyclerViewPetsParaAdocao = view.findViewById(R.id.recyclerViewPetsParaAdocao);
         recyclerViewFiltros = view.findViewById(R.id.recyclerViewFiltros);
         buttonFiltrar = view.findViewById(R.id.buttonFiltrar);
+        buttonCompartilharPerfil = view.findViewById(R.id.buttonCompartilharPerfil);
         searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
 
         // Inicializa os layouts de "Sem Pets" e "Com Pets"
