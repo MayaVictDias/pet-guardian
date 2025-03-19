@@ -50,7 +50,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private Button buttonAlterarFoto, buttonSalvarAlteracoes;
-    private EditText editTextNomeUsuario, editTextEmail, editTextCelular;
+    private EditText editTextNomeUsuario, editTextEmail, editTextCelular, editTextCidade, editTextEstado;
     private ImageView imageViewFotoPerfilUsuario;
     private Usuario usuarioLogado;
 
@@ -69,40 +69,47 @@ public class EditarPerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-        // Validar permissões
-        Permissao.validarPermissoes(permissoesNecessarias, this, 1);
-
+        // Inicializa os componentes
         inicializarComponentes();
 
+        // Recupera o ID do usuário logado
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
 
+        // Configura a toolbar
         setSupportActionBar(toolbar);
         ToolbarHelper.setupToolbar(this, toolbar, "Editar perfil");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        // Referência do Firestore
         storageRef = ConfiguracaoFirebase.getFirebaseStorage();
-
-        // Inicializa o usuário logado
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
-        usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios").
-                document(usuarioLogado.getIdUsuario());
+        usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios")
+                .document(usuarioLogado.getIdUsuario());
 
-        // Verifica se usuarioLogado não é nulo e preenche os EditTexts
+        // Preenche os campos com os dados do usuário
         if (usuarioLogado != null) {
             editTextNomeUsuario.setText(usuarioLogado.getNomeUsuario());
             editTextEmail.setText(usuarioLogado.getEmailUsuario());
-            // No método onCreate ou onde for apropriado, após a inicialização do usuarioRef
+
+            // Recupera os dados do Firestore
             usuarioRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot.exists()) {
-                        // Verificar se o campo celularUsuario existe no documento
+                        // Preenche os campos de celular, cidade e estado
                         String celular = documentSnapshot.getString("celularUsuario");
+                        String cidade = documentSnapshot.getString("cidadeUsuario");
+                        String estado = documentSnapshot.getString("estadoUsuario");
 
                         if (celular != null) {
-                            // Defina o valor do celular no EditText
                             editTextCelular.setText(celular);
+                        }
+                        if (cidade != null) {
+                            editTextCidade.setText(cidade);
+                        }
+                        if (estado != null) {
+                            editTextEstado.setText(estado);
                         }
                     } else {
                         Log.d("EditarPerfil", "Documento não encontrado.");
@@ -115,20 +122,18 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 }
             });
 
+            // Carrega a foto do perfil
+            Uri url = Uri.parse(usuarioLogado.getCaminhoFotoUsuario());
+            if (url != null && !url.toString().isEmpty()) {
+                Glide.with(EditarPerfilActivity.this).load(url).into(imageViewFotoPerfilUsuario);
+            } else {
+                imageViewFotoPerfilUsuario.setImageResource(R.drawable.profile_image);
+            }
         } else {
             Toast.makeText(this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
         }
 
-        Uri url = Uri.parse(usuarioLogado.getCaminhoFotoUsuario());
-        Log.d("URL da foto: ", url.toString());
-
-        if (url != null && !url.toString().isEmpty()) {
-            Glide.with(EditarPerfilActivity.this).load(url).into(imageViewFotoPerfilUsuario);
-        } else {
-            imageViewFotoPerfilUsuario.setImageResource(R.drawable.profile_image);
-        }
-
-        // Alterar foto do usuário
+        // Configura o botão de alterar foto
         buttonAlterarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,11 +145,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
             }
         });
 
-        // Salvar alterações no nome
+        // Configura o botão de salvar alterações
         buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Exibir o AlertDialog para confirmação da senha
                 mostrarDialogConfirmacaoSenha();
             }
         });
@@ -287,7 +291,9 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private void salvarAlteracoes() {
         String nomeAtualizado = editTextNomeUsuario.getText().toString();
         String emailAtualizado = editTextEmail.getText().toString();
-        String celularAtualizado = editTextCelular.getText().toString(); // Captura o valor do celular
+        String celularAtualizado = editTextCelular.getText().toString();
+        String cidadeAtualizada = editTextCidade.getText().toString(); // Captura o valor da cidade
+        String estadoAtualizado = editTextEstado.getText().toString(); // Captura o valor do estado
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -296,15 +302,17 @@ public class EditarPerfilActivity extends AppCompatActivity {
             usuarioAtual.updateEmail(emailAtualizado)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Atualizar nome no Firebase Realtime Database ou Firestore
+                            // Atualizar nome no Firestore
                             UsuarioFirebase.atualizarNomeUsuario(nomeAtualizado);
 
                             // Atualizar informações no modelo local
                             if (usuarioLogado != null) {
                                 usuarioLogado.setNomeUsuario(nomeAtualizado);
                                 usuarioLogado.setEmailUsuario(emailAtualizado);
-                                usuarioLogado.setCelularUsuario(celularAtualizado); // Atualiza o celular
-                                usuarioLogado.atualizar(); // Método hipotético para salvar no banco de dados
+                                usuarioLogado.setCelularUsuario(celularAtualizado);
+                                usuarioLogado.setCidadeUsuario(cidadeAtualizada); // Atualiza a cidade
+                                usuarioLogado.setEstadoUsuario(estadoAtualizado); // Atualiza o estado
+                                usuarioLogado.atualizar(); // Salva no Firestore
                             }
 
                             Toast.makeText(EditarPerfilActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
@@ -324,6 +332,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
         buttonAlterarFoto = findViewById(R.id.buttonAlterarFoto);
         editTextNomeUsuario = findViewById(R.id.editTextNomeUsuario);
         editTextEmail = findViewById(R.id.editTextEmail);
+        editTextCidade = findViewById(R.id.editTextCidade);
+        editTextEstado = findViewById(R.id.editTextEstado);
         imageViewFotoPerfilUsuario = findViewById(R.id.ImageViewFotoPerfilUsuario);
         buttonSalvarAlteracoes = findViewById(R.id.buttonSalvarAlteracoes);
         editTextCelular = findViewById(R.id.editTextCelular);
