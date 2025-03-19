@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -29,6 +30,8 @@ import com.dias.mayara.petguardian.fragment.SearchFragment;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
 import com.dias.mayara.petguardian.model.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +43,9 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -173,26 +178,50 @@ public class MainActivity extends AppCompatActivity {
 
     private void recuperarDadosUsuarioLogado() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference usuarioRef = db.collection("usuarios").document(usuarioLogado.getIdUsuario()); // Supondo que o ID do usuário seja armazenado em usuarioLogadoId
+        DocumentReference usuarioRef = db.collection("usuarios").document(usuarioLogado.getIdUsuario());
 
-        usuarioRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    Usuario usuario = document.toObject(Usuario.class);
+        // Monitora alterações no Firestore
+        usuarioRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("MainActivity", "Erro ao monitorar alterações do usuário", e);
+                    return;
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
 
                     if (usuario != null) {
+                        // Atualiza os dados do usuário
                         userName.setText(usuario.getNomeUsuario());
-                        userLocation.setText(usuario.getCidadeUsuario() + " - " +
-                                usuario.getEstadoUsuario());
+                        userLocation.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
+
+                        // Atualiza a imagem do perfil
+                        atualizarImagemPerfil();
                     }
                 }
-            } else {
-                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", task.getException());
             }
         });
     }
 
+    private void atualizarImagemPerfil() {
+        usuarioPerfil.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Uri url = usuarioPerfil.getPhotoUrl();
+                    if (url != null) {
+                        Glide.with(MainActivity.this).load(url).into(userProfileImage);
+                    } else {
+                        userProfileImage.setImageResource(R.drawable.profile_image);
+                    }
+                } else {
+                    Log.e("MainActivity", "Erro ao recarregar perfil do usuário", task.getException());
+                }
+            }
+        });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
