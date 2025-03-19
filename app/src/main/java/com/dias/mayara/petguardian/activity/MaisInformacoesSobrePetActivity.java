@@ -118,7 +118,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                     clipboard.setPrimaryClip(clip);
 
                     // Exibe uma mensagem de confirmação
-                    Toast.makeText(getApplicationContext(), "Link copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Link do pet  copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Dados do pet não carregados.", Toast.LENGTH_SHORT).show();
                 }

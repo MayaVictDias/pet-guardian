@@ -161,7 +161,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
                 clipboard.setPrimaryClip(clip);
 
                 // Exibe uma mensagem de confirmação
-                Toast.makeText(getContext(), "Link copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Link do perfil copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
             }
         });
 
