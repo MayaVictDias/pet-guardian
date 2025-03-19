@@ -67,8 +67,8 @@
         android:textSize="16sp" />
 
     <Button
-        android:id="@+id/modalButton"
+        android:id="@+id/modalButtonPerfilUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="FECHAR" />
+        android:text="VER PERFIL DO USUÁRIO" />
 </LinearLayout>

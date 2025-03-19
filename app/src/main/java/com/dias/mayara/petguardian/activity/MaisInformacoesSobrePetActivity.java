@@ -62,7 +62,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
     private ImageButton buttonCopiarId;
     private ImageButton buttonMenu;
 
-    private String idUsuarioLogado;
+    private String idUsuarioLogado, idUsuario;
 
     private FirebaseFirestore firebaseRef;
     private DocumentReference usuarioRef, petsRef;
@@ -184,6 +184,7 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                                 String nomeUsuario = document.getString("nomeUsuario");
                                 String emailUsuario = document.getString("emailUsuario");
                                 String telefoneUsuario = document.getString("celularUsuario");
+                                idUsuario = document.getString("idUsuario");
 
                                 textViewNomeResponsavel.setText(nomeUsuario);
                                 textViewEmailResponsavel.setText(emailUsuario);
@@ -193,8 +194,15 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
                     }
                 });
 
-                Button closeButton = modalView.findViewById(R.id.modalButton);
-                closeButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
+                Button verPerfilUsuarioButton = modalView.findViewById(R.id.modalButtonPerfilUsuario);
+                verPerfilUsuarioButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getApplicationContext(), PerfilAmigoActivity.class);
+                        i.putExtra("usuarioID", idUsuario);
+                        startActivity(i);
+                    }
+                });
 
                 bottomSheetDialog.show();
             }
