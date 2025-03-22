@@ -112,16 +112,10 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Inicializa os componentes de interface
         inicializarComponentes(view);
 
+        configurarRecyclerViewFiltros();
+
         // Recupera os dados do usuário logado
         recuperarDadosUsuarioLogado();
-
-        // Exibir foto do usuário, caso ele tenha setado uma
-        Uri url = usuarioPerfil.getPhotoUrl();
-        if (url != null) {
-            Glide.with(PerfilFragment.this).load(url).into(imagemPerfilUsuario);
-        } else {
-            imagemPerfilUsuario.setImageResource(R.drawable.profile_image);
-        }
 
         // Inicializando as listas e os adapters antes de carregar os dados do Firebase
         petListAdocao = new ArrayList<>();
@@ -233,6 +227,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         } else {
             // Carrega todos os pets sem filtros
             petsRef.whereEqualTo("idTutor", idUsuarioLogado)
+                    .orderBy("dataCadastro", Query.Direction.DESCENDING)
                     .addSnapshotListener((snapshots, error) -> {
                         if (error != null) {
                             Log.w("Firestore", "Erro ao ouvir mudanças", error);
@@ -413,17 +408,19 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
                     // Atualiza a imagem do usuário
                     String caminhoFotoUsuario = usuario.getCaminhoFotoUsuario();
+                    Log.d("Imagem do usuario logado", " " + caminhoFotoUsuario);
                     if (caminhoFotoUsuario != null && !caminhoFotoUsuario.isEmpty()) {
                         Uri url = Uri.parse(caminhoFotoUsuario);
-                        if (!isDetached() && !isRemoving()) { // Verifica se o Fragment ainda está ativo
-                            Glide.with(PerfilFragment.this)
-                                    .load(url)
-                                    .placeholder(R.drawable.profile_image) // Imagem temporária
-                                    .error(R.drawable.profile_image) // Imagem de fallback em caso de erro
-                                    .into(imagemPerfilUsuario);
-                        }
+                        Glide.with(PerfilFragment.this)
+                                .load(url)
+                                .placeholder(R.drawable.profile_image) // Imagem temporária
+                                .error(R.drawable.profile_image) // Imagem de fallback em caso de erro
+                                .into(imagemPerfilUsuario);
                     } else {
-                        imagemPerfilUsuario.setImageResource(R.drawable.profile_image); // Define uma imagem padrão
+                        // Carrega uma imagem padrão caso o caminho da foto seja nulo ou vazio
+                        Glide.with(PerfilFragment.this)
+                                .load(R.drawable.profile_image) // Imagem padrão
+                                .into(imagemPerfilUsuario);
                     }
                 }
             } else {
@@ -452,7 +449,8 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
             if (!genero.equals("Selecione")) filtrosAtivos.add("Gênero: " + genero);
             if (!especie.equals("Selecione")) filtrosAtivos.add("Espécie: " + especie);
             if (!corOlhos.equals("Selecione")) filtrosAtivos.add("Cor dos Olhos: " + corOlhos);
-            if (!corPredominante.equals("Selecione")) filtrosAtivos.add("Cor Predominante: " + corPredominante);
+            if (!corPredominante.equals("Selecione"))
+                filtrosAtivos.add("Cor Predominante: " + corPredominante);
 
             // Atualizar o RecyclerView de filtros
             FiltroAdapter adapter = (FiltroAdapter) recyclerViewFiltros.getAdapter();
@@ -470,6 +468,26 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
             // Aplicar os filtros na consulta ao Firestore
             aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
+        }
+    }
+
+    private void configurarRecyclerViewFiltros() {
+        // Crie uma lista de filtros (substitua por sua lógica)
+        List<String> filtros = new ArrayList<>();
+
+        // Configura o adapter
+        FiltroAdapter adapter = new FiltroAdapter(filtros, this);
+        recyclerViewFiltros.setAdapter(adapter);
+
+        // Configura o LayoutManager (horizontal)
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewFiltros.setLayoutManager(layoutManager);
+
+        // Define a visibilidade do RecyclerView
+        if (filtros.isEmpty()) {
+            recyclerViewFiltros.setVisibility(View.GONE); // Oculta se não houver filtros
+        } else {
+            recyclerViewFiltros.setVisibility(View.VISIBLE); // Exibe se houver filtros
         }
     }
 

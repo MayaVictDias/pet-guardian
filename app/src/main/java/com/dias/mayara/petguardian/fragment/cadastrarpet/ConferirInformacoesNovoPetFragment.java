@@ -176,9 +176,6 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
                     Timestamp.now()
             );
 
-            usuario.setQuantidadePetsCadastrados(usuario.getQuantidadePetsCadastrados() + 1);
-            usuario.atualizar();
-
             // Faça o upload da imagem e defina a URL da imagem no objeto Pet após o upload bem-sucedido
             sharedViewModel.getImagemPet().observe(getViewLifecycleOwner(), new Observer<byte[]>() {
                 @Override
@@ -279,33 +276,32 @@ public class ConferirInformacoesNovoPetFragment extends Fragment {
             @Override
             public void onChanged(Pet pet) {
                 if (pet != null) {
-                    textViewNomePet.setText(pet.getNomePet());
-                    textViewIdadePet.setText(pet.getIdadePet());
-                    textViewGeneroPet.setText(pet.getGeneroPet());
-                    textViewEspecie.setText(pet.getEspeciePet());
-                    textViewCorDosOlhos.setText(pet.getCorDosOlhosPet());
-                    textViewCorPredominante.setText(pet.getCorPredominantePet());
-                    textViewPorte.setText(pet.getPortePet());
-                    textViewRaca.setText(pet.getRacaPet());
+                    // Verifica e atribui os valores aos TextViews
+                    textViewNomePet.setText(pet.getNomePet() != null ? pet.getNomePet() : "Não informado");
+                    textViewIdadePet.setText(pet.getIdadePet() != null ? pet.getIdadePet() : "Não informado");
+                    textViewGeneroPet.setText(pet.getGeneroPet() != null ? pet.getGeneroPet() : "Não informado");
+                    textViewEspecie.setText(pet.getEspeciePet() != null ? pet.getEspeciePet() : "Não informado");
+                    textViewCorDosOlhos.setText(pet.getCorDosOlhosPet() != null ? pet.getCorDosOlhosPet() : "Não informado");
+                    textViewCorPredominante.setText(pet.getCorPredominantePet() != null ? pet.getCorPredominantePet() : "Não informado");
+                    textViewPorte.setText(pet.getPortePet() != null ? pet.getPortePet() : "Não informado");
+                    textViewRaca.setText(pet.getRacaPet() != null ? pet.getRacaPet() : "Não informado");
 
-                    textViewStatusVacinacao.setText(pet.getStatusVacinacao());
-                    textViewVacinasTomadas.setText(pet.getVacinasTomadas());
-                    textViewVermifugado.setText(pet.getVermifugado());
-                    textViewDataUltimaVermifugacao.setText(convertTimestampToString(pet.getDataVermifugacao()));
-                    textViewPetCastrado.setText(pet.getStatusCastracao());
-                    textViewHistoricoDoencasTratamentos.setText(pet.getDoencasTratamentos());
-                    textViewNecessidadesEspeciais.setText(pet.getNecessidadesEspeciais());
+                    textViewStatusVacinacao.setText(pet.getStatusVacinacao() != null ? pet.getStatusVacinacao() : "Não informado");
+                    textViewVacinasTomadas.setText(pet.getVacinasTomadas() != null ? pet.getVacinasTomadas() : "Não informado");
+                    textViewVermifugado.setText(pet.getVermifugado() != null ? pet.getVermifugado() : "Não informado");
+                    textViewDataUltimaVermifugacao.setText(pet.getDataVermifugacao() != null ? convertTimestampToString(pet.getDataVermifugacao()) : "Não informado");
+                    textViewPetCastrado.setText(pet.getStatusCastracao() != null ? pet.getStatusCastracao() : "Não informado");
+                    textViewHistoricoDoencasTratamentos.setText(pet.getDoencasTratamentos() != null ? pet.getDoencasTratamentos() : "Não informado");
+                    textViewNecessidadesEspeciais.setText(pet.getNecessidadesEspeciais() != null ? pet.getNecessidadesEspeciais() : "Não informado");
 
-                    textViewNivelEnergia.setText(pet.getNivelEnergia());
-                    textViewSociabilidade.setText(pet.getSociabilidade());
+                    textViewNivelEnergia.setText(pet.getNivelEnergia() != null ? pet.getNivelEnergia() : "Não informado");
+                    textViewSociabilidade.setText(pet.getSociabilidade() != null ? pet.getSociabilidade() : "Não informado");
 
-                    if(pet.isAdestrado()) {
+                    if (pet.isAdestrado()) {
                         textViewPetAdestrado.setText("Adestrado");
                     } else {
                         textViewPetAdestrado.setText("Não adestrado");
                     }
-
-
                 }
             }
         });

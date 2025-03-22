@@ -386,7 +386,7 @@ public class SearchFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
         // Ordena por data de cadastro e limita a 3 resultados
         petsRef.orderBy("dataCadastro", Query.Direction.DESCENDING)
-                .limit(3)
+                .limit(2)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
