@@ -8,160 +8,171 @@
     android:orientation="vertical"
     tools:context=".activity.EditarPerfilActivity">
 
+    <!-- Toolbar -->
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <!-- ScrollView para permitir rolagem -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="24dp"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ImageViewFotoPerfilUsuario"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:src="@drawable/profile_image" />
-
-        <Button
-            android:id="@+id/buttonAlterarFoto"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/button_background_outline_gray"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Alterar foto"
-            android:textColor="@color/cinzaClaro" />
-
-        <TextView
-            android:id="@+id/textView28"
+        <!-- Layout principal que contém os elementos -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Nome de usuário" />
+            android:layout_margin="24dp"
+            android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp">
+            <!-- Foto de perfil -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ImageViewFotoPerfilUsuario"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/profile_image" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextNomeUsuario"
-                android:layout_width="match_parent"
+            <!-- Botão para alterar foto -->
+            <Button
+                android:id="@+id/buttonAlterarFoto"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_perfil_brown_25x26"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nunito_medium" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/textView32"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Email" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_mail_brown_32x32"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nunito_medium" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/textView33"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Celular" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextCelular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_telefone_32x32"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nunito_medium" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Campo para Cidade -->
-        <TextView
-            android:id="@+id/textViewCidade"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Cidade" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextCidade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_location_on_brown_36x36"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nunito_medium" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Campo para Estado -->
-        <TextView
-            android:id="@+id/textViewEstado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_medium"
-            android:text="Estado" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextEstado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/button_background_outline_gray"
-                android:drawableStart="@drawable/ic_map_brown_36x36"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/nunito_medium" />
+                android:fontFamily="@font/nunito_bold"
+                android:text="Alterar foto"
+                android:textColor="@color/cinzaClaro" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <!-- Campo para nome de usuário -->
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Nome de usuário" />
 
-        <Button
-            android:id="@+id/buttonSalvarAlteracoes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_background_outline_gray_with_background"
-            android:fontFamily="@font/nunito_bold"
-            android:text="Salvar alterações" />
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextNomeUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/button_background_outline_gray"
+                    android:drawableStart="@drawable/ic_perfil_brown_25x26"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/nunito_medium" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo para email -->
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Email" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/button_background_outline_gray"
+                    android:drawableStart="@drawable/ic_mail_brown_32x32"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/nunito_medium" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo para celular -->
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Celular" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextCelular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/button_background_outline_gray"
+                    android:drawableStart="@drawable/ic_telefone_32x32"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/nunito_medium" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo para cidade -->
+            <TextView
+                android:id="@+id/textViewCidade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Cidade" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextCidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/button_background_outline_gray"
+                    android:drawableStart="@drawable/ic_location_on_brown_36x36"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/nunito_medium" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Campo para estado -->
+            <TextView
+                android:id="@+id/textViewEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_medium"
+                android:text="Estado" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/button_background_outline_gray"
+                    android:drawableStart="@drawable/ic_map_brown_36x36"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/nunito_medium" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Botão para salvar alterações -->
+            <Button
+                android:id="@+id/buttonSalvarAlteracoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="56dp"
+                android:background="@drawable/button_background_outline_gray_with_background"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Salvar alterações" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
