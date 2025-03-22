@@ -1,5 +1,8 @@
 package com.dias.mayara.petguardian.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,7 +48,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
     private Toolbar toolbar;
     private CircleImageView imagemPerfilUsuario;
-    private ImageButton buttonFiltrar;
+    private ImageButton buttonFiltrar, buttonCompartilharPerfil;
     private RecyclerView recyclerViewPetsParaAdocao;
     private LinearLayout layoutSemPets, layoutComPets; // Adicionado
 
@@ -113,6 +116,25 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
+
+        buttonCompartilharPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Recupera o ID do usuário (substitua pelo método correto para obter o ID)
+                String idUsuario = UsuarioFirebase.getIdentificadorUsuario();
+
+                // Gera o link dinâmico
+                String deepLink = "https://petguardian.com/perfil?id=" + idUsuario;
+
+                // Copia o link para a área de transferência
+                ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Link do Perfil", deepLink);
+                clipboard.setPrimaryClip(clip);
+
+                // Exibe uma mensagem de confirmação
+                Toast.makeText(getApplicationContext(), "Link do perfil copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         buttonFiltrar.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FiltroActivity.class)));
     }
@@ -269,6 +291,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         imagemPerfilUsuario = findViewById(R.id.imagemUsuario);
         recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);
+        buttonCompartilharPerfil = findViewById(R.id.buttonCompartilharPerfil);
         toolbar = findViewById(R.id.toolbar);
 
         // Inicializa os layouts de "Sem Pets" e "Com Pets"

@@ -145,7 +145,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Inicia a escuta em tempo real para os pets
         getPetsAdocao();
 
-        // No método onCreate ou em outro local apropriado
         buttonCompartilharPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
