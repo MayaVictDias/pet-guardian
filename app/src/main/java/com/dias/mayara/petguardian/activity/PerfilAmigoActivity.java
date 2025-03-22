@@ -100,7 +100,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 usuarioID = bundle.getString("usuarioID");
-                Log.d("IPerfilAmigoActivity", " " + usuarioID);
+                Log.d("PerfilAmigoActivity", " " + usuarioID);
             }
         }
 
@@ -228,10 +228,22 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                     String caminhoFoto = usuarioSelecionado.getCaminhoFotoUsuario();
                     if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
                         Uri url = Uri.parse(caminhoFoto);
-                        Glide.with(PerfilAmigoActivity.this)
-                                .load(url)
-                                .into(imagemPerfilUsuario);
+                        Log.d("PerfilAmigoActivity", "URL da imagem: " + url.toString());
+
+                        if (!isDestroyed() && !isFinishing()) {
+                            Glide.with(PerfilAmigoActivity.this)
+                                    .load(url)
+                                    .placeholder(R.drawable.profile_image) // Imagem temporária
+                                    .error(R.drawable.profile_image) // Imagem de fallback em caso de erro
+                                    .into(imagemPerfilUsuario);
+                        }
+                    } else {
+                        Log.e("PerfilAmigoActivity", "Caminho da foto é nulo ou vazio.");
+                        imagemPerfilUsuario.setImageResource(R.drawable.profile_image); // Define uma imagem padrão
                     }
+
+                    Log.d("PerfilAmigoActivity foto imagem do pet", " " + caminhoFoto);
+                    Log.d("PerfilAmigoActivity foto usuario amigo", " " + usuarioSelecionado.getCaminhoFotoUsuario());
 
                     // Carregar os pets do usuário selecionado
                     getPetsAdocao();

@@ -263,10 +263,6 @@ public class MaisInformacoesSobrePetActivity extends AppCompatActivity {
 
                     dialog.cancel();
 
-                    Toast.makeText(view.getContext(),
-                            "Pet deletado com sucesso!",
-                            Toast.LENGTH_SHORT).show();
-
                     finish();
 
                     return true;

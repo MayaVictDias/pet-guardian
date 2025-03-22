@@ -246,8 +246,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         // Atualizar foto no firebase
         usuarioLogado.setCaminhoFotoUsuario(url.toString());
         usuarioLogado.atualizar();
-
-        Toast.makeText(this, "Sua foto foi atualizada!", Toast.LENGTH_SHORT).show();
     }
 
     private void mostrarDialogConfirmacaoSenha() {
@@ -315,7 +313,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
                                 usuarioLogado.atualizar(); // Salva no Firestore
                             }
 
-                            Toast.makeText(EditarPerfilActivity.this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
                             // Tratar erro na atualização do e-mail

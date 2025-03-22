@@ -169,18 +169,6 @@ public class StatusPetFragment extends Fragment {
                 if (endereco != null) {
 
                     Log.d("Endereço conferir informacoes", endereco.toString());
-
-                    /*
-                    editTextPais.setText(endereco.getPais());
-                    editTextCep.setText(endereco.getCep());
-                    editTextEstado.setText(endereco.getEstado());
-                    editTextCidade.setText(endereco.getCidade());
-                    editTextBairro.setText(endereco.getBairro());
-                    editTextRuaAvenida.setText(endereco.getRuaAvenida());
-                    editTextNumeroEndereco.setText(endereco.getNumero());
-                    editTextComplementoEndereco.setText(endereco.getComplemento());
-
-                     */
                 }
             }
         });

@@ -22,7 +22,7 @@
         android:layout_marginTop="42dp"
         android:layout_marginRight="24dp"
         android:fontFamily="@font/nunito_medium"
-        android:text="Agora insira o seu email" />
+        android:text="Agora insira o seu email e celular" />
 
     <TextView
         android:id="@+id/textView5"
@@ -51,14 +51,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textViewTelefone"
+        android:id="@+id/textViewCelular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginRight="24dp"
         android:fontFamily="@font/nunito_bold"
-        android:text="Telefone" />
+        android:text="Celular" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

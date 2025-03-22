@@ -57,7 +57,7 @@ public class Usuario implements Serializable {
         usuarioMap.put("cidadeUsuario", getCidadeUsuario());
         usuarioMap.put("estadoUsuario", getEstadoUsuario());
         usuarioMap.put("idUsuario", getIdUsuario());
-        usuarioMap.put("caminhoFoto", getCaminhoFotoUsuario());
+        usuarioMap.put("caminhoFotoUsuario", getCaminhoFotoUsuario());
         usuarioMap.put("dataCadastro", Timestamp.now());
         usuarioMap.put("quantidadePetsCadastrados", getQuantidadePetsCadastrados());
 

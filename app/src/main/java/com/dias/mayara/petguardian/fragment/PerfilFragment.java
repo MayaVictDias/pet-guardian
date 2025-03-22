@@ -78,7 +78,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
     private List<Pet> petListAdocao = new ArrayList<>();
     private PetsAdapter petsAdapterAdocao;
-    private ListenerRegistration petsListener;
+    private ListenerRegistration petsListener, usuarioListener;
     private static final int FILTRO_REQUEST_CODE = 1;
 
     public PerfilFragment() {
@@ -213,6 +213,9 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
     public void onTodosFiltrosRemovidos() {
         // Lógica para remover todos os filtros
         Log.d("PerfilFragment", "Todos os filtros foram removidos");
+
+        // Oculta o RecyclerView de filtros
+        recyclerViewFiltros.setVisibility(View.GONE);
 
         // Recarregar a lista de pets sem filtros
         getPetsAdocao();
@@ -392,22 +395,39 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference usuarioRef = db.collection("usuarios").document(idUsuarioLogado);
 
-        // Consultando os dados do usuário
-        usuarioRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Criando o objeto Usuario a partir dos dados do Firestore
-                    Usuario usuario = document.toObject(Usuario.class);
+        // Adiciona um listener para monitorar alterações no documento do usuário
+        usuarioRef.addSnapshotListener((documentSnapshot, error) -> {
+            if (error != null) {
+                Log.e("PerfilFragment", "Erro ao monitorar alterações do usuário", error);
+                return;
+            }
 
-                    if (usuario != null) {
-                        // Atualizando a interface com os dados do usuário
-                        textViewNomeUsuario.setText(usuario.getNomeUsuario());
-                        textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                // Cria o objeto Usuario a partir dos dados do Firestore
+                Usuario usuario = documentSnapshot.toObject(Usuario.class);
+
+                if (usuario != null) {
+                    // Atualiza a interface com os dados do usuário
+                    textViewNomeUsuario.setText(usuario.getNomeUsuario());
+                    textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() + " - " + usuario.getEstadoUsuario());
+
+                    // Atualiza a imagem do usuário
+                    String caminhoFotoUsuario = usuario.getCaminhoFotoUsuario();
+                    if (caminhoFotoUsuario != null && !caminhoFotoUsuario.isEmpty()) {
+                        Uri url = Uri.parse(caminhoFotoUsuario);
+                        if (!isDetached() && !isRemoving()) { // Verifica se o Fragment ainda está ativo
+                            Glide.with(PerfilFragment.this)
+                                    .load(url)
+                                    .placeholder(R.drawable.profile_image) // Imagem temporária
+                                    .error(R.drawable.profile_image) // Imagem de fallback em caso de erro
+                                    .into(imagemPerfilUsuario);
+                        }
+                    } else {
+                        imagemPerfilUsuario.setImageResource(R.drawable.profile_image); // Define uma imagem padrão
                     }
                 }
             } else {
-                Log.e("PerfilFragment", "Erro ao recuperar dados do usuário", task.getException());
+                Log.d("PerfilFragment", "Documento do usuário não encontrado!");
             }
         });
     }
@@ -439,10 +459,26 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
             if (adapter != null) {
                 adapter.setFiltros(filtrosAtivos);
                 adapter.notifyDataSetChanged();
+
+                // Verifica se há filtros para definir a visibilidade do recyclerViewFiltros
+                if (filtrosAtivos.isEmpty()) {
+                    recyclerViewFiltros.setVisibility(View.GONE); // Oculta o RecyclerView
+                } else {
+                    recyclerViewFiltros.setVisibility(View.VISIBLE); // Exibe o RecyclerView
+                }
             }
 
             // Aplicar os filtros na consulta ao Firestore
             aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Remove o listener quando o Fragment for destruído
+        if (usuarioListener != null) {
+            usuarioListener.remove();
         }
     }
 }
