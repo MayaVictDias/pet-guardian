@@ -94,17 +94,24 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         if (data != null) {
             // Extrai o usuarioID da URL do deeplink
             usuarioID = data.getQueryParameter("usuarioID");
+            Log.d("PerfilAmigoActivity", "ID usuário via deeplink: " + usuarioID);
         } else {
             // Caso contrário, tenta recuperar o usuarioID do Bundle
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 usuarioID = bundle.getString("usuarioID");
+                Log.d("IPerfilAmigoActivity", " " + usuarioID);
             }
         }
 
+        // Verifica se o usuarioID foi recuperado corretamente
         if (usuarioID != null) {
             usuarioAmigoRef = usuariosRef.document(usuarioID);
             recuperarDadosPerfilAmigo();
+        } else {
+            Log.e("PerfilAmigoActivity", "usuarioID não foi passado corretamente.");
+            Toast.makeText(this, "Erro ao carregar perfil. Tente novamente.", Toast.LENGTH_SHORT).show();
+            finish(); // Fecha a atividade se o usuarioID for nulo
         }
 
         // Inicializando as listas e os adapters antes de carregar os dados do Firebase
@@ -120,10 +127,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         buttonCompartilharPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Recupera o ID do usuário (substitua pelo método correto para obter o ID)
-
                 // Gera o link dinâmico
-                String deepLink = "https://petguardian.com/perfil?id=" + usuarioSelecionado.getIdUsuario();
+                String deepLink = "https://petguardian.com/perfil?usuarioID=" + usuarioSelecionado.getIdUsuario();
 
                 // Copia o link para a área de transferência
                 ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);

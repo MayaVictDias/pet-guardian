@@ -47,10 +47,12 @@
                 <!-- Defina o esquema e o host do seu Deep Link -->
                 <data
                     android:host="petguardian.com"
-                    android:scheme="https" />
+                    android:scheme="https"
+                    android:pathPrefix="/perfil" />
                 <data
                     android:host="petguardian.com"
-                    android:scheme="http" />
+                    android:scheme="http"
+                    android:pathPrefix="/perfil" />
             </intent-filter>
         </activity>
         <activity
