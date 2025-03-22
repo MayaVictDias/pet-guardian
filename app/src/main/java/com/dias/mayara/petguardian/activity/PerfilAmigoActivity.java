@@ -121,10 +121,9 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Recupera o ID do usuário (substitua pelo método correto para obter o ID)
-                String idUsuario = UsuarioFirebase.getIdentificadorUsuario();
 
                 // Gera o link dinâmico
-                String deepLink = "https://petguardian.com/perfil?id=" + idUsuario;
+                String deepLink = "https://petguardian.com/perfil?id=" + usuarioSelecionado.getIdUsuario();
 
                 // Copia o link para a área de transferência
                 ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -133,6 +132,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
                 // Exibe uma mensagem de confirmação
                 Toast.makeText(getApplicationContext(), "Link do perfil copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                Log.d("ID usuario amigo", " " + usuarioSelecionado.getIdUsuario());
+                Log.d("ID usuario logado", " " + idUsuarioLogado);
             }
         });
 
@@ -216,6 +217,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 if (usuarioSelecionado != null) {
                     String nomeUsuario = usuarioSelecionado.getNomeUsuario();
                     textViewNomeUsuario.setText(nomeUsuario);
+                    textViewPerfilCidadeUsuario.setText(usuarioSelecionado.getCidadeUsuario());
 
                     // Recuperar foto do usuário
                     String caminhoFoto = usuarioSelecionado.getCaminhoFotoUsuario();
@@ -240,23 +242,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                 .collection("usuarios")
                 .document(idUsuarioLogado);
 
-        usuarioLogadoRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot snapshot = task.getResult();
-                if (snapshot.exists()) {
-                    Usuario usuario = snapshot.toObject(Usuario.class);
-                    if (usuario != null) {
-                        textViewNomeUsuario.setText(usuario.getNomeUsuario());
-                        textViewPerfilCidadeUsuario.setText(usuario.getCidadeUsuario() +
-                                " - " + usuario.getEstadoUsuario());
-                    }
-                } else {
-                    Log.d("Firestore", "Documento do usuário não encontrado!");
-                }
-            } else {
-                Log.e("Firestore", "Erro ao recuperar dados do usuário", task.getException());
-            }
-        });
     }
 
     @Override
