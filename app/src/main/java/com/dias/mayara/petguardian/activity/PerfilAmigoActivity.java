@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dias.mayara.petguardian.R;
+import com.dias.mayara.petguardian.adapter.FiltroAdapter;
 import com.dias.mayara.petguardian.adapter.PetsAdapter;
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.dias.mayara.petguardian.helper.UsuarioFirebase;
@@ -36,11 +37,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PerfilAmigoActivity extends AppCompatActivity {
+public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdapter.OnFiltroRemovedListener {
 
     private Usuario usuarioSelecionado;
     private Usuario usuarioLogado;
@@ -49,8 +49,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar, buttonCompartilharPerfil;
-    private RecyclerView recyclerViewPetsParaAdocao;
-    private LinearLayout layoutSemPets, layoutComPets; // Adicionado
+    private RecyclerView recyclerViewPetsParaAdocao, recyclerViewFiltros;
+    private LinearLayout layoutSemPets, layoutComPets;
 
     private FirebaseFirestore firebaseRef;
     private CollectionReference usuariosRef;
@@ -62,8 +62,16 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private String usuarioID;
 
     private List<Pet> petListAdocao = new ArrayList<>();
-    private List<Pet> petListDesaparecidos = new ArrayList<>();
     private PetsAdapter petsAdapterAdocao;
+    private FiltroAdapter filtroAdapter;
+
+    // Variáveis para armazenar os filtros atuais
+    private String status = "Selecione";
+    private String idade = "Selecione";
+    private String genero = "Selecione";
+    private String especie = "Selecione";
+    private String corOlhos = "Selecione";
+    private String corPredominante = "Selecione";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +108,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 usuarioID = bundle.getString("usuarioID");
-                Log.d("IPerfilAmigoActivity", " " + usuarioID);
+                Log.d("PerfilAmigoActivity", "ID usuário via bundle: " + usuarioID);
             }
         }
 
@@ -116,13 +124,15 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
         // Inicializando as listas e os adapters antes de carregar os dados do Firebase
         petListAdocao = new ArrayList<>();
-        petListDesaparecidos = new ArrayList<>();
         petsAdapterAdocao = new PetsAdapter(petListAdocao);
 
         // Configura o adapter e layout manager para pets para adoção
         recyclerViewPetsParaAdocao.setAdapter(petsAdapterAdocao);
         LinearLayoutManager layoutManagerAdocao = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewPetsParaAdocao.setLayoutManager(layoutManagerAdocao);
+
+        // Configura o RecyclerView de filtros
+        configurarRecyclerViewFiltros();
 
         buttonCompartilharPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +152,64 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             }
         });
 
-        buttonFiltrar.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), FiltroActivity.class)));
+        buttonFiltrar.setOnClickListener(v -> {
+            // Abrir a FiltroActivity com startActivityForResult
+            Intent filtroIntent = new Intent(getApplicationContext(), FiltroActivity.class);
+            startActivityForResult(filtroIntent, 1);
+        });
+    }
+
+    private void inicializarComponentes() {
+        textViewNomeUsuario = findViewById(R.id.textViewNomeUsuario);
+        textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
+        imagemPerfilUsuario = findViewById(R.id.imagemUsuario);
+        recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
+        recyclerViewFiltros = findViewById(R.id.recyclerViewFiltros);
+        buttonFiltrar = findViewById(R.id.buttonFiltrar);
+        buttonCompartilharPerfil = findViewById(R.id.buttonCompartilharPerfil);
+        toolbar = findViewById(R.id.toolbar);
+
+        // Inicializa os layouts de "Sem Pets" e "Com Pets"
+        layoutSemPets = findViewById(R.id.layoutSemPets);
+        layoutComPets = findViewById(R.id.layoutComPets);
+    }
+
+    private void configurarRecyclerViewFiltros() {
+        // Crie uma lista de filtros (substitua por sua lógica)
+        List<String> filtros = new ArrayList<>();
+
+        // Configura o adapter
+        filtroAdapter = new FiltroAdapter(filtros, this);
+        recyclerViewFiltros.setAdapter(filtroAdapter);
+
+        // Configura o LayoutManager (horizontal)
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewFiltros.setLayoutManager(layoutManager);
+
+        // Define a visibilidade do RecyclerView
+        if (filtros.isEmpty()) {
+            recyclerViewFiltros.setVisibility(View.GONE); // Oculta se não houver filtros
+        } else {
+            recyclerViewFiltros.setVisibility(View.VISIBLE); // Exibe se houver filtros
+        }
+    }
+
+    @Override
+    public void onFiltroRemoved(String filtro) {
+        // Lógica para remover um filtro específico
+        Log.d("PerfilAmigoActivity", "Filtro removido: " + filtro);
+    }
+
+    @Override
+    public void onTodosFiltrosRemovidos() {
+        // Lógica para remover todos os filtros
+        Log.d("PerfilAmigoActivity", "Todos os filtros foram removidos");
+
+        // Oculta o RecyclerView de filtros
+        recyclerViewFiltros.setVisibility(View.GONE);
+
+        // Recarregar a lista de pets sem filtros
+        getPetsAdocao();
     }
 
     private void getPetsAdocao() {
@@ -163,36 +230,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
             petListAdocao.clear();
             for (QueryDocumentSnapshot snapshot : snapshots) {
-                String idPet = snapshot.getString("idPet");
-                String idTutor = snapshot.getString("idTutor");
-                String nomePet = snapshot.getString("nomePet");
-                String idadePet = snapshot.getString("idadePet");
-                String generoPet = snapshot.getString("generoPet");
-                String especiePet = snapshot.getString("especiePet");
-                String raca = snapshot.getString("racaPet");
-                String corPredominantePet = snapshot.getString("corPredominantePet");
-                String corDosOlhosPet = snapshot.getString("corDosOlhosPet");
-                String portePet = snapshot.getString("portePet");
-                String imagemUrl = snapshot.getString("imagemUrl");
-                String statusVacinacao = snapshot.getString("statusVacinacao");
-                String vacinasTomadas = snapshot.getString("vacinasTomadas");
-                String vermifugado = snapshot.getString("vermifugado");
-                Timestamp dataVermifugacao = snapshot.getTimestamp("dataVermifugacao");
-                String necessidadesEspeciais = snapshot.getString("necessidadesEspeciais");
-                String doencasTratamentos = snapshot.getString("doencasTratamentos");
-                String statusCastracao = snapshot.getString("statusCastracao");
-                String nivelEnergia = snapshot.getString("nivelEnergia");
-                String sociabilidade = snapshot.getString("sociabilidade");
-                String isAdestrado = snapshot.getString("sociabilidade");
-                Timestamp dataCadastro = snapshot.getTimestamp("dataCadastro");
-
-                boolean adestrado = "Sim".equalsIgnoreCase(isAdestrado);
-
-                petListAdocao.add(new Pet(idPet, idTutor, nomePet, idadePet, generoPet, especiePet,
-                        raca, corPredominantePet, corDosOlhosPet, portePet, imagemUrl, statusVacinacao,
-                        vacinasTomadas, vermifugado, dataVermifugacao, necessidadesEspeciais,
-                        doencasTratamentos, statusCastracao, nivelEnergia, sociabilidade, adestrado,
-                        dataCadastro));
+                Pet pet = snapshot.toObject(Pet.class);
+                petListAdocao.add(pet);
             }
 
             // Verifica se há pets na lista
@@ -246,7 +285,104 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         DocumentReference usuarioLogadoRef = FirebaseFirestore.getInstance()
                 .collection("usuarios")
                 .document(idUsuarioLogado);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Receber os filtros do Intent
+            status = data.getStringExtra("status");
+            idade = data.getStringExtra("idade");
+            genero = data.getStringExtra("genero");
+            especie = data.getStringExtra("especie");
+            corOlhos = data.getStringExtra("corOlhos");
+            corPredominante = data.getStringExtra("corPredominante");
+
+            // Atualizar a lista de filtros ativos
+            List<String> filtrosAtivos = new ArrayList<>();
+            if (!status.equals("Selecione")) filtrosAtivos.add("Status: " + status);
+            if (!idade.equals("Selecione")) filtrosAtivos.add("Idade: " + idade);
+            if (!genero.equals("Selecione")) filtrosAtivos.add("Gênero: " + genero);
+            if (!especie.equals("Selecione")) filtrosAtivos.add("Espécie: " + especie);
+            if (!corOlhos.equals("Selecione")) filtrosAtivos.add("Cor dos Olhos: " + corOlhos);
+            if (!corPredominante.equals("Selecione"))
+                filtrosAtivos.add("Cor Predominante: " + corPredominante);
+
+            // Atualizar o RecyclerView de filtros
+            if (filtroAdapter != null) {
+                filtroAdapter.setFiltros(filtrosAtivos);
+                filtroAdapter.notifyDataSetChanged();
+
+                // Verifica se há filtros para definir a visibilidade do recyclerViewFiltros
+                if (filtrosAtivos.isEmpty()) {
+                    recyclerViewFiltros.setVisibility(View.GONE); // Oculta o RecyclerView
+                } else {
+                    recyclerViewFiltros.setVisibility(View.VISIBLE); // Exibe o RecyclerView
+                }
+            }
+
+            // Aplicar os filtros na consulta ao Firestore
+            aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
+        }
+    }
+
+    private void aplicarFiltros(String status, String idade, String genero, String especie, String corOlhos, String corPredominante) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference petsRef = db.collection("pets");
+
+        // Inicia a consulta com o filtro básico (pets do usuário logado)
+        Query query = petsRef.whereEqualTo("idTutor", usuarioID);
+
+        // Aplica os filtros adicionais, se selecionados
+        if (!status.equals("Selecione")) {
+            query = query.whereEqualTo("statusPet", status);
+        }
+        if (!idade.equals("Selecione")) {
+            query = query.whereEqualTo("idadePet", idade);
+        }
+        if (!genero.equals("Selecione")) {
+            query = query.whereEqualTo("generoPet", genero);
+        }
+        if (!especie.equals("Selecione")) {
+            query = query.whereEqualTo("especiePet", especie);
+        }
+        if (!corOlhos.equals("Selecione")) {
+            query = query.whereEqualTo("corDosOlhosPet", corOlhos);
+        }
+        if (!corPredominante.equals("Selecione")) {
+            query = query.whereEqualTo("corPredominantePet", corPredominante);
+        }
+
+        // Executa a consulta
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Limpa a lista atual de pets
+                petListAdocao.clear();
+
+                // Adiciona os pets filtrados à lista
+                for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                    Pet pet = snapshot.toObject(Pet.class);
+                    petListAdocao.add(pet);
+                }
+
+                // Atualiza a interface com base na lista de pets
+                if (petListAdocao.isEmpty()) {
+                    layoutSemPets.setVisibility(View.VISIBLE); // Exibe "Não há pets cadastrados"
+                    layoutComPets.setVisibility(View.GONE); // Oculta a lista de pets
+                } else {
+                    layoutSemPets.setVisibility(View.GONE); // Oculta "Não há pets cadastrados"
+                    layoutComPets.setVisibility(View.VISIBLE); // Exibe a lista de pets
+                }
+
+                // Notifica o adapter sobre as mudanças na lista
+                petsAdapterAdocao.notifyDataSetChanged();
+            } else {
+                // Trata erros na consulta
+                Log.e("PerfilAmigoActivity", "Erro ao aplicar filtros", task.getException());
+            }
+        });
     }
 
     @Override
@@ -273,20 +409,6 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         if (listenerRegistrationPetsAdocao != null) {
             listenerRegistrationPetsAdocao.remove();
         }
-    }
-
-    private void inicializarComponentes() {
-        textViewNomeUsuario = findViewById(R.id.textViewNomeUsuario);
-        textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
-        imagemPerfilUsuario = findViewById(R.id.imagemUsuario);
-        recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
-        buttonFiltrar = findViewById(R.id.buttonFiltrar);
-        buttonCompartilharPerfil = findViewById(R.id.buttonCompartilharPerfil);
-        toolbar = findViewById(R.id.toolbar);
-
-        // Inicializa os layouts de "Sem Pets" e "Com Pets"
-        layoutSemPets = findViewById(R.id.layoutSemPets);
-        layoutComPets = findViewById(R.id.layoutComPets);
     }
 
     @Override
