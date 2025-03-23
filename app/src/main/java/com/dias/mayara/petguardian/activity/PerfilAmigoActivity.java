@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +46,7 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
     private Usuario usuarioSelecionado;
     private Usuario usuarioLogado;
 
-    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewQuantidadePetsCadastrados;
+    private TextView textViewNomeUsuario, textViewPerfilCidadeUsuario, textViewSemPets;
     private Toolbar toolbar;
     private CircleImageView imagemPerfilUsuario;
     private ImageButton buttonFiltrar, buttonCompartilharPerfil;
@@ -77,13 +78,14 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_amigo);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         // Inicializa a instância do Firebase e referências do banco de dados
         firebaseRef = ConfiguracaoFirebase.getFirebase();
         usuariosRef = firebaseRef.collection("usuarios");
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
 
-        // Obtém os dados do usuário logado e configura a referência para o nó do usuário específico
+        // Obtém os dados do usuário logado
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
 
         // Inicializa os componentes de interface
@@ -114,8 +116,16 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
 
         // Verifica se o usuarioID foi recuperado corretamente
         if (usuarioID != null) {
-            usuarioAmigoRef = usuariosRef.document(usuarioID);
-            recuperarDadosPerfilAmigo();
+            // Verifica se o usuarioID é igual ao idUsuarioLogado
+            if (usuarioID.equals(idUsuarioLogado)) {
+                // Carrega os dados do usuário logado
+                usuarioSelecionado = usuarioLogado;
+                carregarDadosUsuarioLogado();
+            } else {
+                // Carrega os dados do usuário amigo
+                usuarioAmigoRef = usuariosRef.document(usuarioID);
+                recuperarDadosPerfilAmigo();
+            }
         } else {
             Log.e("PerfilAmigoActivity", "usuarioID não foi passado corretamente.");
             Toast.makeText(this, "Erro ao carregar perfil. Tente novamente.", Toast.LENGTH_SHORT).show();
@@ -164,6 +174,7 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
         textViewPerfilCidadeUsuario = findViewById(R.id.textViewPerfilCidadeUsuario);
         imagemPerfilUsuario = findViewById(R.id.imagemUsuario);
         recyclerViewPetsParaAdocao = findViewById(R.id.recyclerViewPetsParaAdocao);
+        textViewSemPets = findViewById(R.id.textViewSemPets);
         recyclerViewFiltros = findViewById(R.id.recyclerViewFiltros);
         buttonFiltrar = findViewById(R.id.buttonFiltrar);
         buttonCompartilharPerfil = findViewById(R.id.buttonCompartilharPerfil);
@@ -172,6 +183,26 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
         // Inicializa os layouts de "Sem Pets" e "Com Pets"
         layoutSemPets = findViewById(R.id.layoutSemPets);
         layoutComPets = findViewById(R.id.layoutComPets);
+    }
+
+    private void carregarDadosUsuarioLogado() {
+        if (usuarioSelecionado != null) {
+            // Atualiza a interface com os dados do usuário logado
+            textViewNomeUsuario.setText(usuarioSelecionado.getNomeUsuario());
+            textViewPerfilCidadeUsuario.setText(usuarioSelecionado.getCidadeUsuario() + " - " + usuarioSelecionado.getEstadoUsuario());
+
+            // Recuperar foto do usuário
+            String caminhoFoto = usuarioSelecionado.getCaminhoFotoUsuario();
+            if (caminhoFoto != null && !caminhoFoto.isEmpty()) {
+                Uri url = Uri.parse(caminhoFoto);
+                Glide.with(PerfilAmigoActivity.this)
+                        .load(url)
+                        .into(imagemPerfilUsuario);
+            }
+
+            // Carregar os pets do usuário logado
+            getPetsAdocao();
+        }
     }
 
     private void configurarRecyclerViewFiltros() {
@@ -259,8 +290,8 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
             if (snapshot != null && snapshot.exists()) {
                 usuarioSelecionado = snapshot.toObject(Usuario.class);
                 if (usuarioSelecionado != null) {
-                    String nomeUsuario = usuarioSelecionado.getNomeUsuario();
-                    textViewNomeUsuario.setText(nomeUsuario);
+                    // Atualiza a interface com os dados do usuário amigo
+                    textViewNomeUsuario.setText(usuarioSelecionado.getNomeUsuario());
                     textViewPerfilCidadeUsuario.setText(usuarioSelecionado.getCidadeUsuario() + " - " + usuarioSelecionado.getEstadoUsuario());
 
                     // Recuperar foto do usuário
@@ -272,7 +303,7 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
                                 .into(imagemPerfilUsuario);
                     }
 
-                    // Carregar os pets do usuário selecionado
+                    // Carregar os pets do usuário amigo
                     getPetsAdocao();
                 }
             } else {
@@ -370,6 +401,7 @@ public class PerfilAmigoActivity extends AppCompatActivity implements FiltroAdap
                 // Atualiza a interface com base na lista de pets
                 if (petListAdocao.isEmpty()) {
                     layoutSemPets.setVisibility(View.VISIBLE); // Exibe "Não há pets cadastrados"
+                    textViewSemPets.setText("Não foram encontrados pets");
                     layoutComPets.setVisibility(View.GONE); // Oculta a lista de pets
                 } else {
                     layoutSemPets.setVisibility(View.GONE); // Oculta "Não há pets cadastrados"

@@ -1,5 +1,7 @@
 package com.dias.mayara.petguardian.model;
 
+import android.util.Log;
+
 import com.dias.mayara.petguardian.helper.ConfiguracaoFirebase;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,14 +36,25 @@ public class Usuario implements Serializable {
 
     // Metodo que atualiza os valores no firebase
     public void atualizar() {
+        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase();
+        DocumentReference usuariosRef = firebaseRef.collection("usuarios").document(getIdUsuario());
 
-        FirebaseFirestore firebaseRef = ConfiguracaoFirebase.getFirebase(); // Instância do Firestore
-        DocumentReference usuariosRef = firebaseRef.collection("usuarios").document(getIdUsuario()); // Referência ao documento do usuário
+        // Recupera o valor atual do campo caminhoFotoUsuario
+        usuariosRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String caminhoFotoAtual = documentSnapshot.getString("caminhoFotoUsuario");
 
-        Map<String, Object> valoresUsuario = converterParaMap(); // Dados a serem atualizados
+                // Se o campo caminhoFotoUsuario estiver vazio ou nulo, mantém o valor atual
+                if (getCaminhoFotoUsuario() == null || getCaminhoFotoUsuario().isEmpty()) {
+                    setCaminhoFotoUsuario(caminhoFotoAtual);
+                }
 
-        usuariosRef.update(valoresUsuario);
-
+                // Atualiza o documento no Firestore
+                usuariosRef.update(converterParaMap());
+            }
+        }).addOnFailureListener(e -> {
+            Log.e("Usuario", "Erro ao recuperar dados do usuário: ", e);
+        });
     }
 
     /*

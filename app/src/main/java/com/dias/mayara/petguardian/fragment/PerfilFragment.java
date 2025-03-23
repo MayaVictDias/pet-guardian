@@ -112,8 +112,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Inicializa os componentes de interface
         inicializarComponentes(view);
 
-        configurarRecyclerViewFiltros();
-
         // Recupera os dados do usuário logado
         recuperarDadosUsuarioLogado();
 
@@ -139,6 +137,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Inicia a escuta em tempo real para os pets
         getPetsAdocao();
 
+        // No método onCreate ou em outro local apropriado
         buttonCompartilharPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +153,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
                 clipboard.setPrimaryClip(clip);
 
                 // Exibe uma mensagem de confirmação
-                Toast.makeText(getContext(), "Link do perfil copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Link copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -208,9 +207,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         // Lógica para remover todos os filtros
         Log.d("PerfilFragment", "Todos os filtros foram removidos");
 
-        // Oculta o RecyclerView de filtros
-        recyclerViewFiltros.setVisibility(View.GONE);
-
         // Recarregar a lista de pets sem filtros
         getPetsAdocao();
     }
@@ -227,7 +223,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         } else {
             // Carrega todos os pets sem filtros
             petsRef.whereEqualTo("idTutor", idUsuarioLogado)
-                    .orderBy("dataCadastro", Query.Direction.DESCENDING)
                     .addSnapshotListener((snapshots, error) -> {
                         if (error != null) {
                             Log.w("Firestore", "Erro ao ouvir mudanças", error);
@@ -391,7 +386,7 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
         DocumentReference usuarioRef = db.collection("usuarios").document(idUsuarioLogado);
 
         // Adiciona um listener para monitorar alterações no documento do usuário
-        usuarioRef.addSnapshotListener((documentSnapshot, error) -> {
+        usuarioListener = usuarioRef.addSnapshotListener((documentSnapshot, error) -> {
             if (error != null) {
                 Log.e("PerfilFragment", "Erro ao monitorar alterações do usuário", error);
                 return;
@@ -408,7 +403,6 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
 
                     // Atualiza a imagem do usuário
                     String caminhoFotoUsuario = usuario.getCaminhoFotoUsuario();
-                    Log.d("Imagem do usuario logado", " " + caminhoFotoUsuario);
                     if (caminhoFotoUsuario != null && !caminhoFotoUsuario.isEmpty()) {
                         Uri url = Uri.parse(caminhoFotoUsuario);
                         Glide.with(PerfilFragment.this)
@@ -449,54 +443,17 @@ public class PerfilFragment extends Fragment implements FiltroAdapter.OnFiltroRe
             if (!genero.equals("Selecione")) filtrosAtivos.add("Gênero: " + genero);
             if (!especie.equals("Selecione")) filtrosAtivos.add("Espécie: " + especie);
             if (!corOlhos.equals("Selecione")) filtrosAtivos.add("Cor dos Olhos: " + corOlhos);
-            if (!corPredominante.equals("Selecione"))
-                filtrosAtivos.add("Cor Predominante: " + corPredominante);
+            if (!corPredominante.equals("Selecione")) filtrosAtivos.add("Cor Predominante: " + corPredominante);
 
             // Atualizar o RecyclerView de filtros
             FiltroAdapter adapter = (FiltroAdapter) recyclerViewFiltros.getAdapter();
             if (adapter != null) {
                 adapter.setFiltros(filtrosAtivos);
                 adapter.notifyDataSetChanged();
-
-                // Verifica se há filtros para definir a visibilidade do recyclerViewFiltros
-                if (filtrosAtivos.isEmpty()) {
-                    recyclerViewFiltros.setVisibility(View.GONE); // Oculta o RecyclerView
-                } else {
-                    recyclerViewFiltros.setVisibility(View.VISIBLE); // Exibe o RecyclerView
-                }
             }
 
             // Aplicar os filtros na consulta ao Firestore
             aplicarFiltros(status, idade, genero, especie, corOlhos, corPredominante);
-        }
-    }
-
-    private void configurarRecyclerViewFiltros() {
-        // Crie uma lista de filtros (substitua por sua lógica)
-        List<String> filtros = new ArrayList<>();
-
-        // Configura o adapter
-        FiltroAdapter adapter = new FiltroAdapter(filtros, this);
-        recyclerViewFiltros.setAdapter(adapter);
-
-        // Configura o LayoutManager (horizontal)
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewFiltros.setLayoutManager(layoutManager);
-
-        // Define a visibilidade do RecyclerView
-        if (filtros.isEmpty()) {
-            recyclerViewFiltros.setVisibility(View.GONE); // Oculta se não houver filtros
-        } else {
-            recyclerViewFiltros.setVisibility(View.VISIBLE); // Exibe se houver filtros
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // Remove o listener quando o Fragment for destruído
-        if (usuarioListener != null) {
-            usuarioListener.remove();
         }
     }
 }

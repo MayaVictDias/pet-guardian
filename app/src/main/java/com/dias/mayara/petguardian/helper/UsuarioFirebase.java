@@ -106,31 +106,40 @@ public class UsuarioFirebase {
         return usuario;
     }
 
-    public static void atualizarFotoUsuario(Uri url){
-
+    public static void atualizarFotoUsuario(Uri url) {
         try {
-
-            //Usuario logado no App
+            // Usuário logado no App
             FirebaseUser usuarioLogado = getUsuarioAtual();
 
-            //Configurar objeto para alteração do perfil
+            // Configurar objeto para alteração do perfil
             UserProfileChangeRequest profile = new UserProfileChangeRequest
                     .Builder()
-                    .setPhotoUri( url )
+                    .setPhotoUri(url)
                     .build();
-            usuarioLogado.updateProfile( profile ).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+            usuarioLogado.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if( !task.isSuccessful() ){
-                        Log.d("Perfil","Erro ao atualizar a foto de perfil." );
+                    if (task.isSuccessful()) {
+                        // Atualiza a foto no Firestore
+                        DocumentReference usuarioRef = ConfiguracaoFirebase.getFirebase().collection("usuarios")
+                                .document(usuarioLogado.getUid());
+
+                        usuarioRef.update("caminhoFotoUsuario", url.toString())
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Perfil", "Foto atualizada no Firestore com sucesso.");
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("Perfil", "Erro ao atualizar foto no Firestore: ", e);
+                                });
+                    } else {
+                        Log.d("Perfil", "Erro ao atualizar a foto de perfil.");
                     }
                 }
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static String getIdentificadorUsuario(){

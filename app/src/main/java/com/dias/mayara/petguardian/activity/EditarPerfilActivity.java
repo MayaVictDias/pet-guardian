@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -68,6 +69,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         // Inicializa os componentes
         inicializarComponentes();
@@ -290,8 +292,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
         String nomeAtualizado = editTextNomeUsuario.getText().toString();
         String emailAtualizado = editTextEmail.getText().toString();
         String celularAtualizado = editTextCelular.getText().toString();
-        String cidadeAtualizada = editTextCidade.getText().toString(); // Captura o valor da cidade
-        String estadoAtualizado = editTextEstado.getText().toString(); // Captura o valor do estado
+        String cidadeAtualizada = editTextCidade.getText().toString();
+        String estadoAtualizado = editTextEstado.getText().toString();
 
         FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -308,8 +310,14 @@ public class EditarPerfilActivity extends AppCompatActivity {
                                 usuarioLogado.setNomeUsuario(nomeAtualizado);
                                 usuarioLogado.setEmailUsuario(emailAtualizado);
                                 usuarioLogado.setCelularUsuario(celularAtualizado);
-                                usuarioLogado.setCidadeUsuario(cidadeAtualizada); // Atualiza a cidade
-                                usuarioLogado.setEstadoUsuario(estadoAtualizado); // Atualiza o estado
+                                usuarioLogado.setCidadeUsuario(cidadeAtualizada);
+                                usuarioLogado.setEstadoUsuario(estadoAtualizado);
+
+                                // Garantir que o campo caminhoFotoUsuario não seja nulo
+                                if (usuarioLogado.getCaminhoFotoUsuario() == null || usuarioLogado.getCaminhoFotoUsuario().isEmpty()) {
+                                    usuarioLogado.setCaminhoFotoUsuario(usuarioAtual.getPhotoUrl() != null ? usuarioAtual.getPhotoUrl().toString() : "");
+                                }
+
                                 usuarioLogado.atualizar(); // Salva no Firestore
                             }
 

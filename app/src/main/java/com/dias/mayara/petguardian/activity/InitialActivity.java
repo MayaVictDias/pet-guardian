@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.dias.mayara.petguardian.R;
 import com.dias.mayara.petguardian.activity.CadastrarNovoUsuario.InserirNomeActivity;
@@ -21,6 +22,7 @@ public class InitialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         boolean manterLogado = preferences.getBoolean("manterLogado", false);
