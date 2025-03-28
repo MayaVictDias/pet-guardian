@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,6 @@ import com.dias.mayara.petguardian.model.CadastroPetViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 public class InformacoesGeraisPetFragment extends Fragment {
 
@@ -425,72 +423,27 @@ public class InformacoesGeraisPetFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != getActivity().RESULT_OK) return;
-
-        if (requestCode == SELECAO_CAMERA) {
+        if (requestCode == SELECAO_CAMERA && resultCode == getActivity().RESULT_OK) {
             Uri imagemSelecionadaUri = data.getData();
             if (imagemSelecionadaUri != null) {
-                iniciarRecorteImagem(imagemSelecionadaUri);
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imagemSelecionadaUri);
+                    escolherImagemPet.setBackground(null); // Remove o fundo do ImageView
+                    textViewEscolherImagem.setVisibility(View.GONE);
+                    escolherImagemPet.setImageBitmap(bitmap);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imagemBytes = baos.toByteArray();
+
+                    // Armazena a imagem no ViewModel
+                    cadastroPetViewModel.setImagemPet(imagemBytes);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
+                }
             }
         }
-        else if (requestCode == UCrop.REQUEST_CROP) { // Se estiver usando uCrop
-            final Uri resultadoUri = UCrop.getOutput(data);
-            if (resultadoUri != null) {
-                carregarImagemRecortada(resultadoUri);
-            }
-        }
-        else if (requestCode == Crop.REQUEST_CROP) { // Se estiver usando a biblioteca android-crop
-            carregarImagemRecortada(Crop.getOutput(data));
-        }
-    }
-
-    private void carregarImagemRecortada(Uri imagemRecortadaUri) {
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imagemRecortadaUri);
-
-            // Converte para 200dp de altura
-            int alturaDesejadaPx = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    200,
-                    getResources().getDisplayMetrics()
-            );
-
-            // Redimensiona mantendo proporção
-            float proporcao = (float) alturaDesejadaPx / (float) bitmap.getHeight();
-            int novaLargura = (int) (bitmap.getWidth() * proporcao);
-
-            Bitmap bitmapFinal = Bitmap.createScaledBitmap(
-                    bitmap,
-                    novaLargura,
-                    alturaDesejadaPx,
-                    true
-            );
-
-            // Exibe no ImageView
-            escolherImagemPet.setImageBitmap(bitmapFinal);
-            escolherImagemPet.setBackground(null);
-            textViewEscolherImagem.setVisibility(View.GONE);
-
-            // Salva no ViewModel
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmapFinal.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-            byte[] imagemBytes = baos.toByteArray();
-            cadastroPetViewModel.setImagemPet(imagemBytes);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Erro ao carregar imagem recortada", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void iniciarRecorteImagem(Uri sourceUri) {
-        // Cria um arquivo temporário para o resultado
-        File file = new File(getActivity().getCacheDir(), "pet_cropped.jpg");
-        Uri destinoUri = Uri.fromFile(file);
-
-        // Configura o uCrop
-        UCrop.of(sourceUri, destinoUri)
-                .withAspectRatio(1, 1) // Proporção quadrada (opcional)
-                .withMaxResultSize(500, 500) // Tamanho máximo
-                .start(getContext(), this);
     }
 }
