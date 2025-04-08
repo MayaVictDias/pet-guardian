@@ -135,14 +135,26 @@ public class EditarPerfilActivity extends AppCompatActivity {
             Toast.makeText(this, "Usuário não encontrado!", Toast.LENGTH_SHORT).show();
         }
 
-        // Configura o botão de alterar foto
+        // Configura o botão de alterar foto - usando a mesma lógica do InformacoesGeraisPetFragment
         buttonAlterarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (verificarPermissoes()) {
-                    abrirGaleria();
-                } else {
-                    solicitarPermissoes();
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.setType("image/*");
+                if (i.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_GALERIA);
+                }
+            }
+        });
+
+        // Configura o clique na imagem para também abrir a seleção de imagem
+        imageViewFotoPerfilUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.setType("image/*");
+                if (i.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_GALERIA);
                 }
             }
         });
@@ -156,50 +168,17 @@ public class EditarPerfilActivity extends AppCompatActivity {
         });
     }
 
-    private boolean verificarPermissoes() {
-        for (String permissao : permissoesNecessarias) {
-            if (ContextCompat.checkSelfPermission(this, permissao) != PackageManager.PERMISSION_GRANTED) {
-                return false; // Permissão não concedida
-            }
-        }
-        return true; // Todas as permissões concedidas
-    }
-
-    private void solicitarPermissoes() {
-        ActivityCompat.requestPermissions(this, permissoesNecessarias, REQUEST_CODE_PERMISSIONS);
-    }
-
-    private void abrirGaleria() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, SELECAO_GALERIA);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (verificarPermissoes()) {
-                abrirGaleria();
-            } else {
-                Toast.makeText(this, "Permissões necessárias não concedidas.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECAO_GALERIA) {
-                Uri imagemSelecionada = data.getData(); // Obtém o URI da imagem selecionada
-                if (imagemSelecionada != null) {
+                Uri imagemSelecionadaUri = data.getData();
+                if (imagemSelecionadaUri != null) {
                     try {
-                        // Exibe a imagem selecionada no ImageView
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagemSelecionada);
-                        imageViewFotoPerfilUsuario.setImageBitmap(bitmap); // Exibe no ImageView
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagemSelecionadaUri);
+                        imageViewFotoPerfilUsuario.setImageBitmap(bitmap);
 
                         // Converte a imagem para bytes e faz o upload
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -209,7 +188,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                         // Faz o upload da imagem para o Firebase Storage
                         fazerUploadImagem(imagemBytes);
 
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(EditarPerfilActivity.this, "Erro ao carregar a imagem", Toast.LENGTH_SHORT).show();
                     }
